@@ -1,0 +1,69 @@
+
+;; Function printf (printf, funcdef_no=15, decl_uid=798, cgraph_uid=15, symbol_order=15)
+
+__attribute__((__artificial__, __gnu_inline__, __always_inline__))
+printf (const char * restrict __fmt)
+{
+  int _4;
+
+  <bb 2> [0.00%]:
+  _4 = __printf_chk (1, __fmt_2(D), __builtin_va_arg_pack ());
+  return _4;
+
+}
+
+
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23)
+
+  Inlining printf into main (always_inline).
+Iterations: 0
+Removing basic block 5
+Merging blocks 7 and 6
+
+Symbols to be put in SSA form
+{ D.2458 D.2462 }
+Incremental SSA update started at block: 0
+Number of blocks in CFG: 6
+Number of blocks to update: 5 ( 83%)
+
+
+main ()
+{
+  int D.2462;
+  int f;
+  int n;
+  int i;
+  int n.0_1;
+  int _10;
+  int _13;
+
+  <bb 2> [0.00%]:
+  scanf ("%d", &n);
+  i_6 = 2;
+  f_7 = 1;
+  goto <bb 4>; [0.00%]
+
+  <bb 3> [0.00%]:
+  f_11 = f_3 * i_2;
+  i_12 = i_2 + 1;
+
+  <bb 4> [0.00%]:
+  # i_2 = PHI <i_6(2), i_12(3)>
+  # f_3 = PHI <f_7(2), f_11(3)>
+  n.0_1 = n;
+  if (i_2 <= n.0_1)
+    goto <bb 3>; [0.00%]
+  else
+    goto <bb 5>; [0.00%]
+
+  <bb 5> [100.00%]:
+  _13 = __printf_chk (1, "%d\n", f_3);
+  _15 = _13;
+  n ={v} {CLOBBER};
+  _10 = 0;
+  return _10;
+
+}
+
+

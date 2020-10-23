@@ -1,0 +1,60 @@
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23) (executed once)
+
+
+
+ local analysis of main
+   scanning: scanf ("%d", &n);
+  scanning: n.0_12 = n;
+  scanning: if (n.0_12 > 1)
+  scanning: f_7 = i_13 * f_14;
+  scanning: i_8 = i_13 + 1;
+  scanning: if (i_8 <= n.0_12)
+  scanning: __printf_chk (1, "%d\n", f_15);
+  scanning: return 0;
+Function is locally looping.
+Function can locally free.
+main ()
+{
+  int f;
+  int n;
+  int i;
+  int n.0_12;
+
+  <bb 2> [15.00%]:
+  scanf ("%d", &n);
+  n.0_12 = n;
+  if (n.0_12 > 1)
+    goto <bb 5>; [85.00%]
+  else
+    goto <bb 6>; [15.00%]
+
+  <bb 6> [2.25%]:
+  goto <bb 4>; [100.00%]
+
+  <bb 5> [12.75%]:
+
+  <bb 3> [85.00%]:
+  # i_13 = PHI <i_8(7), 2(5)>
+  # f_14 = PHI <f_7(7), 1(5)>
+  f_7 = i_13 * f_14;
+  i_8 = i_13 + 1;
+  if (i_8 <= n.0_12)
+    goto <bb 7>; [85.00%]
+  else
+    goto <bb 8>; [15.00%]
+
+  <bb 7> [72.25%]:
+  goto <bb 3>; [100.00%]
+
+  <bb 8> [12.75%]:
+
+  <bb 4> [15.00%]:
+  # f_15 = PHI <f_7(8), 1(6)>
+  __printf_chk (1, "%d\n", f_15);
+  n ={v} {CLOBBER};
+  return 0;
+
+}
+
+

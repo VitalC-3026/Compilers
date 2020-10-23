@@ -1,0 +1,76 @@
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23) (executed once)
+
+;; 2 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2 5 3 8 6 7 4
+;;
+;; Loop 1
+;;  header 3, latch 6
+;;  depth 1, outer 0
+;;  nodes: 3 6
+;; 2 succs { 5 7 }
+;; 5 succs { 3 }
+;; 3 succs { 6 8 }
+;; 8 succs { 4 }
+;; 6 succs { 3 }
+;; 7 succs { 4 }
+;; 4 succs { 1 }
+
+SSA replacement table
+N_i -> { O_1 ... O_j } means that N_i replaces O_1, ..., O_j
+
+f_1 -> { f_7 }
+Incremental SSA update started at block: 2
+Number of blocks in CFG: 9
+Number of blocks to update: 4 ( 44%)
+
+
+main ()
+{
+  int f;
+  int n;
+  int i;
+  int n.0_12;
+
+  <bb 2> [15.00%]:
+  scanf ("%d", &n);
+  n.0_12 = n;
+  if (n.0_12 > 1)
+    goto <bb 5>; [85.00%]
+  else
+    goto <bb 7>; [15.00%]
+
+  <bb 5> [12.75%]:
+
+  <bb 3> [85.00%]:
+  # i_13 = PHI <i_8(6), 2(5)>
+  # f_14 = PHI <f_7(6), 1(5)>
+  f_7 = i_13 * f_14;
+  i_8 = i_13 + 1;
+  if (i_8 <= n.0_12)
+    goto <bb 6>; [85.00%]
+  else
+    goto <bb 8>; [15.00%]
+
+  <bb 8> [12.75%]:
+  # f_1 = PHI <f_7(3)>
+  goto <bb 4>; [100.00%]
+
+  <bb 6> [72.25%]:
+  goto <bb 3>; [100.00%]
+
+  <bb 7> [2.25%]:
+
+  <bb 4> [15.00%]:
+  # f_15 = PHI <f_1(8), 1(7)>
+  __printf_chk (1, "%d\n", f_15);
+  n ={v} {CLOBBER};
+  return 0;
+
+}
+
+

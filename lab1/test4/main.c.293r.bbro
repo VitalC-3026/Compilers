@@ -1,0 +1,443 @@
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23) (executed once)
+
+
+
+try_optimize_cfg iteration 1
+
+Redirecting fallthru edge 4->5 to 7
+deleting insn with uid = 55.
+deleting block 5
+
+
+try_optimize_cfg iteration 2
+
+
+
+try_optimize_cfg iteration 1
+
+rescanning insn with uid = 18.
+rescanning insn with uid = 18.
+rescanning insn with uid = 24.
+rescanning insn with uid = 24.
+rescanning insn with uid = 38.
+rescanning insn with uid = 38.
+
+Reordering with the "simple" algorithm.
+
+Reordered sequence:
+ 2 bb 2  [1500]
+ 3 bb 3  [1275]
+ 4 bb 4  [8500]
+ 5 bb 7  [1500]
+ 6 bb 9  [1499]
+ 7 bb 6  [225]
+ 8 bb 8  [1]
+
+9 basic blocks, 10 edges.
+
+(note 9 0 59 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(insn/f 59 9 60 2 (parallel [
+            (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int -24 [0xffffffffffffffe8])))
+            (clobber (reg:CC 17 flags))
+            (clobber (mem:BLK (scratch) [0  A8]))
+        ]) "main.c":4 994 {pro_epilogue_adjust_stack_di_add}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (expr_list:REG_CFA_ADJUST_CFA (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int -24 [0xffffffffffffffe8])))
+            (nil))))
+(note 60 59 4 2 NOTE_INSN_PROLOGUE_END)
+(note 4 60 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 4 58 2 (parallel [
+            (set (mem/v/f/c:DI (plus:DI (reg/f:DI 7 sp)
+                        (const_int 8 [0x8])) [2 D.2470+0 S8 A64])
+                (unspec:DI [
+                        (const_int 40 [0x28])
+                    ] UNSPEC_SP_TLS_SET))
+            (set (reg:DI 0 ax [95])
+                (const_int 0 [0]))
+            (clobber (reg:CC 17 flags))
+        ]) "main.c":4 1012 {stack_tls_protect_set_di}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (nil)))
+(insn 58 5 13 2 (set (reg/f:DI 4 si [93])
+        (plus:DI (reg/f:DI 7 sp)
+            (const_int 4 [0x4]))) "main.c":6 214 {*leadi}
+     (nil))
+(insn 13 58 15 2 (set (reg:DI 5 di)
+        (symbol_ref/f:DI ("*.LC0") [flags 0x2]  <var_decl 0x7f9d76de2990 *.LC0>)) "main.c":6 81 {*movdi_internal}
+     (nil))
+(call_insn 15 13 16 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:DI ("*__isoc99_scanf") [flags 0x41]  <function_decl 0x7f9d76ccdb00 scanf>) [0 __builtin_scanf S1 A8])
+            (const_int 0 [0]))) "main.c":6 676 {*call_value}
+     (expr_list:REG_DEAD (reg:DI 5 di)
+        (expr_list:REG_DEAD (reg:DI 4 si)
+            (expr_list:REG_UNUSED (reg:SI 0 ax)
+                (nil))))
+    (expr_list (use (reg:QI 0 ax))
+        (expr_list:DI (use (reg:DI 5 di))
+            (expr_list:DI (use (reg:DI 4 si))
+                (nil)))))
+(insn 16 15 17 2 (set (reg:SI 2 cx [orig:91 n.0_12 ] [91])
+        (mem/c:SI (plus:DI (reg/f:DI 7 sp)
+                (const_int 4 [0x4])) [1 n+0 S4 A32])) "main.c":9 82 {*movsi_internal}
+     (nil))
+(insn 17 16 18 2 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg:SI 2 cx [orig:91 n.0_12 ] [91])
+            (const_int 1 [0x1]))) "main.c":9 7 {*cmpsi_1}
+     (nil))
+(jump_insn 18 17 44 2 (set (pc)
+        (if_then_else (le (reg:CCGC 17 flags)
+                (const_int 0 [0]))
+            (label_ref:DI 49)
+            (pc))) "main.c":9 627 {*jcc_1}
+     (expr_list:REG_DEAD (reg:CCGC 17 flags)
+        (int_list:REG_BR_PROB 1500 (nil)))
+ -> 49)
+
+(note 44 18 6 3 [bb 3] NOTE_INSN_BASIC_BLOCK)
+(insn 6 44 7 3 (set (reg/v:SI 1 dx [orig:89 f ] [89])
+        (const_int 1 [0x1])) "main.c":8 82 {*movsi_internal}
+     (expr_list:REG_EQUAL (const_int 1 [0x1])
+        (nil)))
+(insn 7 6 22 3 (set (reg/v:SI 0 ax [orig:90 i ] [90])
+        (const_int 2 [0x2])) "main.c":7 82 {*movsi_internal}
+     (expr_list:REG_EQUAL (const_int 2 [0x2])
+        (nil)))
+
+(code_label 22 7 19 4 3 (nil) [1 uses])
+(note 19 22 20 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 20 19 21 4 (parallel [
+            (set (reg/v:SI 1 dx [orig:89 f ] [89])
+                (mult:SI (reg/v:SI 1 dx [orig:89 f ] [89])
+                    (reg/v:SI 0 ax [orig:90 i ] [90])))
+            (clobber (reg:CC 17 flags))
+        ]) "main.c":11 338 {*mulsi3_1}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (nil)))
+(insn 21 20 23 4 (parallel [
+            (set (reg/v:SI 0 ax [orig:90 i ] [90])
+                (plus:SI (reg/v:SI 0 ax [orig:90 i ] [90])
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ]) "main.c":12 217 {*addsi_1}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (nil)))
+(insn 23 21 24 4 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 0 ax [orig:90 i ] [90])
+            (reg:SI 2 cx [orig:91 n.0_12 ] [91]))) "main.c":9 7 {*cmpsi_1}
+     (nil))
+(jump_insn 24 23 49 4 (set (pc)
+        (if_then_else (le (reg:CCGC 17 flags)
+                (const_int 0 [0]))
+            (label_ref:DI 22)
+            (pc))) "main.c":9 627 {*jcc_1}
+     (expr_list:REG_DEAD (reg:CCGC 17 flags)
+        (int_list:REG_BR_PROB 8500 (nil)))
+ -> 22)
+
+(code_label 25 8 26 5 2 (nil) [0 uses])
+(note 26 25 28 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 28 26 29 5 (set (reg:DI 4 si)
+        (symbol_ref/f:DI ("*.LC1") [flags 0x2]  <var_decl 0x7f9d76de2a20 *.LC1>)) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 81 {*movdi_internal}
+     (nil))
+(insn 29 28 30 5 (set (reg:SI 5 di)
+        (const_int 1 [0x1])) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 82 {*movsi_internal}
+     (nil))
+(insn 30 29 31 5 (set (reg:QI 0 ax)
+        (const_int 0 [0])) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 84 {*movqi_internal}
+     (nil))
+(call_insn 31 30 36 5 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:DI ("__printf_chk") [flags 0x41]  <function_decl 0x7f9d76cf8700 __printf_chk>) [0 __builtin___printf_chk S1 A8])
+            (const_int 0 [0]))) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 676 {*call_value}
+     (expr_list:REG_DEAD (reg:SI 5 di)
+        (expr_list:REG_DEAD (reg:DI 4 si)
+            (expr_list:REG_DEAD (reg:SI 1 dx)
+                (expr_list:REG_UNUSED (reg:SI 0 ax)
+                    (nil)))))
+    (expr_list (use (reg:QI 0 ax))
+        (expr_list:SI (use (reg:SI 5 di))
+            (expr_list:DI (use (reg:DI 4 si))
+                (expr_list:SI (use (reg:SI 1 dx))
+                    (nil))))))
+(insn 36 31 37 5 (set (reg/i:SI 0 ax)
+        (const_int 0 [0])) "main.c":15 82 {*movsi_internal}
+     (nil))
+(insn 37 36 38 5 (parallel [
+            (set (reg:CCZ 17 flags)
+                (unspec:CCZ [
+                        (mem/v/f/c:DI (plus:DI (reg/f:DI 7 sp)
+                                (const_int 8 [0x8])) [2 D.2470+0 S8 A64])
+                        (const_int 40 [0x28])
+                    ] UNSPEC_SP_TLS_TEST))
+            (clobber (reg:DI 5 di [96]))
+        ]) "main.c":15 1016 {stack_tls_protect_test_di}
+     (expr_list:REG_UNUSED (reg:DI 5 di [96])
+        (nil)))
+(jump_insn 38 37 50 5 (set (pc)
+        (if_then_else (eq (reg:CCZ 17 flags)
+                (const_int 0 [0]))
+            (label_ref 41)
+            (pc))) "main.c":15 627 {*jcc_1}
+     (expr_list:REG_DEAD (reg:CCZ 17 flags)
+        (int_list:REG_BR_PROB 9996 (nil)))
+ -> 41)
+
+(code_label 41 39 51 6 4 (nil) [1 uses])
+(note 51 41 42 6 [bb 6] NOTE_INSN_BASIC_BLOCK)
+(insn 42 51 61 6 (use (reg/i:SI 0 ax)) "main.c":15 -1
+     (nil))
+(note 61 42 62 6 NOTE_INSN_EPILOGUE_BEG)
+(insn/f 62 61 63 6 (parallel [
+            (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int 24 [0x18])))
+            (clobber (reg:CC 17 flags))
+            (clobber (mem:BLK (scratch) [0  A8]))
+        ]) "main.c":15 994 {pro_epilogue_adjust_stack_di_add}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (expr_list:REG_CFA_ADJUST_CFA (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int 24 [0x18])))
+            (nil))))
+(jump_insn 63 62 0 6 (simple_return) "main.c":15 689 {simple_return_internal}
+     (nil)
+ -> simple_return)
+
+(code_label 49 24 48 7 5 (nil) [1 uses])
+(note 48 49 8 7 [bb 7] NOTE_INSN_BASIC_BLOCK)
+(insn 8 48 25 7 (set (reg/v:SI 1 dx [orig:89 f ] [89])
+        (const_int 1 [0x1])) "main.c":8 82 {*movsi_internal}
+     (nil))
+
+(note 50 38 39 8 [bb 8] NOTE_INSN_BASIC_BLOCK)
+(call_insn 39 50 41 8 (call (mem:QI (symbol_ref:DI ("__stack_chk_fail") [flags 0x41]  <function_decl 0x7f9d76de9600 __stack_chk_fail>) [0 __stack_chk_fail S1 A8])
+        (const_int 0 [0])) "main.c":15 665 {*call}
+     (expr_list:REG_ARGS_SIZE (const_int 0 [0])
+        (expr_list:REG_NORETURN (const_int 0 [0])
+            (expr_list:REG_EH_REGION (const_int 0 [0])
+                (nil))))
+    (nil))
+
+
+
+
+
+try_optimize_cfg iteration 1
+
+Emitting label for block 8
+rescanning insn with uid = 38.
+scanning new insn with uid = 68.
+Reordered sequence:
+ 2 bb 2  [1500]
+ 3 bb 3  [1275]
+ 4 bb 4  [8500]
+ 5 bb 5  [1500]
+ 6 bb 6  [1499]
+ 7 bb 7  [225]
+ 8 bb 8  [1]
+
+
+main
+
+Dataflow summary:
+;;  invalidated by call 	 0 [ax] 1 [dx] 2 [cx] 4 [si] 5 [di] 8 [st] 9 [st(1)] 10 [st(2)] 11 [st(3)] 12 [st(4)] 13 [st(5)] 14 [st(6)] 15 [st(7)] 17 [flags] 18 [fpsr] 19 [fpcr] 21 [xmm0] 22 [xmm1] 23 [xmm2] 24 [xmm3] 25 [xmm4] 26 [xmm5] 27 [xmm6] 28 [xmm7] 29 [mm0] 30 [mm1] 31 [mm2] 32 [mm3] 33 [mm4] 34 [mm5] 35 [mm6] 36 [mm7] 37 [r8] 38 [r9] 39 [r10] 40 [r11] 45 [xmm8] 46 [xmm9] 47 [xmm10] 48 [xmm11] 49 [xmm12] 50 [xmm13] 51 [xmm14] 52 [xmm15] 53 [] 54 [] 55 [] 56 [] 57 [] 58 [] 59 [] 60 [] 61 [] 62 [] 63 [] 64 [] 65 [] 66 [] 67 [] 68 [] 69 [] 70 [] 71 [] 72 [] 73 [] 74 [] 75 [] 76 [] 77 [] 78 [] 79 [] 80 []
+;;  hardware regs used 	 7 [sp]
+;;  regular block artificial uses 	 7 [sp]
+;;  eh block artificial uses 	 7 [sp] 16 [argp]
+;;  entry block defs 	 0 [ax] 1 [dx] 2 [cx] 4 [si] 5 [di] 7 [sp] 21 [xmm0] 22 [xmm1] 23 [xmm2] 24 [xmm3] 25 [xmm4] 26 [xmm5] 27 [xmm6] 28 [xmm7] 37 [r8] 38 [r9]
+;;  exit block uses 	 0 [ax] 7 [sp]
+;;  regs ever live 	 0 [ax] 1 [dx] 2 [cx] 4 [si] 5 [di] 7 [sp] 17 [flags]
+;;  ref usage 	r0={9d,7u} r1={7d,2u} r2={5d,2u} r4={6d,2u} r5={7d,2u} r7={3d,19u} r8={3d} r9={3d} r10={3d} r11={3d} r12={3d} r13={3d} r14={3d} r15={3d} r17={11d,3u} r18={3d} r19={3d} r21={4d} r22={4d} r23={4d} r24={4d} r25={4d} r26={4d} r27={4d} r28={4d} r29={3d} r30={3d} r31={3d} r32={3d} r33={3d} r34={3d} r35={3d} r36={3d} r37={4d} r38={4d} r39={3d} r40={3d} r45={3d} r46={3d} r47={3d} r48={3d} r49={3d} r50={3d} r51={3d} r52={3d} r53={3d} r54={3d} r55={3d} r56={3d} r57={3d} r58={3d} r59={3d} r60={3d} r61={3d} r62={3d} r63={3d} r64={3d} r65={3d} r66={3d} r67={3d} r68={3d} r69={3d} r70={3d} r71={3d} r72={3d} r73={3d} r74={3d} r75={3d} r76={3d} r77={3d} r78={3d} r79={3d} r80={3d} 
+;;    total ref usage 293{256d,37u,0e} in 27{24 regular + 3 call} insns.
+(note 3 0 9 NOTE_INSN_DELETED)
+(note 9 3 59 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(insn/f 59 9 60 2 (parallel [
+            (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int -24 [0xffffffffffffffe8])))
+            (clobber (reg:CC 17 flags))
+            (clobber (mem:BLK (scratch) [0  A8]))
+        ]) "main.c":4 994 {pro_epilogue_adjust_stack_di_add}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (expr_list:REG_CFA_ADJUST_CFA (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int -24 [0xffffffffffffffe8])))
+            (nil))))
+(note 60 59 4 2 NOTE_INSN_PROLOGUE_END)
+(note 4 60 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 4 58 2 (parallel [
+            (set (mem/v/f/c:DI (plus:DI (reg/f:DI 7 sp)
+                        (const_int 8 [0x8])) [2 D.2470+0 S8 A64])
+                (unspec:DI [
+                        (const_int 40 [0x28])
+                    ] UNSPEC_SP_TLS_SET))
+            (set (reg:DI 0 ax [95])
+                (const_int 0 [0]))
+            (clobber (reg:CC 17 flags))
+        ]) "main.c":4 1012 {stack_tls_protect_set_di}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (nil)))
+(insn 58 5 13 2 (set (reg/f:DI 4 si [93])
+        (plus:DI (reg/f:DI 7 sp)
+            (const_int 4 [0x4]))) "main.c":6 214 {*leadi}
+     (nil))
+(insn 13 58 15 2 (set (reg:DI 5 di)
+        (symbol_ref/f:DI ("*.LC0") [flags 0x2]  <var_decl 0x7f9d76de2990 *.LC0>)) "main.c":6 81 {*movdi_internal}
+     (nil))
+(call_insn 15 13 16 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:DI ("*__isoc99_scanf") [flags 0x41]  <function_decl 0x7f9d76ccdb00 scanf>) [0 __builtin_scanf S1 A8])
+            (const_int 0 [0]))) "main.c":6 676 {*call_value}
+     (expr_list:REG_DEAD (reg:DI 5 di)
+        (expr_list:REG_DEAD (reg:DI 4 si)
+            (expr_list:REG_UNUSED (reg:SI 0 ax)
+                (nil))))
+    (expr_list (use (reg:QI 0 ax))
+        (expr_list:DI (use (reg:DI 5 di))
+            (expr_list:DI (use (reg:DI 4 si))
+                (nil)))))
+(insn 16 15 17 2 (set (reg:SI 2 cx [orig:91 n.0_12 ] [91])
+        (mem/c:SI (plus:DI (reg/f:DI 7 sp)
+                (const_int 4 [0x4])) [1 n+0 S4 A32])) "main.c":9 82 {*movsi_internal}
+     (nil))
+(insn 17 16 18 2 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg:SI 2 cx [orig:91 n.0_12 ] [91])
+            (const_int 1 [0x1]))) "main.c":9 7 {*cmpsi_1}
+     (nil))
+(jump_insn 18 17 44 2 (set (pc)
+        (if_then_else (le (reg:CCGC 17 flags)
+                (const_int 0 [0]))
+            (label_ref:DI 49)
+            (pc))) "main.c":9 627 {*jcc_1}
+     (expr_list:REG_DEAD (reg:CCGC 17 flags)
+        (int_list:REG_BR_PROB 1500 (nil)))
+ -> 49)
+(note 44 18 6 3 [bb 3] NOTE_INSN_BASIC_BLOCK)
+(insn 6 44 7 3 (set (reg/v:SI 1 dx [orig:89 f ] [89])
+        (const_int 1 [0x1])) "main.c":8 82 {*movsi_internal}
+     (expr_list:REG_EQUAL (const_int 1 [0x1])
+        (nil)))
+(insn 7 6 22 3 (set (reg/v:SI 0 ax [orig:90 i ] [90])
+        (const_int 2 [0x2])) "main.c":7 82 {*movsi_internal}
+     (expr_list:REG_EQUAL (const_int 2 [0x2])
+        (nil)))
+(code_label 22 7 19 4 3 (nil) [1 uses])
+(note 19 22 20 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 20 19 21 4 (parallel [
+            (set (reg/v:SI 1 dx [orig:89 f ] [89])
+                (mult:SI (reg/v:SI 1 dx [orig:89 f ] [89])
+                    (reg/v:SI 0 ax [orig:90 i ] [90])))
+            (clobber (reg:CC 17 flags))
+        ]) "main.c":11 338 {*mulsi3_1}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (nil)))
+(insn 21 20 23 4 (parallel [
+            (set (reg/v:SI 0 ax [orig:90 i ] [90])
+                (plus:SI (reg/v:SI 0 ax [orig:90 i ] [90])
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ]) "main.c":12 217 {*addsi_1}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (nil)))
+(insn 23 21 24 4 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 0 ax [orig:90 i ] [90])
+            (reg:SI 2 cx [orig:91 n.0_12 ] [91]))) "main.c":9 7 {*cmpsi_1}
+     (nil))
+(jump_insn 24 23 25 4 (set (pc)
+        (if_then_else (le (reg:CCGC 17 flags)
+                (const_int 0 [0]))
+            (label_ref:DI 22)
+            (pc))) "main.c":9 627 {*jcc_1}
+     (expr_list:REG_DEAD (reg:CCGC 17 flags)
+        (int_list:REG_BR_PROB 8500 (nil)))
+ -> 22)
+(code_label 25 24 26 5 2 (nil) [1 uses])
+(note 26 25 28 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 28 26 29 5 (set (reg:DI 4 si)
+        (symbol_ref/f:DI ("*.LC1") [flags 0x2]  <var_decl 0x7f9d76de2a20 *.LC1>)) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 81 {*movdi_internal}
+     (nil))
+(insn 29 28 30 5 (set (reg:SI 5 di)
+        (const_int 1 [0x1])) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 82 {*movsi_internal}
+     (nil))
+(insn 30 29 31 5 (set (reg:QI 0 ax)
+        (const_int 0 [0])) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 84 {*movqi_internal}
+     (nil))
+(call_insn 31 30 36 5 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:DI ("__printf_chk") [flags 0x41]  <function_decl 0x7f9d76cf8700 __printf_chk>) [0 __builtin___printf_chk S1 A8])
+            (const_int 0 [0]))) "/usr/include/x86_64-linux-gnu/bits/stdio2.h":104 676 {*call_value}
+     (expr_list:REG_DEAD (reg:SI 5 di)
+        (expr_list:REG_DEAD (reg:DI 4 si)
+            (expr_list:REG_DEAD (reg:SI 1 dx)
+                (expr_list:REG_UNUSED (reg:SI 0 ax)
+                    (nil)))))
+    (expr_list (use (reg:QI 0 ax))
+        (expr_list:SI (use (reg:SI 5 di))
+            (expr_list:DI (use (reg:DI 4 si))
+                (expr_list:SI (use (reg:SI 1 dx))
+                    (nil))))))
+(insn 36 31 37 5 (set (reg/i:SI 0 ax)
+        (const_int 0 [0])) "main.c":15 82 {*movsi_internal}
+     (nil))
+(insn 37 36 38 5 (parallel [
+            (set (reg:CCZ 17 flags)
+                (unspec:CCZ [
+                        (mem/v/f/c:DI (plus:DI (reg/f:DI 7 sp)
+                                (const_int 8 [0x8])) [2 D.2470+0 S8 A64])
+                        (const_int 40 [0x28])
+                    ] UNSPEC_SP_TLS_TEST))
+            (clobber (reg:DI 5 di [96]))
+        ]) "main.c":15 1016 {stack_tls_protect_test_di}
+     (expr_list:REG_UNUSED (reg:DI 5 di [96])
+        (nil)))
+(jump_insn 38 37 51 5 (set (pc)
+        (if_then_else (ne (reg:CCZ 17 flags)
+                (const_int 0 [0]))
+            (label_ref:DI 67)
+            (pc))) "main.c":15 627 {*jcc_1}
+     (expr_list:REG_DEAD (reg:CCZ 17 flags)
+        (int_list:REG_BR_PROB 4 (nil)))
+ -> 67)
+(note 51 38 42 6 [bb 6] NOTE_INSN_BASIC_BLOCK)
+(insn 42 51 61 6 (use (reg/i:SI 0 ax)) "main.c":15 -1
+     (nil))
+(note 61 42 62 6 NOTE_INSN_EPILOGUE_BEG)
+(insn/f 62 61 63 6 (parallel [
+            (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int 24 [0x18])))
+            (clobber (reg:CC 17 flags))
+            (clobber (mem:BLK (scratch) [0  A8]))
+        ]) "main.c":15 994 {pro_epilogue_adjust_stack_di_add}
+     (expr_list:REG_UNUSED (reg:CC 17 flags)
+        (expr_list:REG_CFA_ADJUST_CFA (set (reg/f:DI 7 sp)
+                (plus:DI (reg/f:DI 7 sp)
+                    (const_int 24 [0x18])))
+            (nil))))
+(jump_insn 63 62 66 6 (simple_return) "main.c":15 689 {simple_return_internal}
+     (nil)
+ -> simple_return)
+(barrier 66 63 49)
+(code_label 49 66 48 7 5 (nil) [1 uses])
+(note 48 49 8 7 [bb 7] NOTE_INSN_BASIC_BLOCK)
+(insn 8 48 68 7 (set (reg/v:SI 1 dx [orig:89 f ] [89])
+        (const_int 1 [0x1])) "main.c":8 82 {*movsi_internal}
+     (nil))
+(jump_insn 68 8 69 7 (set (pc)
+        (label_ref 25)) -1
+     (nil)
+ -> 25)
+(barrier 69 68 67)
+(code_label 67 69 50 8 8 (nil) [1 uses])
+(note 50 67 39 8 [bb 8] NOTE_INSN_BASIC_BLOCK)
+(call_insn 39 50 40 8 (call (mem:QI (symbol_ref:DI ("__stack_chk_fail") [flags 0x41]  <function_decl 0x7f9d76de9600 __stack_chk_fail>) [0 __stack_chk_fail S1 A8])
+        (const_int 0 [0])) "main.c":15 665 {*call}
+     (expr_list:REG_ARGS_SIZE (const_int 0 [0])
+        (expr_list:REG_NORETURN (const_int 0 [0])
+            (expr_list:REG_EH_REGION (const_int 0 [0])
+                (nil))))
+    (nil))
+(barrier 40 39 57)
+(note 57 40 0 NOTE_INSN_DELETED)

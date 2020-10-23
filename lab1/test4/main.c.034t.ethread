@@ -1,0 +1,74 @@
+
+;; Function printf (printf, funcdef_no=15, decl_uid=798, cgraph_uid=15, symbol_order=15)
+
+;; 1 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2
+;; 2 succs { 1 }
+__attribute__((__artificial__, __gnu_inline__, __always_inline__))
+printf (const char * restrict __fmt)
+{
+  int _4;
+
+  <bb 2> [0.00%]:
+  _4 = __printf_chk (1, __fmt_2(D), __builtin_va_arg_pack ());
+  return _4;
+
+}
+
+
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23)
+
+;; 2 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2 3 4 5
+;;
+;; Loop 1
+;;  header 4, latch 3
+;;  depth 1, outer 0
+;;  nodes: 4 3
+;; 2 succs { 4 }
+;; 3 succs { 4 }
+;; 4 succs { 3 5 }
+;; 5 succs { 1 }
+main ()
+{
+  int D.2462;
+  int f;
+  int n;
+  int i;
+  int n.0_1;
+  int _13;
+
+  <bb 2> [0.00%]:
+  scanf ("%d", &n);
+  goto <bb 4>; [0.00%]
+
+  <bb 3> [0.00%]:
+  f_11 = i_2 * f_3;
+  i_12 = i_2 + 1;
+
+  <bb 4> [0.00%]:
+  # i_2 = PHI <2(2), i_12(3)>
+  # f_3 = PHI <1(2), f_11(3)>
+  n.0_1 = n;
+  if (n.0_1 >= i_2)
+    goto <bb 3>; [0.00%]
+  else
+    goto <bb 5>; [0.00%]
+
+  <bb 5> [100.00%]:
+  _13 = __printf_chk (1, "%d\n", f_3);
+  n ={v} {CLOBBER};
+  return 0;
+
+}
+
+

@@ -1,0 +1,52 @@
+
+;; Function printf (printf, funcdef_no=15, decl_uid=798, cgraph_uid=15, symbol_order=15)
+
+Released 0 names, 0.00%, removed 0 holes
+__attribute__((__artificial__, __gnu_inline__, __always_inline__))
+printf (const char * restrict __fmt)
+{
+  int _4;
+
+  <bb 2> [100.00%]:
+  _4 = __printf_chk (1, __fmt_2(D), __builtin_va_arg_pack ());
+  return _4;
+
+}
+
+
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23) (executed once)
+
+Released 6 names, 60.00%, removed 6 holes
+main ()
+{
+  int f;
+  int n;
+  int i;
+  int n.0_1;
+
+  <bb 2> [15.00%]:
+  scanf ("%d", &n);
+  goto <bb 4>; [100.00%]
+
+  <bb 3> [85.00%]:
+  f_7 = i_2 * f_3;
+  i_8 = i_2 + 1;
+
+  <bb 4> [100.00%]:
+  # i_2 = PHI <2(2), i_8(3)>
+  # f_3 = PHI <1(2), f_7(3)>
+  n.0_1 = n;
+  if (n.0_1 >= i_2)
+    goto <bb 3>; [85.00%]
+  else
+    goto <bb 5>; [15.00%]
+
+  <bb 5> [15.00%]:
+  __printf_chk (1, "%d\n", f_3);
+  n ={v} {CLOBBER};
+  return 0;
+
+}
+
+

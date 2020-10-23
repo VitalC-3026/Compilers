@@ -1,0 +1,50 @@
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23) (executed once)
+
+;; 2 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2 3 4 5
+;;
+;; Loop 1
+;;  header 4, latch 3
+;;  depth 1, outer 0
+;;  nodes: 4 3
+;; 2 succs { 4 }
+;; 3 succs { 4 }
+;; 4 succs { 3 5 }
+;; 5 succs { 1 }
+main ()
+{
+  int f;
+  int n;
+  int i;
+  int n.0_1;
+
+  <bb 2> [15.00%]:
+  scanf ("%d", &n);
+  goto <bb 4>; [100.00%]
+
+  <bb 3> [85.00%]:
+  f_7 = i_2 * f_3;
+  i_8 = i_2 + 1;
+
+  <bb 4> [100.00%]:
+  # i_2 = PHI <2(2), i_8(3)>
+  # f_3 = PHI <1(2), f_7(3)>
+  n.0_1 = n;
+  if (n.0_1 >= i_2)
+    goto <bb 3>; [85.00%]
+  else
+    goto <bb 5>; [15.00%]
+
+  <bb 5> [15.00%]:
+  __printf_chk (1, "%d\n", f_3);
+  n ={v} {CLOBBER};
+  return 0;
+
+}
+
+

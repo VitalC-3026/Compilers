@@ -1,0 +1,7 @@
+0000000000000000 B a
+0000000000000004 B b
+                 U _GLOBAL_OFFSET_TABLE_
+                 U __isoc99_scanf
+000000000000001c T main
+0000000000000000 T max
+                 U printf

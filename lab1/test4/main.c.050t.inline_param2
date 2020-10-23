@@ -1,0 +1,91 @@
+
+;; Function printf (printf, funcdef_no=15, decl_uid=798, cgraph_uid=15, symbol_order=15)
+
+
+Analyzing function body size: printf
+
+Inline summary for printf/15 always_inline inlinable
+  self time:       15
+  global time:     0
+  self size:       7
+  global size:     0
+  min size:       0
+  self stack:      0
+  global stack:    0
+    size:0.000000, time:0.000000, predicate:(true)
+    size:3.000000, time:2.000000, predicate:(not inlined)
+  calls:
+    __printf_chk/25 function body not available
+      loop depth: 0 freq:1000 size: 4 time: 13 callee size: 0 stack: 0
+       op0 is compile time invariant
+
+__attribute__((__artificial__, __gnu_inline__, __always_inline__))
+printf (const char * restrict __fmt)
+{
+  int _4;
+
+  <bb 2> [100.00%]:
+  _4 = __printf_chk (1, __fmt_2(D), __builtin_va_arg_pack ());
+  return _4;
+
+}
+
+
+
+;; Function main (main, funcdef_no=23, decl_uid=2444, cgraph_uid=23, symbol_order=23) (executed once)
+
+
+Analyzing function body size: main
+
+Inline summary for main/23 inlinable
+  self time:       58
+  global time:     0
+  self size:       15
+  global size:     0
+  min size:       30
+  self stack:      4
+  global stack:    4
+    size:5.000000, time:31.330000, predicate:(true)
+    size:3.000000, time:2.000000, predicate:(not inlined)
+  calls:
+    __printf_chk/25 function body not available
+      loop depth: 0 freq:1000 size: 4 time: 13 callee size: 0 stack: 0
+       op0 is compile time invariant
+       op1 is compile time invariant
+    scanf/24 function body not available
+      loop depth: 0 freq:1000 size: 3 time: 12 callee size: 0 stack: 0
+       op0 is compile time invariant
+       op1 is compile time invariant
+
+main ()
+{
+  int f;
+  int n;
+  int i;
+  int n.0_1;
+
+  <bb 2> [15.00%]:
+  scanf ("%d", &n);
+  goto <bb 4>; [100.00%]
+
+  <bb 3> [85.00%]:
+  f_7 = i_2 * f_3;
+  i_8 = i_2 + 1;
+
+  <bb 4> [100.00%]:
+  # i_2 = PHI <2(2), i_8(3)>
+  # f_3 = PHI <1(2), f_7(3)>
+  n.0_1 = n;
+  if (n.0_1 >= i_2)
+    goto <bb 3>; [85.00%]
+  else
+    goto <bb 5>; [15.00%]
+
+  <bb 5> [15.00%]:
+  __printf_chk (1, "%d\n", f_3);
+  n ={v} {CLOBBER};
+  return 0;
+
+}
+
+
