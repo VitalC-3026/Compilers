@@ -76,7 +76,7 @@ Juanyun Mai <1811499@mail.nankai.edu.cn>
 #include <ctype.h>
 #include <string.h>
 #ifndef YYSTYPE
-#define YYSTYPE double
+#define YYSTYPE int
 #endif
 
 
@@ -400,16 +400,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   33
+#define YYLAST   39
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  15
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  3
+#define YYNNTS  4
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  12
+#define YYNRULES  15
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  21
+#define YYNSTATES  26
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -456,8 +456,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    52,    52,    53,    54,    57,    58,    59,    60,    61,
-      62,    63,    64
+       0,    53,    53,    54,    55,    56,    59,    60,    63,    64,
+      65,    66,    67,    68,    69,    70
 };
 #endif
 
@@ -468,7 +468,7 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "ADD", "SUB", "MUL", "DIV", "UMINUS",
   "LB", "RB", "ID", "EQ", "NUMBER", "';'", "'\\n'", "$accept", "lines",
-  "expr", YY_NULLPTR
+  "stmt", "expr", YY_NULLPTR
 };
 #endif
 
@@ -482,10 +482,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -3
+#define YYPACT_NINF -4
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-3)))
+  (!!((Yystate) == (-4)))
 
 #define YYTABLE_NINF -1
 
@@ -496,9 +496,9 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,     0,    -3,    10,    10,    -3,    -3,    -3,    -2,    -3,
-      24,    10,    10,    10,    10,    -3,    -3,    26,    26,    -3,
-      -3
+      -4,     9,    -4,    23,    23,     0,    -4,    -4,     5,    21,
+      -4,    -4,    -1,    23,    -4,    23,    23,    23,    23,    -4,
+      -4,    33,     1,     1,    -4,    -4
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -506,21 +506,21 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       4,     0,     1,     0,     0,    12,    11,     3,     0,    10,
-       0,     0,     0,     0,     0,     2,     9,     5,     6,     7,
-       8
+       5,     7,     1,     0,     0,    15,    14,     4,     0,     0,
+      15,    13,     0,     0,     3,     0,     0,     0,     0,     2,
+      12,     6,     8,     9,    10,    11
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -3,    -3,    12
+      -4,    -4,    -4,    -3
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     8
+      -1,     1,     8,     9
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -528,41 +528,41 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,    11,    12,    13,    14,     0,     0,     3,     4,     0,
-       5,    15,     6,     0,     7,     9,    10,     3,     4,     0,
-       5,     0,     6,    17,    18,    19,    20,    11,    12,    13,
-      14,    13,    14,    16
+      11,    12,    15,    16,    17,    18,    17,    18,    20,     2,
+      21,    13,    22,    23,    24,    25,     3,     4,    14,     5,
+       0,     6,     0,     7,    15,    16,    17,    18,     0,     0,
+       3,     4,     0,    10,    19,     6,    15,    16,    17,    18
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     3,     4,     5,     6,    -1,    -1,     7,     8,    -1,
-      10,    13,    12,    -1,    14,     3,     4,     7,     8,    -1,
-      10,    -1,    12,    11,    12,    13,    14,     3,     4,     5,
-       6,     5,     6,     9
+       3,     4,     3,     4,     5,     6,     5,     6,     9,     0,
+      13,    11,    15,    16,    17,    18,     7,     8,    13,    10,
+      -1,    12,    -1,    14,     3,     4,     5,     6,    -1,    -1,
+       7,     8,    -1,    10,    13,    12,     3,     4,     5,     6
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    16,     0,     7,     8,    10,    12,    14,    17,    17,
-      17,     3,     4,     5,     6,    13,     9,    17,    17,    17,
-      17
+       0,    16,     0,     7,     8,    10,    12,    14,    17,    18,
+      10,    18,    18,    11,    13,     3,     4,     5,     6,    13,
+       9,    18,    18,    18,    18,    18
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    15,    16,    16,    16,    17,    17,    17,    17,    17,
-      17,    17,    17
+       0,    15,    16,    16,    16,    16,    17,    17,    18,    18,
+      18,    18,    18,    18,    18,    18
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     3,     2,     0,     3,     3,     3,     3,     3,
-       2,     1,     1
+       0,     2,     3,     3,     2,     0,     3,     0,     3,     3,
+       3,     3,     3,     2,     1,     1
 };
 
 
@@ -1239,61 +1239,73 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 52 "hw3_3.y" /* yacc.c:1646  */
-    { printf("%f\n", (yyvsp[-1]) ); }
+#line 53 "hw3_3.y" /* yacc.c:1646  */
+    { printf("%d\n", (yyvsp[-1]) ); }
 #line 1245 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 5:
-#line 57 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) + (yyvsp[0]); }
+  case 3:
+#line 54 "hw3_3.y" /* yacc.c:1646  */
+    { printf("%d\n", (yyvsp[-1]) ); }
 #line 1251 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 58 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) - (yyvsp[0]); }
+#line 59 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); id_table[(yyvsp[-2])].value = (yyvsp[0]); }
 #line 1257 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 7:
-#line 59 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) * (yyvsp[0]); }
+  case 8:
+#line 63 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) + (yyvsp[0]); }
 #line 1263 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 8:
-#line 60 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) / (yyvsp[0]); }
+  case 9:
+#line 64 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) - (yyvsp[0]); }
 #line 1269 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 9:
-#line 61 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-1]); }
+  case 10:
+#line 65 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) * (yyvsp[0]); }
 #line 1275 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 10:
-#line 62 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = -(yyvsp[0]); }
+  case 11:
+#line 66 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) / (yyvsp[0]); }
 #line 1281 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 11:
-#line 63 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
+  case 12:
+#line 67 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-1]); }
 #line 1287 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 12:
-#line 64 "hw3_3.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
+  case 13:
+#line 68 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = -(yyvsp[0]); }
 #line 1293 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
+  case 14:
+#line 69 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1299 "hw3_3.tab.c" /* yacc.c:1646  */
+    break;
 
-#line 1297 "hw3_3.tab.c" /* yacc.c:1646  */
+  case 15:
+#line 70 "hw3_3.y" /* yacc.c:1646  */
+    { (yyval) = id_table[(yyvsp[0])].value; }
+#line 1305 "hw3_3.tab.c" /* yacc.c:1646  */
+    break;
+
+
+#line 1309 "hw3_3.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1521,7 +1533,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 76 "hw3_3.y" /* yacc.c:1906  */
+#line 75 "hw3_3.y" /* yacc.c:1906  */
 	
 	
 // programs section	
@@ -1590,7 +1602,7 @@ int yylex()
             ungetc(t, stdin);
             return NUMBER;
         }
-        else if ((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z')) {
+        else if ((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z') || t == '_') {
             int idx = 0;
             while((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z') 
             || (t >= '0' && t <= '9') || t == '_' ) {
@@ -1599,30 +1611,31 @@ int yylex()
                 t = getchar();
             }
             idStr[idx] = '\0';
-            int flag = 0;
+            ungetc(t, stdin);
             int i;
             for (i = 0; i < last; i++) {
                 if (cmpstr(id_table[i].identifier, idStr)) {
-                    flag = 1;
-                    break;
+                    yylval = i;
+                    return ID;
                 }
             }
-            if (flag == 1) {
-                yylval = id_table[i].value;
-            } else {
-                if (last < 1000) {
-                    struct item temp;
-                    temp.identifier = idStr;
-                    temp.value = 0;
-                    id_table[last] = temp;
-                    last++;
+            
+            if (last < 1000) {
+                struct item temp;
+                for (int i = 0; i <= idx && i < 50; i++) {
+                    temp.identifier[i] = idStr[i];
                 }
-                else {
-                    char err[50] = "NO Place For New Identifier!";
-                    yyerror(err);
-                }
+                temp.value = 0;
+                id_table[last] = temp;
+                yylval = last;
+                last++;
             }
-            ungetc(t, stdin);
+            else {
+                char err[50] = "NO Place For New Identifier!";
+                yyerror(err);
+            }
+            
+            
             return ID;
         }
         else {

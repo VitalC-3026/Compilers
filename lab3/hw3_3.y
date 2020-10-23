@@ -11,7 +11,7 @@ Juanyun Mai <1811499@mail.nankai.edu.cn>
 #include <ctype.h>
 #include <string.h>
 #ifndef YYSTYPE
-#define YYSTYPE double
+#define YYSTYPE int
 #endif
 
 
@@ -44,13 +44,19 @@ void yyerror(const char* s);
 
 %left ADD SUB
 %left MUL DIV
-%right UMINUS
+%right UMINUS EQ
+
 
 %%
 
 
-lines	:	lines expr ';' { printf("%f\n", $2 ); }
+lines	:	lines expr ';' { printf("%d\n", $2 ); }
+        |   lines stmt ';' { printf("%d\n", $2 ); }
         |	lines '\n'
+        |
+        ;
+
+stmt    :   ID EQ expr  { $$ = $3; id_table[$1].value = $3; }
         |
         ;
 
@@ -61,17 +67,10 @@ expr    :   expr ADD expr   { $$ = $1 + $3; }
         |   LB expr RB    { $$ = $2; }
         |   UMINUS expr   { $$ = -$2; }
         |   NUMBER  { $$ = $1; }
-        |   ID      { $$ = $1; }
+        |   ID      { $$ = id_table[$1].value; }
         ;
 
-stmt    :   ID EQ expr  { $$ = $3; 
-                            for (int i = 0; i < last; i++) {
-                                if (cmpstr(id_table[i], $1)) {
-                                    id_table[i].value = $3;
-                                    break;
-                                }
-                            }
-                        }
+
 	
 %%	
 	
@@ -141,7 +140,7 @@ int yylex()
             ungetc(t, stdin);
             return NUMBER;
         }
-        else if ((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z')) {
+        else if ((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z') || t == '_') {
             int idx = 0;
             while((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z') 
             || (t >= '0' && t <= '9') || t == '_' ) {
@@ -150,32 +149,31 @@ int yylex()
                 t = getchar();
             }
             idStr[idx] = '\0';
-            int flag = 0;
+            ungetc(t, stdin);
             int i;
             for (i = 0; i < last; i++) {
                 if (cmpstr(id_table[i].identifier, idStr)) {
-                    flag = 1;
-                    break;
+                    yylval = i;
+                    return ID;
                 }
             }
-            if (flag == 1) {
-                yylval = id_table[i].value;
-            } else {
-                if (last < 1000) {
-                    struct item temp;
-                    for (int i = 0; i <= idx && i < 50; i++) {
-                        temp.identifier[i] = idStr[i];
-                    }
-                    temp.value = 0;
-                    id_table[last] = temp;
-                    last++;
+            
+            if (last < 1000) {
+                struct item temp;
+                for (int i = 0; i <= idx && i < 50; i++) {
+                    temp.identifier[i] = idStr[i];
                 }
-                else {
-                    char err[50] = "NO Place For New Identifier!";
-                    yyerror(err);
-                }
+                temp.value = 0;
+                id_table[last] = temp;
+                yylval = last;
+                last++;
             }
-            ungetc(t, stdin);
+            else {
+                char err[50] = "NO Place For New Identifier!";
+                yyerror(err);
+            }
+            
+            
             return ID;
         }
         else {
