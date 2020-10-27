@@ -400,7 +400,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   39
+#define YYLAST   46
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  15
@@ -482,10 +482,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -4
+#define YYPACT_NINF -10
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-4)))
+  (!!((Yystate) == (-10)))
 
 #define YYTABLE_NINF -1
 
@@ -496,9 +496,9 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -4,     9,    -4,    23,    23,     0,    -4,    -4,     5,    21,
-      -4,    -4,    -1,    23,    -4,    23,    23,    23,    23,    -4,
-      -4,    33,     1,     1,    -4,    -4
+     -10,    16,   -10,    -1,    -1,    -9,   -10,   -10,    -5,    28,
+     -10,   -10,    33,    -1,   -10,    -1,    -1,    -1,    -1,   -10,
+     -10,    40,     0,     0,   -10,   -10
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -514,7 +514,7 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4,    -4,    -3
+     -10,   -10,   -10,    -3
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -528,25 +528,27 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      11,    12,    15,    16,    17,    18,    17,    18,    20,     2,
-      21,    13,    22,    23,    24,    25,     3,     4,    14,     5,
-       0,     6,     0,     7,    15,    16,    17,    18,     0,     0,
-       3,     4,     0,    10,    19,     6,    15,    16,    17,    18
+      11,    12,    13,     3,     0,    17,    18,     4,    14,    10,
+      21,     6,    22,    23,    24,    25,     2,     0,     0,     0,
+       3,     0,     0,     0,     4,     0,     5,     0,     6,     0,
+       7,    15,    16,    17,    18,     0,    15,    16,    17,    18,
+       0,    19,    20,    15,    16,    17,    18
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     4,     3,     4,     5,     6,     5,     6,     9,     0,
-      13,    11,    15,    16,    17,    18,     7,     8,    13,    10,
-      -1,    12,    -1,    14,     3,     4,     5,     6,    -1,    -1,
-       7,     8,    -1,    10,    13,    12,     3,     4,     5,     6
+       3,     4,    11,     4,    -1,     5,     6,     8,    13,    10,
+      13,    12,    15,    16,    17,    18,     0,    -1,    -1,    -1,
+       4,    -1,    -1,    -1,     8,    -1,    10,    -1,    12,    -1,
+      14,     3,     4,     5,     6,    -1,     3,     4,     5,     6,
+      -1,    13,     9,     3,     4,     5,     6
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    16,     0,     7,     8,    10,    12,    14,    17,    18,
+       0,    16,     0,     4,     8,    10,    12,    14,    17,    18,
       10,    18,    18,    11,    13,     3,     4,     5,     6,    13,
        9,    18,    18,    18,    18,    18
 };
@@ -1241,71 +1243,71 @@ yyreduce:
         case 2:
 #line 53 "hw3_3.y" /* yacc.c:1646  */
     { printf("%d\n", (yyvsp[-1]) ); }
-#line 1245 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1247 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 54 "hw3_3.y" /* yacc.c:1646  */
     { printf("%d\n", (yyvsp[-1]) ); }
-#line 1251 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1253 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 59 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); id_table[(yyvsp[-2])].value = (yyvsp[0]); }
-#line 1257 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1259 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 63 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[-2]) + (yyvsp[0]); }
-#line 1263 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1265 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
 #line 64 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[-2]) - (yyvsp[0]); }
-#line 1269 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1271 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 65 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[-2]) * (yyvsp[0]); }
-#line 1275 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1277 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 66 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[-2]) / (yyvsp[0]); }
-#line 1281 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1283 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 67 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[-1]); }
-#line 1287 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1289 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
 #line 68 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = -(yyvsp[0]); }
-#line 1293 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1295 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
 #line 69 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1299 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1301 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
 #line 70 "hw3_3.y" /* yacc.c:1646  */
     { (yyval) = id_table[(yyvsp[0])].value; }
-#line 1305 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1307 "hw3_3.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1309 "hw3_3.tab.c" /* yacc.c:1646  */
+#line 1311 "hw3_3.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1565,18 +1567,19 @@ int yylex()
             return ADD;
         }
         else if (t == '-') {
-            ungetc(t, stdin);
-            ungetc(t, stdin);
-            t = getchar();
-            // 如果-前面是数字的话，那么一定是SUB.
-            // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
-            if (isdigit(t)) {
-                return SUB;
-            }
-            else {
-                t = getchar();
-                return UMINUS;
-            }
+            return SUB;
+            // ungetc(t, stdin);
+            // ungetc(t, stdin);
+            // t = getchar();
+            // // 如果-前面是数字的话，那么一定是SUB.
+            // // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
+            // if (isdigit(t)) {
+            //     return SUB;
+            // }
+            // else {
+            //     t = getchar();
+            //     return UMINUS;
+            // }
         }
         else if (t == '*') {
             return MUL;

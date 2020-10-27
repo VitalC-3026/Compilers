@@ -8,6 +8,7 @@ Juanyun Mai <1811499@mail.nankai.edu.cn>
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #ifndef YYSTYPE
 #define YYSTYPE double 
 #endif
@@ -45,7 +46,7 @@ expr    :   expr ADD expr   { $$ = $1 + $3; }
         |   expr MUL expr   { $$ = $1 * $3; }
         |   expr DIV expr   { $$ = $1 / $3; }
         |   LB expr RB    { $$ = $2; }
-        |   UMINUS expr   { $$ = -$2; }
+        |   SUB expr %prec UMINUS   { $$ = -$2; }
         |   NUMBER  { $$ = $1; }
         ;
 
@@ -77,18 +78,20 @@ int yylex()
             return ADD;
         }
         else if (t == '-') {
-            ungetc(t, stdin);
-            ungetc(t, stdin);
-            t = getchar();
-            // 如果-前面是数字的话，那么一定是SUB.
-            // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
-            if (isdigit(t)) {
-                return SUB;
-            }
-            else {
-                t = getchar();
-                return UMINUS;
-            }
+            return SUB;
+            // ungetc(t, stdin);
+            // ungetc(t, stdin);
+            // t = getchar();
+            // // 如果-前面是数字的话，那么一定是SUB.
+            // // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
+            // if (isdigit(t)) {
+            //     t = getchar();
+            //     return SUB;
+            // }
+            // else {
+            //     t = getchar();
+            //     return UMINUS;
+            // }
         }
         else if (t == '*') {
             return MUL;

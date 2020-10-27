@@ -391,7 +391,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   33
+#define YYLAST   36
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  14
@@ -472,10 +472,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -7
+#define YYPACT_NINF -5
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-7)))
+  (!!((Yystate) == (-5)))
 
 #define YYTABLE_NINF -1
 
@@ -486,9 +486,9 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -7,     0,    -7,    -6,    -6,    -7,    -7,    -7,    14,    -7,
-      24,    -6,    -6,    -6,    -6,    -7,    -7,    26,    26,    -7,
-      -7
+      -5,     0,    -5,    18,    18,    -5,    -5,    -5,    15,    -5,
+      27,    18,    18,    18,    18,    -5,    -5,    -4,    -4,    -5,
+      -5
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -504,7 +504,7 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -7,    -7,    11
+      -5,    -5,     3
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -518,25 +518,25 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,     3,     4,     0,     5,     6,     0,     3,     4,     0,
-       5,     6,     0,     7,     9,    10,     0,    11,    12,    13,
-      14,     0,    17,    18,    19,    20,    15,    11,    12,    13,
-      14,    13,    14,    16
+       2,    13,    14,     0,     3,     0,     9,    10,     4,     0,
+       5,     6,     0,     7,    17,    18,    19,    20,    11,    12,
+      13,    14,     3,     0,     0,     0,     4,    15,     5,     6,
+      11,    12,    13,    14,     0,     0,    16
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     7,     8,    -1,    10,    11,    -1,     7,     8,    -1,
-      10,    11,    -1,    13,     3,     4,    -1,     3,     4,     5,
-       6,    -1,    11,    12,    13,    14,    12,     3,     4,     5,
-       6,     5,     6,     9
+       0,     5,     6,    -1,     4,    -1,     3,     4,     8,    -1,
+      10,    11,    -1,    13,    11,    12,    13,    14,     3,     4,
+       5,     6,     4,    -1,    -1,    -1,     8,    12,    10,    11,
+       3,     4,     5,     6,    -1,    -1,     9
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    15,     0,     7,     8,    10,    11,    13,    16,    16,
+       0,    15,     0,     4,     8,    10,    11,    13,    16,    16,
       16,     3,     4,     5,     6,    12,     9,    16,    16,    16,
       16
 };
@@ -1236,25 +1236,25 @@ yyreduce:
 
   case 5:
 #line 47 "hw3_2.y" /* yacc.c:1646  */
-    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "+"); }
+    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "+ "); }
 #line 1241 "hw3_2.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 48 "hw3_2.y" /* yacc.c:1646  */
-    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "-"); }
+    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "- "); }
 #line 1247 "hw3_2.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 49 "hw3_2.y" /* yacc.c:1646  */
-    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "*"); }
+    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "* "); }
 #line 1253 "hw3_2.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 50 "hw3_2.y" /* yacc.c:1646  */
-    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "/"); }
+    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[-2])); strcat((yyval), (yyvsp[0])); strcat((yyval), "/ "); }
 #line 1259 "hw3_2.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1272,13 +1272,13 @@ yyreduce:
 
   case 11:
 #line 53 "hw3_2.y" /* yacc.c:1646  */
-    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[0])); }
+    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[0])); strcat((yyval), " ");}
 #line 1277 "hw3_2.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 54 "hw3_2.y" /* yacc.c:1646  */
-    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[0])); }
+    { (yyval) = (char*) malloc(50*sizeof(char)); strcpy((yyval), (yyvsp[0])); strcat((yyval), " ");}
 #line 1283 "hw3_2.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1528,18 +1528,19 @@ int yylex()
             return ADD;
         }
         else if (t == '-') {
-            ungetc(t, stdin);
-            ungetc(t, stdin);
-            t = getchar();
-            // 如果-前面是数字的话，那么一定是SUB.
-            // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
-            if (isdigit(t)) {
-                return SUB;
-            }
-            else {
-                t = getchar();
-                return UMINUS;
-            }
+            return SUB;
+            // ungetc(t, stdin);
+            // ungetc(t, stdin);
+            // t = getchar();
+            // // 如果-前面是数字的话，那么一定是SUB.
+            // // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
+            // if (isdigit(t)) {
+            //     return SUB;
+            // }
+            // else {
+            //     t = getchar();
+            //     return UMINUS;
+            // }
         }
         else if (t == '*') {
             return MUL;

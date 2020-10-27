@@ -44,14 +44,14 @@ lines	:	lines expr ';' { printf("%s\n", $2 ); }
         |
         ;
 
-expr    :   expr ADD expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "+"); }
-        |   expr SUB expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "-"); }
-        |   expr MUL expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "*"); }
-        |   expr DIV expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "/"); }
+expr    :   expr ADD expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "+ "); }
+        |   expr SUB expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "- "); }
+        |   expr MUL expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "* "); }
+        |   expr DIV expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, $3); strcat($$, "/ "); }
         |   LB expr RB    { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $2); }
-        |   UMINUS expr   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, "0"); strcat($$, $2); }
-        |   NUMBER  { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); }
-        |   ID      { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); }
+        |   SUB expr %prec UMINUS   { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, "0"); strcat($$, $2); }
+        |   NUMBER  { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, " ");}
+        |   ID      { $$ = (char*) malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, " ");}
         ;
 
 	
@@ -71,18 +71,19 @@ int yylex()
             return ADD;
         }
         else if (t == '-') {
-            ungetc(t, stdin);
-            ungetc(t, stdin);
-            t = getchar();
-            // 如果-前面是数字的话，那么一定是SUB.
-            // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
-            if (isdigit(t)) {
-                return SUB;
-            }
-            else {
-                t = getchar();
-                return UMINUS;
-            }
+            return SUB;
+            // ungetc(t, stdin);
+            // ungetc(t, stdin);
+            // t = getchar();
+            // // 如果-前面是数字的话，那么一定是SUB.
+            // // 如果-前面什么都没有|有运算符|有括号，那么就是UMINUS.
+            // if (isdigit(t)) {
+            //     return SUB;
+            // }
+            // else {
+            //     t = getchar();
+            //     return UMINUS;
+            // }
         }
         else if (t == '*') {
             return MUL;
