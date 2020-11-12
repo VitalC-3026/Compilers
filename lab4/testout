@@ -1,0 +1,64 @@
+        Type  Attributes      Values
+         INT         int
+           ID           f           0
+      LPAREN           (
+      RPAREN           )
+       LBRACE           {
+             INT         int
+           ID           a           1
+     SEMICOL           ;
+              ID           a           1
+        ASSIG           =
+          DEC           0           0
+     SEMICOL           ;
+           WHILE       while
+      LPAREN           (
+          ID           a           1
+           ST           <
+          DEC          10          10
+      RPAREN           )
+       LBRACE           {
+                  ID           a           2
+      MULASGN          *=
+          DEC           2           2
+     SEMICOL           ;
+       RBRACE           }
+          RETURN      return
+           ID           a           1
+     SEMICOL           ;
+      RBRACE           }
+         INT         int
+           ID        main           0
+      LPAREN           (
+      RPAREN           )
+      LBRACE           {
+             INT         int
+           ID           a           1
+     SEMICOL           ;
+              ID           a           1
+        ASSIG           =
+          HEX        0x22          34
+     SEMICOL           ;
+              IF          if
+      LPAREN           (
+          ID           a           1
+       EQUAL          ==
+         DEC           0           0
+      RPAREN           )
+       LBRACE           {
+                 INT         int
+           ID           a           2
+     SEMICOL           ;
+              ID           a           2
+       ASSIG           =
+          ID           a           2
+         ADD           +
+         DEC           1           1
+     SEMICOL           ;
+       RBRACE           }
+      RETURN      return
+          DEC           0           0
+     SEMICOL           ;
+       RBRACE           }
+       LINES          14
+   KEY WORDS           9
