@@ -1,11 +1,11 @@
-#include <iostream>
+#include "pch.h"
 #include "common.h"
 
 
-using std::cout;
-using std::endl;
+using namespace std;
 
 TreeNode *root = nullptr;
+map<string, stack<int>> identifierTable;
 
 int main() 
 {
@@ -21,4 +21,3 @@ void yyerror(const char* msg)
     cout << msg << endl;
 }
 
-//

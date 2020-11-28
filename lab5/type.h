@@ -3,7 +3,8 @@
 
 
 enum NodeType
-{
+{   
+    NODE_Prog,
     NODE_Const,
     NODE_Var, 
     NODE_Op, 
@@ -47,12 +48,34 @@ enum DeclType
 
 enum StatementType
 {
-    TYPE_ASIG,
-    TYPE_EXPR,
-    TYPE_DECL,
-    TYPE_IF,
-    TYPE_WHILE,
-    TYPE_CONTROL
+    STMT_ASIG,
+    STMT_EXPR,
+    STMT_DECL,
+    STMT_IF,
+    STMT_WHILE,
+    STMT_BREAK,
+    STMT_CONTINUE,
+    STMT_RETURN,
+    STMT_SKIP
 };
+
+enum RadixType
+{
+    DECIMAL,
+    OCTAL,
+    HEX
+}
+
+enum AssignmentType
+{
+    ASIG,
+    ADDASIG,
+    MINASIG,
+    MULASIG,
+    DIVASIG,
+    MODASIG,
+    ADDASIGO,
+    MINASIGO
+}
 
 #endif

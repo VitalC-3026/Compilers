@@ -8,8 +8,52 @@
 */
 
 #include "common.h"
-int lineno = 1; 
+#include "type.h"
+#include "pch.h"
+using namespace std;
+int lineno = 1, level = 0;
+extern void yyerror(const char*);
+extern map<string, stack<int>> idenfierTable;
 
+void createIntNode(int lineno, RadixType radix){
+    TreeNode* node = new TreeNode(lineno, NODE_Const);
+    node->setDeclType(D_INT);
+    node->setRadixType(radix);
+    switch (radix){
+        case DECIMAL:
+            node->setIntValue(atoi(yytext));
+            break;
+        case OCTAL:
+            int num = 0;
+            for (int i = 1; i < strlen(yytext); i++) {
+                num += (int)yytext[i] * pow(8, (strlen(yytext) - i - 1));
+            }
+            node->setIntValue(num);
+            break;
+        case HEX:
+            int num = 0;
+            for (int i = 2; i < strlen(yytext); i++) {
+                char c = yytext[i];
+                int tmp;
+                if (c >= '0' && c <= '9') {
+                    tmp = c - '0';
+                } else if (c >= 'a' && c <= 'f') {
+                    tmp = c - 'a';
+                } else if (c >= 'A' && c <= 'F') {
+                    tmp = c - 'A';
+                } else {
+                    yyerror("Unexpected integer!");
+                    break;
+                }
+                num += tmp * pow(16, (strlen(yytext) - i - 1));
+            }
+            node->setIntValue(num);
+            break;
+        default:
+            break;
+    }
+    yylval = node;
+}
 %}
 
 commentbegin "/*"
@@ -24,7 +68,6 @@ ID  [_a-zA-Z][a-zA-Z_0-9]*
 DEC [1-9]?[0-9]*
 OCT 0[0-7]+
 HEX 0x[0-9a-fA-F]+
-INTEGER {DEC}|{OCT}|{HEX}
 CHAR \'.?\'
 STRING \".*\"
 
@@ -34,13 +77,12 @@ STRING \".*\"
 <COMMENT>{commentelement} {}
 <COMMENT>{commentend} {BEGIN INITIAL;}
 {commentline}   /*do nothing*/
-{EOL}   { lineno++; }
-{WHITESPACE}    /*do nothing*/
 
-"bool"  return BOOL;
-"int"   return INT; 
-"char"  return CHAR; 
-"string" return STRING;
+
+"bool"  return D_BOOL;
+"int"   return D_INT; 
+"char"  return D_CHAR; 
+"string" return D_STRING;
 "const" return CONST; 
 "struct" return STRUCT;
 "if"    return IF;
@@ -58,6 +100,9 @@ STRING \".*\"
 "-="    return MINASG;
 "*="    return MULASG;
 "/="    return DIVASG;
+"%="    return MODASG;
+"++"    return ADDASGO;
+"--"    return MINASGO;
 
 "."     return DOT;
 "&"     return REF;
@@ -82,14 +127,50 @@ STRING \".*\"
 
 "("     return LBRACE;
 ")"     return RBRACE;
-"{"     return LPAREN;
-"}"     return RPAREN;
+"{"     { level++; return LPAREN; }
+"}"     { level--; return RPAREN; }
 ";"     return SEMICOLON;
+","     return COMMA;
 
 {ID}    {
-            TreeNode* Node_ID = new TreeNode(Type_ID);
+            TreeNode* node = new TreeNode(lineno, NODE_Var);
+            string identifier = (string) yytext;
+            node->setIdentifier(identifier);
+            yylval = node;
+            return ID;
+        }
+{DEC}   {
+            createIntNode(lineno, DECIMAL);
+            return INTEGER;
+        }
+{OCT}   {
+            createIntNode(lineno, OCTAL);
+            return INTEGER;
+        }
+{HEX}   {
+            createIntNode(lineno, HEX);
+            return INTEGER;
+        }
+{CHAR}  {
+            TreeNode* node = new TreeNode(lineno, NODE_Const);
+            node->setDeclType(D_CHAR);
+            cout << "lex, char: " << yytext << endl;
+            node->setCharValue(yytext[0]);
+            yylval = node;
+            return CHAR;
+        }
+{STRING}    {
+            TreeNode* node = new TreeNode(lineno, NODE_Const);
+            node->setDeclType(D_STRING);
+            node->setStringValue((string)yytext);
+            yylval = node;
+            return CHAR;
         }
 
+{WHITESPACE}    /*do nothing*/
 
-{CHAR}
-{STRING}
+{EOL}   { lineno++; }
+
+.       {
+            cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
+        }
