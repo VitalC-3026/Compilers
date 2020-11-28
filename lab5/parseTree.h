@@ -1,10 +1,12 @@
 #include "type.h"
-#include <string>
+#include "pch.h"
 
 using namespace std;
 
 class TreeNode{
 private:
+    static int count;
+
     NodeType nodeType;
     TreeNode* child = nullptr;
     TreeNode* sibling = nullptr;
@@ -23,6 +25,7 @@ private:
     string identifier = "";
 
 public:
+    int generateNodeID();
     int getNodeId();
     void printAST();
     void addChild(TreeNode*);
@@ -55,7 +58,13 @@ public:
 
 public:
     TreeNode(int, NodeType);
+    string attributes();
+    static string nodeType2String(NodeType);
+    static string declType2String(DeclType);
+    static string operatorType2String(OperatorType);
+    static string radixType2String(RadixType);
+    static string assignmentType2String(AssignmentType);
+    static string statementType2String(StatementType);
 
-public:
-    int generateNodeID();
+    
 };

@@ -8,11 +8,11 @@
 
 %token  ASG ADDASG MINASG MULASG DIVASG MODASG ADDASGO MINASGO
 %token  DOT REF POI NOT
-%token  ADD SUB MUL DIV MOD
+%token  ADD MIN MUL DIV MOD
 %token  EQU GT LT GTQ LTQ NEQ
 %token  AND OR
 %token  LBRACE RBRACE LPAREN RPAREN
-%token  ID
+%token  ID INTEGER
 %token  DEC OCT HEX
 %token  CHAR BOOL STRING
 %token  D_BOOL D_INT D_CHAR D_STRING
@@ -20,10 +20,11 @@
 %token  PRINTF SCANCF
 %token  SEMICOLON COMMA
 
-%right  ASG ADDASG ASG ADDASG MINASG MULASG DIVASG
+
+%right  ASG ADDASG MINASG MULASG DIVASG MODASG
 %left   AND OR
 %left   EQU GT LT GTQ LTQ NEQ
-%left   ADD SUB
+%left   ADD MIN
 %left   MUL DIV MOD
 %left   REF NOT
 %left   DOT POI
@@ -44,10 +45,10 @@ statement
 : SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_SKIP); }
 | declaration SEMICOLON { $$ = $1; }
 | assignment SEMICOLON  { $$ = $1; }
-| arithmetic SEMICOLON  { $$ = $1; }
+| expr SEMICOLON  { $$ = $1; }
 | jump SEMICOLON { $$ = $1; }
-| loop
-| control
+| loop      { $$ = $1; }
+| control   { $$ = $1; }
 ;
 
 idlist
@@ -70,8 +71,8 @@ idlist
 ;
 
 declaration
-: type idlist   {   $$ = setType($2, $1, 0);}
-| CONST type idlist {   $$ = setType($3, $2, 1);}
+: type idlist   {   $$ = setType($2, $1, 0); }
+| CONST type idlist {   $$ = setType($3, $2, 1); }
 ;
 
 type
@@ -82,16 +83,16 @@ type
 ;
 
 loop
-: FOR LBRACE forcon RBRACE LPAREN statements RPAREN { if(checkFor($3, $6)) {
-                                                              $$ = new TreeNode(lineno, NODE_Stmt);
-                                                              $$->addChild($3);
-                                                              $$->addChild($6);
-                                                              $$->setStatementType(STMT_FOR);
-                                                          } else {
-                                                              yyerror("FOR error, check failed!");
-                                                          }
-                                                          
-                                                        }
+: FOR LBRACE forcon RBRACE LPAREN statements RPAREN {   if(checkFor($3, $6)) {
+                                                            $$ = new TreeNode(lineno, NODE_Stmt);
+                                                            $$->addChild($3);
+                                                            $$->addChild($6);
+                                                            $$->setStatementType(STMT_FOR);
+                                                        } else {
+                                                            yyerror("FOR error, check failed!");
+                                                            $$ = nullptr;
+                                                        }                                                        
+                                                    }
 | WHILE LBRACE expr RBRACE LPAREN statements RPAREN     { if(checkWhile($3, $6)) {
                                                               $$ = new TreeNode(lineno, NODE_Stmt);
                                                               $$->addChild($3);
@@ -99,21 +100,21 @@ loop
                                                               $$->setStatementType(STMT_WHILE);
                                                           } else {
                                                               yyerror("WHILE error, check failed!");
-                                                          }
-                                                            
+                                                              $$ = nullptr;
+                                                          }                 
                                                         }
 ;
 
 forcon
-: statement SEMICOLON arithmetic SEMICOLON assignment {   if(checkIfCon($1, $3, $5)) {
+: statement SEMICOLON expr SEMICOLON assignment {   if(checkIfCon($1, $3, $5)) {
                                                                 $$ = new TreeNode(lineno, NODE_Stmt);
                                                                 $$->addChild($1);
                                                                 $$->addChild($3);
                                                                 $$->addChild($5);
                                                             } else {
                                                                 yyerror("FOR CON error, check failed!");
+                                                                $$ = nullptr;
                                                             }
-
                                                         }
 ;
 
@@ -125,17 +126,19 @@ control
                                                             $$->setStatementType(STMT_IF);
                                                         } else {
                                                             yyerror("IF error, check failed!");
+                                                            $$ = nullptr;
                                                         }
                                                             
                                                     }
 | IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN  {   if(checkIf($3, $6, $10)) {
-                                                                                    $$ = new TreeNode(lineno, NODE_Stmt);
-                                                                                    $$->addChild($3);
-                                                                                    $$->addChild($6);
-                                                                                    $$->addChild($10);
-                                                                                    $$->setStatementType(STMT_IF);
+                                                                                        $$ = new TreeNode(lineno, NODE_Stmt);
+                                                                                        $$->addChild($3);
+                                                                                        $$->addChild($6);
+                                                                                        $$->addChild($10);
+                                                                                        $$->setStatementType(STMT_IF);
                                                                                     } else {
                                                                                         yyerror("IF error, check failed!");
+                                                                                        $$ = nullptr
                                                                                     }
                                                                                         
                                                                                 }
@@ -158,6 +161,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr
                         }
                     }
 | ID ADDASG expr    {   if(checkAsg($1, 1)) {
@@ -168,6 +172,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | ID MINASG expr    {   if(checkAsg($1, 1)) {
@@ -178,6 +183,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | ID MULASG expr    {   if(checkAsg($1, 1)) {
@@ -188,6 +194,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | ID DIVASG expr    {   if(checkAsg($1, 1)) {
@@ -198,6 +205,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | ID MODASG expr    {   if(checkAsg($1, 1)) {
@@ -208,6 +216,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | ADDASGO ID        {   if(checkAsg($2, 1)) {
@@ -217,6 +226,7 @@ assignment
                             $$->addChild($2);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | MINASGO ID        {   if(checkAsg($2, 1)) {
@@ -226,6 +236,7 @@ assignment
                             $$->addChild($2);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | ID ADDASGO        {   if(checkAsg($1, 1)) {
@@ -235,6 +246,7 @@ assignment
                             $$->addChild($1);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 | ID MINASGO        {   if(checkAsg($1, 1)) {
@@ -244,6 +256,7 @@ assignment
                             $$->addChild($1);
                         } else {
                             yyerror("ASSIGN error!");
+                            $$ = nullptr;
                         }
                     }
 ;
@@ -271,6 +284,7 @@ expr
                     }
                   } else {
                       yyerror("NOT Type error, this node is a string.");
+                      $$ = nullptr;
                   }
                 }
 | ADD  expr     { $$ = $2;}
@@ -280,6 +294,7 @@ expr
                     $$ = $2;
                   } else {
                       yyerror("UMINUS Type error, this node is not an integer.");
+                      $$ = nullptr;
                   }
                 }
 | REF  expr     { if($1->getNodeType() == NODE_Var || $1->getNodeType() == NODE_Const) {
@@ -291,6 +306,7 @@ expr
                     }
                   } else {
                       yyerror("REF Type error, this node is not an identifier.");
+                      $$ = nullptr;
                   }
                 }    
 | ID   { $$ = $1; }

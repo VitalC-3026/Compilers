@@ -1,17 +1,38 @@
 #include "pch.h"
 #include "common.h"
+#include <fstream>
 
 
 using namespace std;
 
 TreeNode *root = nullptr;
 map<string, stack<int>> identifierTable;
+int TreeNode::count = 0;
+extern int yyparse();
+extern FILE *yyin;
+extern FILE *yyout;
 
-int main() 
+int main(int argc, char *argv[]) 
 {
+    if (argc == 3) 
+    {
+        FILE *fin = fopen(argv[1], "r");
+        FILE *fout = fopen(argv[2], "w");
+        if (fin != nullptr) {
+            yyin = fin;
+        } else {
+            cerr << "failed to open file to read: " << argv[1] << endl;
+        }
+        if (fout != nullptr) {
+            yyout = fout;
+        } else {
+            cerr << "failed to open file to write: " << argv[2] << endl;
+        }
+    }
+
     yyparse();
-    if (root) {
-        root->getNodeId();
+    if (root != nullptr) {
+        root->generateNodeID();
         root->printAST();
     }
 }
