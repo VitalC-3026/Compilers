@@ -9,8 +9,7 @@
 
 #include "common.h"
 #include "type.h"
-#include "pch.h"
-using namespace std;
+#include "main.tab.h" 
 int lineno = 1, level = 0;
 extern void yyerror(const char*);
 extern map<string, stack<int>> idenfierTable;
@@ -20,17 +19,19 @@ void createIntNode(int lineno, RadixType radix){
     node->setDeclType(D_INT);
     node->setRadixType(radix);
     switch (radix){
-        case DECIMAL:
+        case DECIMAL: {
             node->setIntValue(atoi(yytext));
             break;
-        case OCTAL:
+        }
+        case OCTAL: {
             int num = 0;
             for (int i = 1; i < strlen(yytext); i++) {
                 num += (int)yytext[i] * pow(8, (strlen(yytext) - i - 1));
             }
             node->setIntValue(num);
             break;
-        case HEX:
+        }
+        case HEXA: {
             int num = 0;
             for (int i = 2; i < strlen(yytext); i++) {
                 char c = yytext[i];
@@ -49,6 +50,7 @@ void createIntNode(int lineno, RadixType radix){
             }
             node->setIntValue(num);
             break;
+        }
         default:
             break;
     }
@@ -79,11 +81,11 @@ STRING \".*\"
 {commentline}   /*do nothing*/
 
 
-"bool"  return D_BOOL;
-"int"   return D_INT; 
-"char"  return D_CHAR; 
-"string" return D_STRING;
-"const" return CONST; 
+"bool"  return T_BOOL;
+"int"   return T_INT; 
+"char"  return T_CHAR; 
+"string" return T_STRING;
+"const"  return CONST;
 "struct" return STRUCT;
 "if"    return IF;
 "else"  return ELSE;
@@ -148,7 +150,7 @@ STRING \".*\"
             return INTEGER;
         }
 {HEX}   {
-            createIntNode(lineno, HEX);
+            createIntNode(lineno, HEXA);
             return INTEGER;
         }
 {CHAR}  {

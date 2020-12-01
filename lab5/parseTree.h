@@ -1,7 +1,16 @@
-#include "type.h"
-#include "pch.h"
+#ifndef PARSETREE_H
+#define PARSETREE_H
+
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+#include <string>
+#include <map>
+#include <stack>
 
 using namespace std;
+
+#include "type.h"
 
 class TreeNode{
 private:
@@ -56,8 +65,8 @@ public:
     AssignmentType getAssignmentType();
     RadixType getRadixType();
 
-public:
     TreeNode(int, NodeType);
+    // TreeNode();
     string attributes();
     static string nodeType2String(NodeType);
     static string declType2String(DeclType);
@@ -65,6 +74,6 @@ public:
     static string radixType2String(RadixType);
     static string assignmentType2String(AssignmentType);
     static string statementType2String(StatementType);
-
-    
 };
+
+#endif

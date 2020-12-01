@@ -82,10 +82,10 @@ extern int yydebug;
     CHAR = 292,
     BOOL = 293,
     STRING = 294,
-    D_BOOL = 295,
-    D_INT = 296,
-    D_CHAR = 297,
-    D_STRING = 298,
+    T_BOOL = 295,
+    T_INT = 296,
+    T_CHAR = 297,
+    T_STRING = 298,
     CONST = 299,
     STRUCT = 300,
     IF = 301,
@@ -96,7 +96,7 @@ extern int yydebug;
     CONTINUE = 306,
     BREAK = 307,
     PRINTF = 308,
-    SCANCF = 309,
+    SCANF = 309,
     SEMICOLON = 310,
     COMMA = 311
   };

@@ -1,5 +1,4 @@
 #include "parseTree.h"
-#include <string>
 extern FILE *yyout;
 
 void TreeNode::addChild(TreeNode* child) {
@@ -28,8 +27,11 @@ TreeNode::TreeNode(int lineno, NodeType type) {
     this->nodeType = type;
 }
 
+// TreeNode::TreeNode(){}
+
 int TreeNode::generateNodeID() {
     this->nodeID = ++count;
+    return this->nodeID;
 }
 
 int TreeNode::getNodeId() {
@@ -271,6 +273,7 @@ string TreeNode::operatorType2String(OperatorType t){
         case 16:
             return (string)"||";
         default:
+            break;
     }
 }
 

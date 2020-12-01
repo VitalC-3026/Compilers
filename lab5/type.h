@@ -27,7 +27,7 @@ enum OperatorType
     OP_DIV,
     OP_MOD,
     
-    OP_EQ,
+    OP_EQU,
     OP_GT,
     OP_LT,
     OP_GTQ,
@@ -52,6 +52,7 @@ enum StatementType
     STMT_EXPR,
     STMT_DECL,
     STMT_IF,
+    STMT_FOR,
     STMT_WHILE,
     STMT_BREAK,
     STMT_CONTINUE,
@@ -63,8 +64,8 @@ enum RadixType
 {
     DECIMAL,
     OCTAL,
-    HEX
-}
+    HEXA
+};
 
 enum AssignmentType
 {
@@ -76,6 +77,6 @@ enum AssignmentType
     MODASIG,
     ADDASIGO,
     MINASIGO
-}
+};
 
 #endif

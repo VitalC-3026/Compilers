@@ -8,7 +8,7 @@ Terminals unused in grammar
    BOOL
    STRUCT
    PRINTF
-   SCANCF
+   SCANF
 
 
 State 0 conflicts: 1 shift/reduce
@@ -49,10 +49,10 @@ Grammar
    15 declaration: type idlist
    16            | CONST type idlist
 
-   17 type: D_BOOL
-   18     | D_INT
-   19     | D_CHAR
-   20     | D_STRING
+   17 type: T_BOOL
+   18     | T_INT
+   19     | T_CHAR
+   20     | T_STRING
 
    21 loop: FOR LBRACE forcon RBRACE LPAREN statements RPAREN
    22     | WHILE LBRACE expr RBRACE LPAREN statements RPAREN
@@ -143,10 +143,10 @@ HEX (291)
 CHAR (292) 60
 BOOL (293)
 STRING (294) 61
-D_BOOL (295) 17
-D_INT (296) 18
-D_CHAR (297) 19
-D_STRING (298) 20
+T_BOOL (295) 17
+T_INT (296) 18
+T_CHAR (297) 19
+T_STRING (298) 20
 CONST (299) 16
 STRUCT (300)
 IF (301) 24 25
@@ -157,7 +157,7 @@ RETURN (305) 28 29
 CONTINUE (306) 27
 BREAK (307) 26
 PRINTF (308)
-SCANCF (309)
+SCANF (309)
 SEMICOLON (310) 4 5 6 7 8 23
 COMMA (311) 11 12
 
@@ -208,10 +208,10 @@ State 0
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -360,28 +360,28 @@ State 10
 
 State 11
 
-   17 type: D_BOOL .
+   17 type: T_BOOL .
 
     $default  reduce using rule 17 (type)
 
 
 State 12
 
-   18 type: D_INT .
+   18 type: T_INT .
 
     $default  reduce using rule 18 (type)
 
 
 State 13
 
-   19 type: D_CHAR .
+   19 type: T_CHAR .
 
     $default  reduce using rule 19 (type)
 
 
 State 14
 
-   20 type: D_STRING .
+   20 type: T_STRING .
 
     $default  reduce using rule 20 (type)
 
@@ -390,10 +390,10 @@ State 15
 
    16 declaration: CONST . type idlist
 
-    D_BOOL    shift, and go to state 11
-    D_INT     shift, and go to state 12
-    D_CHAR    shift, and go to state 13
-    D_STRING  shift, and go to state 14
+    T_BOOL    shift, and go to state 11
+    T_INT     shift, and go to state 12
+    T_CHAR    shift, and go to state 13
+    T_STRING  shift, and go to state 14
 
     type  go to state 48
 
@@ -482,10 +482,10 @@ State 24
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -867,10 +867,10 @@ State 51
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -1943,10 +1943,10 @@ State 106
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -1983,10 +1983,10 @@ State 107
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -2056,10 +2056,10 @@ State 109
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -2115,10 +2115,10 @@ State 111
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -2156,10 +2156,10 @@ State 112
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -2210,10 +2210,10 @@ State 114
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -2342,10 +2342,10 @@ State 122
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17
@@ -2384,10 +2384,10 @@ State 123
     INTEGER    shift, and go to state 8
     CHAR       shift, and go to state 9
     STRING     shift, and go to state 10
-    D_BOOL     shift, and go to state 11
-    D_INT      shift, and go to state 12
-    D_CHAR     shift, and go to state 13
-    D_STRING   shift, and go to state 14
+    T_BOOL     shift, and go to state 11
+    T_INT      shift, and go to state 12
+    T_CHAR     shift, and go to state 13
+    T_STRING   shift, and go to state 14
     CONST      shift, and go to state 15
     IF         shift, and go to state 16
     WHILE      shift, and go to state 17

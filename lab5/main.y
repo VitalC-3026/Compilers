@@ -1,9 +1,16 @@
 %{
     #include "common.h"
-    #include "pch.h"
     TreeNode* root;
     int yylex();
     extern void yyerror(const char*);
+    extern int lineno;
+    TreeNode* addOperatorNode(TreeNode* t1, TreeNode* t2, OperatorType op, int lineno);
+    bool checkFor(TreeNode* t1, TreeNode* t2);
+    bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3);
+    bool checkWhile(TreeNode* t1, TreeNode* t2);
+    bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3);
+    bool checkAsg(TreeNode* t1, bool i);
+    TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst);
 %}
 
 %token  ASG ADDASG MINASG MULASG DIVASG MODASG ADDASGO MINASGO
@@ -15,9 +22,9 @@
 %token  ID INTEGER
 %token  DEC OCT HEX
 %token  CHAR BOOL STRING
-%token  D_BOOL D_INT D_CHAR D_STRING
+%token  T_BOOL T_INT T_CHAR T_STRING
 %token  CONST STRUCT IF ELSE WHILE FOR RETURN CONTINUE BREAK
-%token  PRINTF SCANCF
+%token  PRINTF SCANF
 %token  SEMICOLON COMMA
 
 
@@ -76,10 +83,10 @@ declaration
 ;
 
 type
-: D_BOOL { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType($1); }
-| D_INT { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType($1); }
-| D_CHAR { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType($1); }
-| D_STRING { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType($1); }
+: T_BOOL { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_BOOL); }
+| T_INT { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_INT); }
+| T_CHAR { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_CHAR); }
+| T_STRING { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_STRING); }
 ;
 
 loop
@@ -119,7 +126,7 @@ forcon
 ;
 
 control
-: IF LBRACE expr RBRACE LPAREN statements RPAREN    {   if(checkIf($3, $6)) {
+: IF LBRACE expr RBRACE LPAREN statements RPAREN    {   if(checkIf($3, $6, NULL)) {
                                                             $$ = new TreeNode(lineno, NODE_Stmt);
                                                             $$->addChild($3);
                                                             $$->addChild($6);
@@ -138,7 +145,7 @@ control
                                                                                         $$->setStatementType(STMT_IF);
                                                                                     } else {
                                                                                         yyerror("IF error, check failed!");
-                                                                                        $$ = nullptr
+                                                                                        $$ = nullptr;
                                                                                     }
                                                                                         
                                                                                 }
@@ -161,7 +168,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
-                            $$ = nullptr
+                            $$ = nullptr;
                         }
                     }
 | ID ADDASG expr    {   if(checkAsg($1, 1)) {
@@ -356,7 +363,7 @@ bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
 
 bool checkWhile(TreeNode* t1, TreeNode* t2)
 {
-    if(t1->getNodeType() != NODE_Var && t1->getNodeType() != NODE_Const && t1->getNodeType != NODE_Op) {
+    if(t1->getNodeType() != NODE_Var && t1->getNodeType() != NODE_Const && t1->getNodeType() != NODE_Op) {
         return false;
     }
     if(t2->getNodeType() != NODE_Stmt) {
@@ -370,15 +377,15 @@ bool checkWhile(TreeNode* t1, TreeNode* t2)
     return true;
 }
 
-bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3=nullptr)
+bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
 {
-    if (t1->getNodeType() != NODE_Var && t1->getNodeType() != NODE_Const && t1->getNodeType != NODE_Op) {
+    if (t1->getNodeType() != NODE_Var && t1->getNodeType() != NODE_Const && t1->getNodeType() != NODE_Op) {
         return false;
     }
     if (t2->getNodeType() != NODE_Stmt) {
         return false;
     }
-    if (t3 != nullptr && t3->getNodeType() != NODE_Stmt) {
+    if (t3 != NULL && t3->getNodeType() != NODE_Stmt) {
         return false;
     }
     if (t1->getNodeType() != NODE_Var || t1->getNodeType() != NODE_Const) {
