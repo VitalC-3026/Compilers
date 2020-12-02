@@ -8,7 +8,7 @@ struct idAttr{
     int level;
     DeclType type;
     string value;
-    TreeNode* entry;
+    int id;
 };
 
 #endif

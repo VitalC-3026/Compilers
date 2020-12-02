@@ -144,26 +144,32 @@ STRING \".*\"
 {ID}    {
             if (identifierTable.find(yytext) != identifierTable.end()){
                 stack<idAttr> s = (identifierTable.find(yytext)->second);
-                if(s.top().level == level) {
-                    yylval = s.top().entry;
-                } else if (s.top().level < level) {
-                    TreeNode* node = new TreeNode(lineno, NODE_Var);
-                    string identifier = (string) yytext;
-                    node->setIdentifier(identifier);
+                int id = -1;
+                if(s.top().level <= level) {
+                    id = s.top().id;
+                }
+                
+                TreeNode* node = new TreeNode(lineno, NODE_Var);
+                if (id != -1) {
+                    node->setNodeId(id);
+                } else {
                     idAttr attr;
                     attr.level = level;
-                    attr.entry = node;
+                    attr.id = node->getNodeId();
                     s.push(attr);
                     identifierTable[yytext] = s;
-                    yylval = node;
                 }
+                string identifier = (string) yytext;
+                node->setIdentifier(identifier);
+                yylval = node;
+                
             } else {
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 string identifier = (string) yytext;
                 node->setIdentifier(identifier);
                 idAttr attr;
                 attr.level = level;
-                attr.entry = node;
+                attr.id = node->getNodeId();
                 stack<idAttr> s;
                 s.push(attr);
                 identifierTable[yytext] = s;

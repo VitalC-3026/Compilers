@@ -80,7 +80,7 @@
     bool checkAsg(TreeNode* t1, bool i);
     TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst);
     string getValueOfId(TreeNode* n);
-    stack<idAttr> setEntryOfId(int level, DeclType type, string value, TreeNode* node);
+    stack<idAttr> setEntryOfId(int level, DeclType type, string value, int nodeId);
     int assignId(TreeNode* &id, TreeNode* expr);
 
 #line 87 "main.tab.cpp" /* yacc.c:339  */
@@ -1403,13 +1403,13 @@ yyreduce:
     {
         case 2:
 #line 49 "main.y" /* yacc.c:1646  */
-    { root = new TreeNode(0, NODE_Prog); root->addChild((yyvsp[0])); fputs("root \n", yyout); }
+    { root = new TreeNode(0, NODE_Prog); root->addChild((yyvsp[0])); cout << (yyvsp[0])->getNodeId() << ((yyval)->getSibling() == nullptr) << endl; fputs("root \n", yyout); }
 #line 1408 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 53 "main.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); fputs("statements <= statement \n", yyout);}
+    { (yyval) = (yyvsp[0]); cout << (yyvsp[0])->getNodeId() << ((yyval)->getSibling() == nullptr) << endl;fputs("statements <= statement \n", yyout);}
 #line 1414 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1433,7 +1433,7 @@ yyreduce:
 
   case 7:
 #line 60 "main.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-1]); fputs("statement <= declaration \n", yyout); }
+    { (yyval) = (yyvsp[-1]); cout << (yyvsp[-1])->getNodeId() << ((yyval)->getSibling() == nullptr) << endl; fputs("statement <= declaration \n", yyout); }
 #line 1438 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1496,7 +1496,7 @@ yyreduce:
     {   (yyval) = (yyvsp[-4]); 
                                 assignId((yyvsp[-2]), (yyvsp[0]));
                                 (yyval)->addChild((yyvsp[-2]));
-                                identifierTable[(yyvsp[-2])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[-2])->getDeclType(), getValueOfId((yyvsp[0])), (yyvsp[-2]));
+                                identifierTable[(yyvsp[-2])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[-2])->getDeclType(), getValueOfId((yyvsp[0])), (yyvsp[-2])->getNodeId());
                                 fputs("idlist with assignment \n", yyout);
                             }
 #line 1503 "main.tab.cpp" /* yacc.c:1646  */
@@ -1506,7 +1506,7 @@ yyreduce:
 #line 94 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[-2]); 
                         (yyval)->addChild((yyvsp[0]));
-                        identifierTable[(yyvsp[0])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[0])->getDeclType(), getValueOfId(nullptr), (yyvsp[0]));
+                        identifierTable[(yyvsp[0])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[0])->getDeclType(), getValueOfId(nullptr), (yyvsp[0])->getNodeId());
                         fputs("idlist \n", yyout);
                     }
 #line 1513 "main.tab.cpp" /* yacc.c:1646  */
@@ -1517,7 +1517,7 @@ yyreduce:
     {   (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_DECL);
                     assignId((yyvsp[-2]), (yyvsp[0]));
                     (yyval)->addChild((yyvsp[-2]));
-                    identifierTable[(yyvsp[-2])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[-2])->getDeclType(), getValueOfId((yyvsp[0])), (yyvsp[-2]));
+                    identifierTable[(yyvsp[-2])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[-2])->getDeclType(), getValueOfId((yyvsp[0])), (yyvsp[-2])->getNodeId());
                     fputs("id with assignment \n", yyout);
                 }
 #line 1524 "main.tab.cpp" /* yacc.c:1646  */
@@ -1527,7 +1527,7 @@ yyreduce:
 #line 105 "main.y" /* yacc.c:1646  */
     {   (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_DECL);
                     (yyval)->addChild((yyvsp[0]));
-                    identifierTable[(yyvsp[0])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[0])->getDeclType(), getValueOfId(nullptr), (yyvsp[0]));
+                    identifierTable[(yyvsp[0])->getIdentifier()] = setEntryOfId(lineno, (yyvsp[0])->getDeclType(), getValueOfId(nullptr), (yyvsp[0])->getNodeId());
                     fputs("id \n", yyout);
                 }
 #line 1534 "main.tab.cpp" /* yacc.c:1646  */
@@ -1535,7 +1535,7 @@ yyreduce:
 
   case 23:
 #line 113 "main.y" /* yacc.c:1646  */
-    {   (yyval) = setType((yyvsp[0]), (yyvsp[-1]), 0); fputs("declaration <= variable \n", yyout); }
+    {   (yyval) = setType((yyvsp[0]), (yyvsp[-1]), 0); string no = to_string((yyval)->getNodeId()); cout << ((yyval)->getSibling() == nullptr) << endl;fputs(no.c_str(), yyout); fputs("declaration <= variable \n", yyout); }
 #line 1540 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -2325,22 +2325,22 @@ TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst) {
     if(ifConst){
         // iterate nodes to set type and const
         cout << "ifConst here" << endl;
-        TreeNode* child = idlist->getChild();
-        assert (child != nullptr);
-        child->setNodeType(NODE_Const);
-        child->setDeclType(type->getDeclType());
-        while ((child = child->getSibling()) != nullptr) {
-            child->setNodeType(NODE_Const);
-            child->setDeclType(type->getDeclType());
+        TreeNode* node = idlist->getChild();
+        assert (node != nullptr);
+        node->setNodeType(NODE_Const);
+        node->setDeclType(type->getDeclType());
+        while ((node = node->getSibling()) != nullptr) {
+            node->setNodeType(NODE_Const);
+            node->setDeclType(type->getDeclType());
         }
     } else {
-        TreeNode* child = idlist->getChild();
-        assert (child != nullptr);
-        child->setNodeType(NODE_Var);
-        child->setDeclType(type->getDeclType());
-        while ((child = child->getSibling()) != nullptr) {
-            child->setNodeType(NODE_Var);
-            child->setDeclType(type->getDeclType());
+        TreeNode* node = idlist->getChild();
+        assert (node != nullptr);
+        node->setNodeType(NODE_Var);
+        node->setDeclType(type->getDeclType());
+        while ((node = node->getSibling()) != nullptr) {
+            node->setNodeType(NODE_Var);
+            node->setDeclType(type->getDeclType());
         }
     }
     // idlist->setDeclType(type->getDeclType());
@@ -2371,13 +2371,13 @@ string getValueOfId(TreeNode* n) {
     }
 }
 
-stack<idAttr> setEntryOfId(int level, DeclType type, string value, TreeNode* node){
+stack<idAttr> setEntryOfId(int level, DeclType type, string value, int nodeId){
     idAttr attr;
     attr.level = level;
     attr.type = type;
     // type check
     attr.value = value;
-    attr.entry = node;
+    attr.id = nodeId;
     stack<idAttr> s;
     s.push(attr);
     return s;

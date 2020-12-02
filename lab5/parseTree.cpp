@@ -11,19 +11,14 @@ void TreeNode::addChild(TreeNode* &child) {
 }
 
 void TreeNode::addSibling(TreeNode* &sibling) {
-    TreeNode* node = this->sibling;
+    TreeNode* node = this;
     string info = to_string(sibling->getNodeId()) + (string)" add sibling\n";
     fputs(info.c_str(), yyout);
-    if (node == nullptr) {
-        fputs("node == nullptr\n", yyout);
-        this->sibling = sibling;
-    } else {
-        while(node->sibling != nullptr){
-            node = node->sibling;
-        } 
-        node->sibling = sibling;
-    }
     
+    while(node->sibling != nullptr){
+        node = node->sibling;
+    } 
+    node->sibling = sibling;
 }
 
 
@@ -51,6 +46,11 @@ int TreeNode::getNodeId() {
     return this->nodeID;
 }
 
+void TreeNode::setNodeId(int i) {
+    this->nodeID = i;
+    count--;
+}
+
 void TreeNode::printInfo() {
     string info = (string)"NodeID: " + to_string(this->nodeID);
     info += (string)" NodeType: " + TreeNode::nodeType2String(this->nodeType);
@@ -60,19 +60,20 @@ void TreeNode::printInfo() {
 
 void TreeNode::printAST() {
     this->printInfo();
-    string chi = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s child\n";
-    fputs(chi.c_str(), yyout);
-    TreeNode* node = this->child;
-    while(node != nullptr) {
-        node->printAST();
-        node = node->child;
-    }
-    string sib = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s sibling\n";
+    string sib = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s child\n";
     fputs(sib.c_str(), yyout);
-    node = this->sibling;
+    TreeNode* node = this->child;
     if(node != nullptr){
         node->printAST();
     }
+    string chi = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s sibling\n";
+    fputs(chi.c_str(), yyout);
+    node = this->sibling;
+    while(node != nullptr) {
+        node->printAST();
+        node = node->sibling;
+    }
+    
     // if (this->child != nullptr) {
     //     TreeNode* node = this->child->sibling;
     //     this->child->printAST();

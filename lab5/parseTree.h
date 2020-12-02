@@ -36,6 +36,7 @@ private:
 public:
     void generateNodeID();
     int getNodeId();
+    void setNodeId(int i);
     void printAST();
     void printInfo();
     void addChild(TreeNode*&);

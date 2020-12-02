@@ -1126,26 +1126,32 @@ YY_RULE_SETUP
 {
             if (identifierTable.find(yytext) != identifierTable.end()){
                 stack<idAttr> s = (identifierTable.find(yytext)->second);
-                if(s.top().level == level) {
-                    yylval = s.top().entry;
-                } else if (s.top().level < level) {
-                    TreeNode* node = new TreeNode(lineno, NODE_Var);
-                    string identifier = (string) yytext;
-                    node->setIdentifier(identifier);
+                int id = -1;
+                if(s.top().level <= level) {
+                    id = s.top().id;
+                }
+                
+                TreeNode* node = new TreeNode(lineno, NODE_Var);
+                if (id != -1) {
+                    node->setNodeId(id);
+                } else {
                     idAttr attr;
                     attr.level = level;
-                    attr.entry = node;
+                    attr.id = node->getNodeId();
                     s.push(attr);
                     identifierTable[yytext] = s;
-                    yylval = node;
                 }
+                string identifier = (string) yytext;
+                node->setIdentifier(identifier);
+                yylval = node;
+                
             } else {
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 string identifier = (string) yytext;
                 node->setIdentifier(identifier);
                 idAttr attr;
                 attr.level = level;
-                attr.entry = node;
+                attr.id = node->getNodeId();
                 stack<idAttr> s;
                 s.push(attr);
                 identifierTable[yytext] = s;
@@ -1156,7 +1162,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 174 "main.l"
+#line 180 "main.l"
 {
             createIntNode(lineno, DECIMAL);
             return INTEGER;
@@ -1164,7 +1170,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 178 "main.l"
+#line 184 "main.l"
 {
             createIntNode(lineno, OCTAL);
             return INTEGER;
@@ -1172,7 +1178,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 182 "main.l"
+#line 188 "main.l"
 {
             createIntNode(lineno, HEXA);
             return INTEGER;
@@ -1180,7 +1186,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 186 "main.l"
+#line 192 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
@@ -1193,7 +1199,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 195 "main.l"
+#line 201 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_STRING);
@@ -1205,28 +1211,28 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 204 "main.l"
+#line 210 "main.l"
 /*do nothing*/
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 206 "main.l"
+#line 212 "main.l"
 { lineno++; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 208 "main.l"
+#line 214 "main.l"
 {
             cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
         }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 211 "main.l"
+#line 217 "main.l"
 ECHO;
 	YY_BREAK
-#line 1230 "main.lex.yy.cpp"
+#line 1236 "main.lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -2195,4 +2201,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 211 "main.l"
+#line 217 "main.l"
