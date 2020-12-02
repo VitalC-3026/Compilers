@@ -143,12 +143,14 @@ STRING \".*\"
 
 {ID}    {
             if (identifierTable.find(yytext) != identifierTable.end()){
+                cout << yytext << " exists!" << endl;
                 stack<idAttr> s = (identifierTable.find(yytext)->second);
                 int id = -1;
+                cout << s.top().level << " " << level;
                 if(s.top().level <= level) {
+                    cout << yytext << " use before" << endl;
                     id = s.top().id;
                 }
-                
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 if (id != -1) {
                     node->setNodeId(id);
@@ -164,6 +166,7 @@ STRING \".*\"
                 yylval = node;
                 
             } else {
+                cout << yytext << " doesn't exist!" << endl;
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 string identifier = (string) yytext;
                 node->setIdentifier(identifier);
@@ -192,7 +195,6 @@ STRING \".*\"
 {CHAR}  {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
-            cout << "lex, char: " << yytext << endl;
             node->setCharValue(yytext[1]);
             yylval = node;
             cout << "ID value: CHAR" << yytext[1] << endl;

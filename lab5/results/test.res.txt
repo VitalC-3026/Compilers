@@ -1,57 +1,300 @@
 type <= int 
 id 
-4 add sibling
+5 add sibling
 idlist 
-3declaration <= variable 
+3 add sibling
+declaration <= variable 
 statement <= declaration 
 statements <= statement 
-6 add sibling
+7 add sibling
 assignment <= = 
 statement <= assignment 
-7 add sibling
+8 add sibling
 statements <= statements statement 
 9 add sibling
 assignment <= = 
 statement <= assignment 
 10 add sibling
 statements <= statements statement 
+type <= char 
+id 
+13 add sibling
+declaration <= variable 
+statement <= declaration 
+14 add sibling
+statements <= statements statement 
+15 add sibling
+17 add sibling
+18 add sibling
+20 add sibling
+22 add sibling
+23 add sibling
+26 add sibling
+27 add sibling
+29 add sibling
+assignment <= -= 
+statement <= assignment 
+statements <= statement 
+type <= int 
+id 
+32 add sibling
+declaration <= variable 
+statement <= declaration 
+33 add sibling
+statements <= statements statement 
+34 add sibling
+assignment <= = 
+statement <= assignment 
+35 add sibling
+statements <= statements statement 
+32 add sibling
+assignment <= += 
+statement <= assignment 
+36 add sibling
+statements <= statements statement 
+39 add sibling
+type <= int 
+id 
+43 add sibling
+declaration <= variable 
+statement <= declaration 
+statements <= statement 
+45 add sibling
+assignment <= = 
+statement <= assignment 
+46 add sibling
+statements <= statements statement 
+type <= int 
+id with assignment 
+50 add sibling
+declaration <= variable 
+43 add sibling
+assignment <= i++ 
+52 add sibling
+53 add sibling
+for conditions 
+assignment <= i++ 
+statement <= assignment 
+statements <= statement 
+55 add sibling
+loop <= for 
+statement <= loop 
+56 add sibling
+statements <= statements statement 
+44 add sibling
+control <= if then 
+statement <= control 
+57 add sibling
+statements <= statements statement 
+30 add sibling
+loop <= while 
+statement <= loop 
+58 add sibling
+statements <= statements statement 
 root 
-NodeID: 12 NodeType: Program Root Attributes: 0
-0 12's child
-NodeID: 3 NodeType: Statement Attributes: 0
-3 3's child
-NodeID: 2 NodeType: Variable Attributes: 0
-3 2's child
-3 2's sibling
-NodeID: 4 NodeType: Variable Attributes: 0
-3 4's child
-3 4's sibling
-3 3's sibling
-NodeID: 7 NodeType: Statement Attributes: 0
-4 7's child
-NodeID: 5 NodeType: Variable Attributes: 0
-4 5's child
-4 5's sibling
-NodeID: 6 NodeType: Const Variable Attributes: 10
-4 6's child
-4 6's sibling
-4 7's sibling
-NodeID: 10 NodeType: Statement Attributes: 0
-5 10's child
-NodeID: 8 NodeType: Variable Attributes: 0
-5 8's child
-5 8's sibling
-NodeID: 9 NodeType: Const Variable Attributes: 2
-5 9's child
-5 9's sibling
-5 10's sibling
-NodeID: 10 NodeType: Statement Attributes: 0
-5 10's child
-NodeID: 8 NodeType: Variable Attributes: 0
-5 8's child
-5 8's sibling
-NodeID: 9 NodeType: Const Variable Attributes: 2
-5 9's child
-5 9's sibling
-5 10's sibling
-0 12's sibling
+NodeID: 60 NodeType: Program Root Attributes: Root
+0 60's children
+NodeID: 6 NodeType: Statement Attributes: Declaration
+2 6's children
+NodeID: 1 NodeType: Data Type Attributes: int
+2 1's children
+end 1's children
+NodeID: 3 NodeType: Variable Attributes: int 0
+2 3's children
+end 3's children
+NodeID: 5 NodeType: Variable Attributes: int 0
+2 5's children
+end 5's children
+end 6's children
+NodeID: 8 NodeType: Statement Attributes: Assignment =
+3 8's children
+NodeID: 3 NodeType: Variable Attributes: int 0
+3 3's children
+end 3's children
+NodeID: 7 NodeType: Const Variable Attributes: int 10
+3 7's children
+end 7's children
+end 8's children
+NodeID: 10 NodeType: Statement Attributes: Assignment =
+4 10's children
+NodeID: 5 NodeType: Variable Attributes: int 0
+4 5's children
+end 5's children
+NodeID: 9 NodeType: Const Variable Attributes: int 0
+4 9's children
+end 9's children
+end 10's children
+NodeID: 14 NodeType: Statement Attributes: Declaration
+6 14's children
+NodeID: 11 NodeType: Data Type Attributes: char
+6 11's children
+end 11's children
+NodeID: 13 NodeType: Variable Attributes: char 6 13's children
+end 13's children
+end 14's children
+NodeID: 58 NodeType: Statement Attributes: While
+20 58's children
+NodeID: 28 NodeType: Operator Attributes: &&
+8 28's children
+NodeID: 24 NodeType: Operator Attributes: ||
+8 24's children
+NodeID: 19 NodeType: Operator Attributes: &&
+8 19's children
+NodeID: 16 NodeType: Operator Attributes: >
+8 16's children
+NodeID: 3 NodeType: Variable Attributes: int 0
+8 3's children
+end 3's children
+NodeID: 15 NodeType: Const Variable Attributes: int 0
+8 15's children
+end 15's children
+end 16's children
+NodeID: 18 NodeType: Operator Attributes: <=
+8 18's children
+NodeID: 3 NodeType: Variable Attributes: int 0
+8 3's children
+end 3's children
+NodeID: 17 NodeType: Const Variable Attributes: int 10
+8 17's children
+end 17's children
+end 18's children
+end 19's children
+NodeID: 23 NodeType: Operator Attributes: ==
+8 23's children
+NodeID: 21 NodeType: Operator Attributes: %
+8 21's children
+NodeID: 3 NodeType: Variable Attributes: int 0
+8 3's children
+end 3's children
+NodeID: 20 NodeType: Const Variable Attributes: int 100
+8 20's children
+end 20's children
+end 21's children
+NodeID: 22 NodeType: Const Variable Attributes: int 10
+8 22's children
+end 22's children
+end 23's children
+end 24's children
+NodeID: 27 NodeType: Operator Attributes: ==
+8 27's children
+NodeID: 25 NodeType: Operator Attributes: !
+8 25's children
+NodeID: 3 NodeType: Variable Attributes: int 0
+8 3's children
+end 3's children
+end 25's children
+NodeID: 26 NodeType: Const Variable Attributes: int 10
+8 26's children
+end 26's children
+end 27's children
+end 28's children
+NodeID: 30 NodeType: Statement Attributes: Assignment -=
+9 30's children
+NodeID: 3 NodeType: Variable Attributes: int 0
+9 3's children
+end 3's children
+NodeID: 29 NodeType: Const Variable Attributes: int 1
+9 29's children
+end 29's children
+end 30's children
+NodeID: 33 NodeType: Statement Attributes: Declaration
+10 33's children
+NodeID: 31 NodeType: Data Type Attributes: int
+10 31's children
+end 31's children
+NodeID: 32 NodeType: Variable Attributes: int 0
+10 32's children
+end 32's children
+end 33's children
+NodeID: 35 NodeType: Statement Attributes: Assignment =
+11 35's children
+NodeID: 32 NodeType: Variable Attributes: int 0
+11 32's children
+end 32's children
+NodeID: 34 NodeType: Const Variable Attributes: int 10
+11 34's children
+end 34's children
+end 35's children
+NodeID: 36 NodeType: Statement Attributes: Assignment +=
+12 36's children
+NodeID: 5 NodeType: Variable Attributes: int 0
+12 5's children
+end 5's children
+NodeID: 32 NodeType: Variable Attributes: int 0
+12 32's children
+end 32's children
+end 36's children
+NodeID: 57 NodeType: Statement Attributes: If
+20 57's children
+NodeID: 40 NodeType: Operator Attributes: <
+13 40's children
+NodeID: 37 NodeType: Operator Attributes: -
+13 37's children
+NodeID: 5 NodeType: Variable Attributes: int 0
+13 5's children
+end 5's children
+end 37's children
+NodeID: 39 NodeType: Operator Attributes: -
+13 39's children
+NodeID: 38 NodeType: Const Variable Attributes: int 10
+13 38's children
+end 38's children
+end 39's children
+end 40's children
+NodeID: 44 NodeType: Statement Attributes: Declaration
+14 44's children
+NodeID: 41 NodeType: Data Type Attributes: int
+14 41's children
+end 41's children
+NodeID: 43 NodeType: Variable Attributes: int 0
+14 43's children
+end 43's children
+end 44's children
+NodeID: 46 NodeType: Statement Attributes: Assignment =
+15 46's children
+NodeID: 43 NodeType: Variable Attributes: int 0
+15 43's children
+end 43's children
+NodeID: 45 NodeType: Const Variable Attributes: int 10
+15 45's children
+end 45's children
+end 46's children
+NodeID: 56 NodeType: Statement Attributes: For
+18 56's children
+NodeID: 54 NodeType: Statement Attributes: Assignment =
+16 54's children
+NodeID: 51 NodeType: Statement Attributes: Declaration
+16 51's children
+NodeID: 47 NodeType: Data Type Attributes: int
+16 47's children
+end 47's children
+NodeID: 50 NodeType: Variable Attributes: int 0
+16 50's children
+end 50's children
+end 51's children
+NodeID: 52 NodeType: Operator Attributes: <
+16 52's children
+NodeID: 50 NodeType: Variable Attributes: int 0
+16 50's children
+end 50's children
+NodeID: 43 NodeType: Variable Attributes: int 0
+16 43's children
+end 43's children
+end 52's children
+NodeID: 53 NodeType: Statement Attributes: Assignment ++
+16 53's children
+NodeID: 50 NodeType: Variable Attributes: int 0
+16 50's children
+end 50's children
+end 53's children
+end 54's children
+NodeID: 55 NodeType: Statement Attributes: Assignment ++
+17 55's children
+NodeID: 50 NodeType: Variable Attributes: int 0
+17 50's children
+end 50's children
+end 55's children
+end 56's children
+end 57's children
+end 58's children
+end 60's children

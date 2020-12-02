@@ -1125,12 +1125,14 @@ YY_RULE_SETUP
 #line 144 "main.l"
 {
             if (identifierTable.find(yytext) != identifierTable.end()){
+                cout << yytext << " exists!" << endl;
                 stack<idAttr> s = (identifierTable.find(yytext)->second);
                 int id = -1;
+                cout << s.top().level << " " << level;
                 if(s.top().level <= level) {
+                    cout << yytext << " use before" << endl;
                     id = s.top().id;
                 }
-                
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 if (id != -1) {
                     node->setNodeId(id);
@@ -1146,6 +1148,7 @@ YY_RULE_SETUP
                 yylval = node;
                 
             } else {
+                cout << yytext << " doesn't exist!" << endl;
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 string identifier = (string) yytext;
                 node->setIdentifier(identifier);
@@ -1162,7 +1165,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 180 "main.l"
+#line 183 "main.l"
 {
             createIntNode(lineno, DECIMAL);
             return INTEGER;
@@ -1170,7 +1173,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 184 "main.l"
+#line 187 "main.l"
 {
             createIntNode(lineno, OCTAL);
             return INTEGER;
@@ -1178,7 +1181,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 188 "main.l"
+#line 191 "main.l"
 {
             createIntNode(lineno, HEXA);
             return INTEGER;
@@ -1186,11 +1189,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 192 "main.l"
+#line 195 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
-            cout << "lex, char: " << yytext << endl;
             node->setCharValue(yytext[1]);
             yylval = node;
             cout << "ID value: CHAR" << yytext[1] << endl;
@@ -1199,7 +1201,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 201 "main.l"
+#line 203 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_STRING);
@@ -1211,28 +1213,28 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 210 "main.l"
+#line 212 "main.l"
 /*do nothing*/
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 212 "main.l"
+#line 214 "main.l"
 { lineno++; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 214 "main.l"
+#line 216 "main.l"
 {
             cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
         }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 217 "main.l"
+#line 219 "main.l"
 ECHO;
 	YY_BREAK
-#line 1236 "main.lex.yy.cpp"
+#line 1238 "main.lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -2201,4 +2203,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 217 "main.l"
+#line 219 "main.l"

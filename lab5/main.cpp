@@ -3,6 +3,7 @@
 #include <map>
 #include <iostream>
 #include <stack>
+#include <cstring>
 
 using namespace std;
 
@@ -10,6 +11,7 @@ TreeNode *root = nullptr;
 map<string, stack<idAttr>> identifierTable;
 int TreeNode::count = 0;
 extern int yyparse();
+extern int lineno;
 extern FILE *yyin;
 extern FILE *yyout;
 
@@ -40,6 +42,9 @@ int main(int argc, char *argv[])
 
 void yyerror(const char* msg)
 {   
+    if(strcmp(msg, "syntax error") == 0){
+        cout << lineno;
+    }
     cout << msg << endl;
 }
 

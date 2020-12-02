@@ -54,37 +54,41 @@ void TreeNode::setNodeId(int i) {
 void TreeNode::printInfo() {
     string info = (string)"NodeID: " + to_string(this->nodeID);
     info += (string)" NodeType: " + TreeNode::nodeType2String(this->nodeType);
-    info += (string)" Attributes: " + getValueOfId(this) + "\n";
+    info += (string)" Attributes: " + this->attributes() + "\n";
     fputs(info.c_str(), yyout);
 }
 
 void TreeNode::printAST() {
     this->printInfo();
-    string sib = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s child\n";
-    fputs(sib.c_str(), yyout);
+    string info = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s children\n";
+    fputs(info.c_str(), yyout);
     TreeNode* node = this->child;
     if(node != nullptr){
         node->printAST();
-    }
-    string chi = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s sibling\n";
-    fputs(chi.c_str(), yyout);
-    node = this->sibling;
-    while(node != nullptr) {
-        node->printAST();
         node = node->sibling;
+        while(node != nullptr) {
+            node->printAST();
+            node = node->sibling;
+        }
     }
-    
-    // if (this->child != nullptr) {
-    //     TreeNode* node = this->child->sibling;
-    //     this->child->printAST();
-    //     while(node != nullptr) {
-    //         node->printAST();
-    //         node = node->sibling;
-    //     }
+    // info = "end " + to_string(this->nodeID) + (string)"'s child\n";
+    // fputs(info.c_str(), yyout);
+    // info = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s sibling\n";
+    // fputs(info.c_str(), yyout);
+    // if (this->getNodeId() == 1) {
+    //     cout << this->getNodeId() << ": " << (this->sibling == nullptr) << endl;
     // }
-    // if (this->sibling != nullptr) {
-    //     this->sibling->printAST();
+    // if (this->getNodeId() == 2) {
+    //     cout << this->getNodeId() << ": " << this->sibling->getNodeId() << endl;
     // }
+    // if (this->getNodeId() == 3) {
+    //     cout << this->getNodeId() << ": " << this->sibling->getNodeId() << endl;
+    // }
+    // if (this->getNodeId() == 4) {
+    //     cout << this->getNodeId() << ": " << this->sibling->getNodeId() << endl;
+    // }
+    info = "end " + to_string(this->nodeID) + (string)"'s children\n";
+    fputs(info.c_str(), yyout);
 }
 
 void TreeNode::setNodeType(NodeType type) {
@@ -244,8 +248,14 @@ string TreeNode::attributes(){
         case 4:
         // expression
             return "";
-        case 5:
-            return statementType2String(this->stmtType);
+        case 5: {
+            string stmt = statementType2String(this->stmtType);
+            if(stmt == (string)"Assignment") {
+                string asig = assignmentType2String(this->asigType);
+                return stmt+(string)" "+asig; 
+            }
+            return stmt;
+        }
         case 6:
         // function
             return "";
@@ -296,9 +306,9 @@ string TreeNode::operatorType2String(OperatorType t){
         case 10:
             return (string)">";
         case 11:
-            return (string)">=";
-        case 12:
             return (string)"<";
+        case 12:
+            return (string)">=";
         case 13:
             return (string)"<=";
         case 14:
@@ -359,14 +369,16 @@ string TreeNode::statementType2String(StatementType t){
         case 3:
             return (string)"If";
         case 4:
-            return (string)"While";
+            return (string)"For";
         case 5:
-            return (string)"Break";
+            return (string)"While";
         case 6:
-            return (string)"Continue";
+            return (string)"Break";
         case 7:
-            return (string)"Return";
+            return (string)"Continue";
         case 8:
+            return (string)"Return";
+        case 9:
             return (string)"Skip";
         default:
             return (string)"";
