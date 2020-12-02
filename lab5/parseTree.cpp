@@ -12,6 +12,8 @@ void TreeNode::addChild(TreeNode* &child) {
 
 void TreeNode::addSibling(TreeNode* &sibling) {
     TreeNode* node = this->sibling;
+    string info = to_string(sibling->getNodeId()) + (string)" add sibling\n";
+    fputs(info.c_str(), yyout);
     if (node == nullptr) {
         fputs("node == nullptr\n", yyout);
         this->sibling = sibling;
@@ -49,20 +51,36 @@ int TreeNode::getNodeId() {
     return this->nodeID;
 }
 
-
-void TreeNode::printAST() {
+void TreeNode::printInfo() {
     string info = (string)"NodeID: " + to_string(this->nodeID);
     info += (string)" NodeType: " + TreeNode::nodeType2String(this->nodeType);
     info += (string)" Attributes: " + getValueOfId(this) + "\n";
     fputs(info.c_str(), yyout);
-    if (this->child != nullptr) {
-        TreeNode* node = this->child->sibling;
-        this->child->printAST();
-        while(node != nullptr) {
-            node->printAST();
-            node = node->sibling;
-        }
+}
+
+void TreeNode::printAST() {
+    this->printInfo();
+    string chi = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s child\n";
+    fputs(chi.c_str(), yyout);
+    TreeNode* node = this->child;
+    while(node != nullptr) {
+        node->printAST();
+        node = node->child;
     }
+    string sib = to_string(this->lineno) + " " + to_string(this->nodeID) + (string)"'s sibling\n";
+    fputs(sib.c_str(), yyout);
+    node = this->sibling;
+    if(node != nullptr){
+        node->printAST();
+    }
+    // if (this->child != nullptr) {
+    //     TreeNode* node = this->child->sibling;
+    //     this->child->printAST();
+    //     while(node != nullptr) {
+    //         node->printAST();
+    //         node = node->sibling;
+    //     }
+    // }
     // if (this->sibling != nullptr) {
     //     this->sibling->printAST();
     // }

@@ -1,55 +1,27 @@
 type <= int 
-id with assignment 
-declaration <= variable 
-statement <= declaration 
-statements <= statement 
-type <= int 
-id with assignment 
-declaration <= variable 
-statement <= declaration 
-node == nullptr
-statements <= statements statement 
-type <= int 
-id with assignment 
-declaration <= variable 
-statement <= declaration 
-statements <= statements statement 
-type <= int 
-id with assignment 
+id 
+4 add sibling
 node == nullptr
 idlist 
 declaration <= variable 
 statement <= declaration 
-statements <= statements statement 
-type <= int 
-id with assignment 
-declaration <= const 
-statement <= declaration 
-statements <= statements statement 
-type <= char 
-id with assignment 
-declaration <= variable 
-statement <= declaration 
-statements <= statements statement 
-type <= string 
-id with assignment 
-declaration <= variable 
-statement <= declaration 
-statements <= statements statement 
+statements <= statement 
 root 
-NodeID: 31 NodeType: Program Root Attributes: 0
-NodeID: 4 NodeType: Statement Attributes: 0
+NodeID: 6 NodeType: Program Root Attributes: 0
+0 6's child
+NodeID: 3 NodeType: Statement Attributes: 0
+3 3's child
 NodeID: 2 NodeType: Variable Attributes: 0
-NodeID: 8 NodeType: Statement Attributes: 0
-NodeID: 6 NodeType: Variable Attributes: 1
-NodeID: 12 NodeType: Statement Attributes: 0
-NodeID: 10 NodeType: Variable Attributes: 1
-NodeID: 16 NodeType: Statement Attributes: 0
-NodeID: 14 NodeType: Variable Attributes: 2
-NodeID: 17 NodeType: Variable Attributes: 0
-NodeID: 21 NodeType: Statement Attributes: 0
-NodeID: 19 NodeType: Const Variable Attributes: 25
-NodeID: 25 NodeType: Statement Attributes: 0
-NodeID: 23 NodeType: Variable Attributes: 3
-NodeID: 29 NodeType: Statement Attributes: 0
-NodeID: 27 NodeType: Variable Attributes: "happy"
+3 2's child
+3 2's sibling
+NodeID: 4 NodeType: Variable Attributes: 0
+3 4's child
+3 4's sibling
+3 3's sibling
+NodeID: 2 NodeType: Variable Attributes: 0
+3 2's child
+3 2's sibling
+NodeID: 4 NodeType: Variable Attributes: 0
+3 4's child
+3 4's sibling
+0 6's sibling

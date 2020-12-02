@@ -1,5 +1,5 @@
-main.l:154: warning, rule cannot be matched
-main.y: warning: 11 shift/reduce conflicts [-Wconflicts-sr]
+main.l:178: warning, rule cannot be matched
+main.y: warning: 13 shift/reduce conflicts [-Wconflicts-sr]
 main.l: In function ‘void createIntNode(int, RadixType)’:
 main.l:32:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
              for (int i = 1; i < strlen(yytext); i++) {
@@ -8,13 +8,13 @@ main.l:41:31: warning: comparison between signed and unsigned integer expression
              for (int i = 2; i < strlen(yytext); i++) {
                              ~~^~~~~~~~~~~~~~~~
 main.y: In function ‘bool checkIfCon(TreeNode*, TreeNode*, TreeNode*)’:
-main.y:381:55: warning: unused parameter ‘t3’ [-Wunused-parameter]
+main.y:401:55: warning: unused parameter ‘t3’ [-Wunused-parameter]
  bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
                                                        ^~
-main.y:393:1: warning: control reaches end of non-void function [-Wreturn-type]
+main.y:413:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 ./parseTree.cpp: In static member function ‘static std::__cxx11::string TreeNode::operatorType2String(OperatorType)’:
-./parseTree.cpp:294:1: warning: control reaches end of non-void function [-Wreturn-type]
+./parseTree.cpp:312:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^

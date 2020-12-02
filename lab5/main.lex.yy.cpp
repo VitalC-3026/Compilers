@@ -544,7 +544,7 @@ using std::cout;
 using std::endl;
 int lineno = 1, level = 0;
 extern void yyerror(const char*);
-extern map<string, stack<int>> identifierTable;
+extern map<string, stack<idAttr>> identifierTable;
 
 void createIntNode(int lineno, RadixType radix){
     TreeNode* node = new TreeNode(lineno, NODE_Const);
@@ -809,7 +809,7 @@ YY_DECL
 		}
 
 	{
-#line 82 "main.l"
+#line 83 "main.l"
 
 
 #line 816 "main.lex.yy.cpp"
@@ -871,269 +871,292 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 84 "main.l"
+#line 85 "main.l"
 {BEGIN COMMENT;}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 85 "main.l"
+#line 86 "main.l"
 {}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 86 "main.l"
+#line 87 "main.l"
 {BEGIN INITIAL;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 87 "main.l"
-{/*do nothing*/}
+#line 88 "main.l"
+{} /*do nothing*/
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 90 "main.l"
+#line 91 "main.l"
 return T_BOOL;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 91 "main.l"
+#line 92 "main.l"
 return T_INT; 
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 92 "main.l"
+#line 93 "main.l"
 return T_CHAR; 
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 93 "main.l"
+#line 94 "main.l"
 return T_STRING;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 94 "main.l"
+#line 95 "main.l"
 return CONST;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 95 "main.l"
+#line 96 "main.l"
 return STRUCT;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 96 "main.l"
+#line 97 "main.l"
 return IF;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 97 "main.l"
+#line 98 "main.l"
 return ELSE;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 98 "main.l"
+#line 99 "main.l"
 return WHILE;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 99 "main.l"
+#line 100 "main.l"
 return FOR;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 100 "main.l"
+#line 101 "main.l"
 return RETURN;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 101 "main.l"
+#line 102 "main.l"
 return CONTINUE;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 102 "main.l"
+#line 103 "main.l"
 return BREAK;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 103 "main.l"
+#line 104 "main.l"
 return PRINTF;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 104 "main.l"
+#line 105 "main.l"
 return SCANF;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 106 "main.l"
+#line 107 "main.l"
 return ASG;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 107 "main.l"
+#line 108 "main.l"
 return ADDASG;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 108 "main.l"
+#line 109 "main.l"
 return MINASG;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 109 "main.l"
+#line 110 "main.l"
 return MULASG;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 110 "main.l"
+#line 111 "main.l"
 return DIVASG;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 111 "main.l"
+#line 112 "main.l"
 return MODASG;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 112 "main.l"
+#line 113 "main.l"
 return ADDASGO;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 113 "main.l"
+#line 114 "main.l"
 return MINASGO;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 115 "main.l"
+#line 116 "main.l"
 return DOT;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 116 "main.l"
+#line 117 "main.l"
 return REF;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 117 "main.l"
+#line 118 "main.l"
 return POI;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 118 "main.l"
+#line 119 "main.l"
 return NOT;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 120 "main.l"
+#line 121 "main.l"
 return ADD;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 121 "main.l"
+#line 122 "main.l"
 return MIN;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 122 "main.l"
+#line 123 "main.l"
 return MUL;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 123 "main.l"
+#line 124 "main.l"
 return DIV;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 124 "main.l"
+#line 125 "main.l"
 return MOD;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 126 "main.l"
+#line 127 "main.l"
 return EQU;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 127 "main.l"
+#line 128 "main.l"
 return GT;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 128 "main.l"
+#line 129 "main.l"
 return LT;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 129 "main.l"
+#line 130 "main.l"
 return GTQ;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 130 "main.l"
+#line 131 "main.l"
 return LTQ;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 131 "main.l"
+#line 132 "main.l"
 return NEQ;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 133 "main.l"
+#line 134 "main.l"
 return AND;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 134 "main.l"
+#line 135 "main.l"
 return OR;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 136 "main.l"
+#line 137 "main.l"
 return LBRACE;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 137 "main.l"
+#line 138 "main.l"
 return RBRACE;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 138 "main.l"
+#line 139 "main.l"
 { level++; return LPAREN; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 139 "main.l"
+#line 140 "main.l"
 { level--; return RPAREN; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 140 "main.l"
+#line 141 "main.l"
 return SEMICOLON;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 141 "main.l"
+#line 142 "main.l"
 return COMMA;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 143 "main.l"
+#line 144 "main.l"
 {
-            TreeNode* node = new TreeNode(lineno, NODE_Var);
-            string identifier = (string) yytext;
-            node->setIdentifier(identifier);
-            yylval = node;
+            if (identifierTable.find(yytext) != identifierTable.end()){
+                stack<idAttr> s = (identifierTable.find(yytext)->second);
+                if(s.top().level == level) {
+                    yylval = s.top().entry;
+                } else if (s.top().level < level) {
+                    TreeNode* node = new TreeNode(lineno, NODE_Var);
+                    string identifier = (string) yytext;
+                    node->setIdentifier(identifier);
+                    idAttr attr;
+                    attr.level = level;
+                    attr.entry = node;
+                    s.push(attr);
+                    identifierTable[yytext] = s;
+                    yylval = node;
+                }
+            } else {
+                TreeNode* node = new TreeNode(lineno, NODE_Var);
+                string identifier = (string) yytext;
+                node->setIdentifier(identifier);
+                idAttr attr;
+                attr.level = level;
+                attr.entry = node;
+                stack<idAttr> s;
+                s.push(attr);
+                identifierTable[yytext] = s;
+                yylval = node;
+            }
             return ID;
         }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 150 "main.l"
+#line 174 "main.l"
 {
             createIntNode(lineno, DECIMAL);
             return INTEGER;
@@ -1141,7 +1164,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 154 "main.l"
+#line 178 "main.l"
 {
             createIntNode(lineno, OCTAL);
             return INTEGER;
@@ -1149,7 +1172,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 158 "main.l"
+#line 182 "main.l"
 {
             createIntNode(lineno, HEXA);
             return INTEGER;
@@ -1157,7 +1180,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 162 "main.l"
+#line 186 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
@@ -1170,7 +1193,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 171 "main.l"
+#line 195 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_STRING);
@@ -1182,28 +1205,28 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 180 "main.l"
+#line 204 "main.l"
 /*do nothing*/
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 182 "main.l"
+#line 206 "main.l"
 { lineno++; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 184 "main.l"
+#line 208 "main.l"
 {
             cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
         }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 187 "main.l"
+#line 211 "main.l"
 ECHO;
 	YY_BREAK
-#line 1207 "main.lex.yy.cpp"
+#line 1230 "main.lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -2172,4 +2195,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 187 "main.l"
+#line 211 "main.l"

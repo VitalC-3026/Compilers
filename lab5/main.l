@@ -15,7 +15,7 @@ using std::cout;
 using std::endl;
 int lineno = 1, level = 0;
 extern void yyerror(const char*);
-extern map<string, stack<int>> identifierTable;
+extern map<string, stack<idAttr>> identifierTable;
 
 void createIntNode(int lineno, RadixType radix){
     TreeNode* node = new TreeNode(lineno, NODE_Const);
@@ -79,12 +79,13 @@ HEX 0x[0-9a-fA-F]+
 CHAR \'.?\'
 STRING \".*\"
 
+
 %%
 
 {commentbegin} {BEGIN COMMENT;}
 <COMMENT>{commentelement} {}
 <COMMENT>{commentend} {BEGIN INITIAL;}
-{commentline}   {/*do nothing*/}
+{commentline}   {} /*do nothing*/
 
 
 "bool"  return T_BOOL;
@@ -141,10 +142,33 @@ STRING \".*\"
 ","     return COMMA;
 
 {ID}    {
-            TreeNode* node = new TreeNode(lineno, NODE_Var);
-            string identifier = (string) yytext;
-            node->setIdentifier(identifier);
-            yylval = node;
+            if (identifierTable.find(yytext) != identifierTable.end()){
+                stack<idAttr> s = (identifierTable.find(yytext)->second);
+                if(s.top().level == level) {
+                    yylval = s.top().entry;
+                } else if (s.top().level < level) {
+                    TreeNode* node = new TreeNode(lineno, NODE_Var);
+                    string identifier = (string) yytext;
+                    node->setIdentifier(identifier);
+                    idAttr attr;
+                    attr.level = level;
+                    attr.entry = node;
+                    s.push(attr);
+                    identifierTable[yytext] = s;
+                    yylval = node;
+                }
+            } else {
+                TreeNode* node = new TreeNode(lineno, NODE_Var);
+                string identifier = (string) yytext;
+                node->setIdentifier(identifier);
+                idAttr attr;
+                attr.level = level;
+                attr.entry = node;
+                stack<idAttr> s;
+                s.push(attr);
+                identifierTable[yytext] = s;
+                yylval = node;
+            }
             return ID;
         }
 {DEC}   {

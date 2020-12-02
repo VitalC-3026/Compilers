@@ -15,7 +15,7 @@
     bool checkAsg(TreeNode* t1, bool i);
     TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst);
     string getValueOfId(TreeNode* n);
-    stack<idAttr> setEntryOfId(int level, DeclType type, string value);
+    stack<idAttr> setEntryOfId(int level, DeclType type, string value, TreeNode* node);
     int assignId(TreeNode* &id, TreeNode* expr);
 %}
 
@@ -56,6 +56,7 @@ statements
 
 statement
 : SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_SKIP); fputs("skip \n", yyout);}
+| function  { $$ = $1; fputs("statement <= function\n", yyout); }
 | declaration SEMICOLON { $$ = $1; fputs("statement <= declaration \n", yyout); }
 | assignment SEMICOLON  { $$ = $1; fputs("statement <= assignment \n", yyout); }
 | expr SEMICOLON  { $$ = $1; fputs("statement <= expr \n", yyout); }
@@ -64,27 +65,46 @@ statement
 | control   { $$ = $1; fputs("statement <= control \n", yyout); }
 ;
 
+function
+: functionDecl {}
+| functionCall {}
+| functionDefi {}
+;
+
+functionDefi
+: type ID LBRACE RBRACE LPAREN statements RPAREN {}
+;
+
+functionDecl
+: type ID LBRACE RBRACE SEMICOLON
+;
+
+functionCall
+: ID LBRACE RBRACE
+;
+
+
 idlist
 : idlist COMMA ID ASG expr  {   $$ = $1; 
                                 assignId($3, $5);
                                 $$->addChild($3);
-                                identifierTable[$3->getIdentifier()] = setEntryOfId(lineno, $3->getDeclType(), getValueOfId($5));
+                                identifierTable[$3->getIdentifier()] = setEntryOfId(lineno, $3->getDeclType(), getValueOfId($5), $3);
                                 fputs("idlist with assignment \n", yyout);
                             }
 | idlist COMMA ID   {   $$ = $1; 
                         $$->addChild($3);
-                        identifierTable[$3->getIdentifier()] = setEntryOfId(lineno, $3->getDeclType(), getValueOfId(nullptr));
+                        identifierTable[$3->getIdentifier()] = setEntryOfId(lineno, $3->getDeclType(), getValueOfId(nullptr), $3);
                         fputs("idlist \n", yyout);
                     }
 | ID ASG expr   {   $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_DECL);
                     assignId($1, $3);
                     $$->addChild($1);
-                    identifierTable[$1->getIdentifier()] = setEntryOfId(lineno, $1->getDeclType(), getValueOfId($3));
+                    identifierTable[$1->getIdentifier()] = setEntryOfId(lineno, $1->getDeclType(), getValueOfId($3), $1);
                     fputs("id with assignment \n", yyout);
                 }
 | ID            {   $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_DECL);
                     $$->addChild($1);
-                    identifierTable[$1->getIdentifier()] = setEntryOfId(lineno, $1->getDeclType(), getValueOfId(nullptr));
+                    identifierTable[$1->getIdentifier()] = setEntryOfId(lineno, $1->getDeclType(), getValueOfId(nullptr), $1);
                     fputs("id \n", yyout);
                 }
 ;
@@ -183,7 +203,7 @@ assignment
                             $$->addChild($3);
                         } else {
                             yyerror("ASSIGN error!");
-                            $$ = nullptr;
+                            
                         }
                         fputs("assignment <= = \n", yyout);
                     }
@@ -430,6 +450,7 @@ bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
 bool checkAsg(TreeNode* t1, bool i)
 {
     if (t1->getNodeType() != NODE_Var) {
+        cout << TreeNode::nodeType2String(t1->getNodeType()) << endl;
         return false;
     }
     if (i) {
@@ -445,6 +466,7 @@ bool checkAsg(TreeNode* t1, bool i)
 TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst) {
     if(ifConst){
         // iterate nodes to set type and const
+        cout << "ifConst here" << endl;
         TreeNode* child = idlist->getChild();
         assert (child != nullptr);
         child->setNodeType(NODE_Const);
@@ -456,8 +478,10 @@ TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst) {
     } else {
         TreeNode* child = idlist->getChild();
         assert (child != nullptr);
+        child->setNodeType(NODE_Var);
         child->setDeclType(type->getDeclType());
         while ((child = child->getSibling()) != nullptr) {
+            child->setNodeType(NODE_Var);
             child->setDeclType(type->getDeclType());
         }
     }
@@ -489,12 +513,13 @@ string getValueOfId(TreeNode* n) {
     }
 }
 
-stack<idAttr> setEntryOfId(int level, DeclType type, string value){
+stack<idAttr> setEntryOfId(int level, DeclType type, string value, TreeNode* node){
     idAttr attr;
     attr.level = level;
     attr.type = type;
     // type check
     attr.value = value;
+    attr.entry = node;
     stack<idAttr> s;
     s.push(attr);
     return s;
