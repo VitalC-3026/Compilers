@@ -1,12 +1,13 @@
-#include "pch.h"
 #include "common.h"
 #include <fstream>
-
+#include <map>
+#include <iostream>
+#include <stack>
 
 using namespace std;
 
 TreeNode *root = nullptr;
-map<string, stack<int>> identifierTable;
+map<string, stack<idAttr>> identifierTable;
 int TreeNode::count = 0;
 extern int yyparse();
 extern FILE *yyin;

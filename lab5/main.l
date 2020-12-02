@@ -1,4 +1,4 @@
-%option noyywrap
+%option nounput
 %{
 /*
  * lab5
@@ -10,9 +10,12 @@
 #include "common.h"
 #include "type.h"
 #include "main.tab.h" 
+using std::cerr;
+using std::cout;
+using std::endl;
 int lineno = 1, level = 0;
 extern void yyerror(const char*);
-extern map<string, stack<int>> idenfierTable;
+extern map<string, stack<int>> identifierTable;
 
 void createIntNode(int lineno, RadixType radix){
     TreeNode* node = new TreeNode(lineno, NODE_Const);
@@ -21,6 +24,7 @@ void createIntNode(int lineno, RadixType radix){
     switch (radix){
         case DECIMAL: {
             node->setIntValue(atoi(yytext));
+            cout << "ID value: INT" << atoi(yytext) << endl;
             break;
         }
         case OCTAL: {
@@ -29,6 +33,7 @@ void createIntNode(int lineno, RadixType radix){
                 num += (int)yytext[i] * pow(8, (strlen(yytext) - i - 1));
             }
             node->setIntValue(num);
+            cout << "ID value: INT" << num << endl;
             break;
         }
         case HEXA: {
@@ -49,6 +54,7 @@ void createIntNode(int lineno, RadixType radix){
                 num += tmp * pow(16, (strlen(yytext) - i - 1));
             }
             node->setIntValue(num);
+            cout << "ID value: INT" << num << endl;
             break;
         }
         default:
@@ -78,7 +84,7 @@ STRING \".*\"
 {commentbegin} {BEGIN COMMENT;}
 <COMMENT>{commentelement} {}
 <COMMENT>{commentend} {BEGIN INITIAL;}
-{commentline}   /*do nothing*/
+{commentline}   {/*do nothing*/}
 
 
 "bool"  return T_BOOL;
@@ -94,7 +100,7 @@ STRING \".*\"
 "return" return RETURN;
 "continue" return CONTINUE;
 "break" return BREAK;
-"printf" return PRINTF
+"printf" return PRINTF;
 "scanf" return SCANF;
 
 "="     return ASG;
@@ -157,8 +163,9 @@ STRING \".*\"
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
             cout << "lex, char: " << yytext << endl;
-            node->setCharValue(yytext[0]);
+            node->setCharValue(yytext[1]);
             yylval = node;
+            cout << "ID value: CHAR" << yytext[1] << endl;
             return CHAR;
         }
 {STRING}    {
@@ -166,7 +173,8 @@ STRING \".*\"
             node->setDeclType(D_STRING);
             node->setStringValue((string)yytext);
             yylval = node;
-            return CHAR;
+            cout << "ID value: STRING" << yytext << endl;
+            return STRING;
         }
 
 {WHITESPACE}    /*do nothing*/

@@ -1,74 +1,20 @@
-main.l:148: warning, rule cannot be matched
+main.l:154: warning, rule cannot be matched
 main.y: warning: 11 shift/reduce conflicts [-Wconflicts-sr]
 main.l: In function ‘void createIntNode(int, RadixType)’:
-main.l:28:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+main.l:32:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
              for (int i = 1; i < strlen(yytext); i++) {
                              ~~^~~~~~~~~~~~~~~~
-main.l:36:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+main.l:41:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
              for (int i = 2; i < strlen(yytext); i++) {
                              ~~^~~~~~~~~~~~~~~~
-main.l: In function ‘int yylex()’:
-main.lex.yy.cpp:767:28: error: expected ‘;’ before ‘break’
- #define YY_BREAK /*LINTED*/break;
-                            ^
-main.l:98:2: note: in expansion of macro ‘YY_BREAK’
- "scanf" return SCANF;
-  ^~~~~~~~
-main.lex.yy.cpp: At global scope:
-main.lex.yy.cpp:1537:17: warning: ‘void yyunput(int, char*)’ defined but not used [-Wunused-function]
-     static void yyunput (int c, char * yy_bp )
-                 ^~~~~~~
 main.y: In function ‘bool checkIfCon(TreeNode*, TreeNode*, TreeNode*)’:
-main.y:350:55: warning: unused parameter ‘t3’ [-Wunused-parameter]
+main.y:381:55: warning: unused parameter ‘t3’ [-Wunused-parameter]
  bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
                                                        ^~
-main.y: In function ‘TreeNode* setType(TreeNode*, TreeNode*, bool)’:
-main.y:414:47: warning: unused parameter ‘type’ [-Wunused-parameter]
- TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst) {
-                                               ^~~~
-main.y: In function ‘bool checkIfCon(TreeNode*, TreeNode*, TreeNode*)’:
-main.y:362:1: warning: control reaches end of non-void function [-Wreturn-type]
+main.y:393:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
-./parseTree.cpp: In member function ‘std::__cxx11::string TreeNode::attributes()’:
-./parseTree.cpp:178:39: warning: this statement may fall through [-Wimplicit-fallthrough=]
-                     value += to_string(this->getIntValue());
-                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
-./parseTree.cpp:179:17: note: here
-                 case 1:
-                 ^~~~
-./parseTree.cpp:180:39: warning: this statement may fall through [-Wimplicit-fallthrough=]
-                     value += to_string(this->getCharValue());
-                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-./parseTree.cpp:181:17: note: here
-                 case 2:
-                 ^~~~
-./parseTree.cpp:182:50: warning: this statement may fall through [-Wimplicit-fallthrough=]
-                     value += this->getStringValue();
-                              ~~~~~~~~~~~~~~~~~~~~^~
-./parseTree.cpp:183:17: note: here
-                 case 3:
-                 ^~~~
-./parseTree.cpp:195:39: warning: this statement may fall through [-Wimplicit-fallthrough=]
-                     value += to_string(this->getIntValue());
-                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
-./parseTree.cpp:196:17: note: here
-                 case 1:
-                 ^~~~
-./parseTree.cpp:197:39: warning: this statement may fall through [-Wimplicit-fallthrough=]
-                     value += to_string(this->getCharValue());
-                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-./parseTree.cpp:198:17: note: here
-                 case 2:
-                 ^~~~
-./parseTree.cpp:199:50: warning: this statement may fall through [-Wimplicit-fallthrough=]
-                     value += this->getStringValue();
-                              ~~~~~~~~~~~~~~~~~~~~^~
-./parseTree.cpp:200:17: note: here
-                 case 3:
-                 ^~~~
 ./parseTree.cpp: In static member function ‘static std::__cxx11::string TreeNode::operatorType2String(OperatorType)’:
-./parseTree.cpp:278:1: warning: control reaches end of non-void function [-Wreturn-type]
+./parseTree.cpp:294:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
-make: *** [main] Error 1

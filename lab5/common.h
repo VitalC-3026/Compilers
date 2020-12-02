@@ -4,4 +4,10 @@
 #include "parseTree.h"
 #define YYSTYPE TreeNode *
 
+struct idAttr{
+    int level;
+    DeclType type;
+    string value;
+};
+
 #endif

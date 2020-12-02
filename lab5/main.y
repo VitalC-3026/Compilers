@@ -1,9 +1,12 @@
 %{
     #include "common.h"
-    TreeNode* root;
+    #include <cassert>
+    extern TreeNode* root;
     int yylex();
     extern void yyerror(const char*);
-    extern int lineno;
+    extern int lineno, level;
+    extern FILE* yyout;
+    extern map<string, stack<idAttr>> identifierTable;
     TreeNode* addOperatorNode(TreeNode* t1, TreeNode* t2, OperatorType op, int lineno);
     bool checkFor(TreeNode* t1, TreeNode* t2);
     bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3);
@@ -11,6 +14,9 @@
     bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3);
     bool checkAsg(TreeNode* t1, bool i);
     TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst);
+    string getValueOfId(TreeNode* n);
+    stack<idAttr> setEntryOfId(int level, DeclType type, string value);
+    int assignId(TreeNode* &id, TreeNode* expr);
 %}
 
 %token  ASG ADDASG MINASG MULASG DIVASG MODASG ADDASGO MINASGO
@@ -40,53 +46,59 @@
 %%
 
 program 
-: statements    { root = new TreeNode(0, NODE_Prog); root->addChild($1); }
+: statements    { root = new TreeNode(0, NODE_Prog); root->addChild($1); fputs("root \n", yyout); }
 ;
 
 statements
-: statement { $$ = $1; }
-| statements statement { $$ = $1; $$->addSibling($2); }
+: statement { $$ = $1; fputs("statements <= statement \n", yyout);}
+| statements statement { $$ = $1; $$->addSibling($2); fputs("statements <= statements statement \n", yyout);}
 ;
 
 statement
-: SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_SKIP); }
-| declaration SEMICOLON { $$ = $1; }
-| assignment SEMICOLON  { $$ = $1; }
-| expr SEMICOLON  { $$ = $1; }
-| jump SEMICOLON { $$ = $1; }
-| loop      { $$ = $1; }
-| control   { $$ = $1; }
+: SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_SKIP); fputs("skip \n", yyout);}
+| declaration SEMICOLON { $$ = $1; fputs("statement <= declaration \n", yyout); }
+| assignment SEMICOLON  { $$ = $1; fputs("statement <= assignment \n", yyout); }
+| expr SEMICOLON  { $$ = $1; fputs("statement <= expr \n", yyout); }
+| jump SEMICOLON { $$ = $1; fputs("statement <= jump \n", yyout); }
+| loop      { $$ = $1; fputs("statement <= loop \n", yyout); }
+| control   { $$ = $1; fputs("statement <= control \n", yyout); }
 ;
 
 idlist
 : idlist COMMA ID ASG expr  {   $$ = $1; 
-                                TreeNode* node = new TreeNode(lineno, NODE_Stmt); node->setStatementType(STMT_ASIG);
-                                node->setAssignmentType(ADDASIG); node->addChild($3); node->addChild($5);
-                                $$->addChild(node);
+                                assignId($3, $5);
+                                $$->addChild($3);
+                                identifierTable[$3->getIdentifier()] = setEntryOfId(lineno, $3->getDeclType(), getValueOfId($5));
+                                fputs("idlist with assignment \n", yyout);
                             }
 | idlist COMMA ID   {   $$ = $1; 
                         $$->addChild($3);
+                        identifierTable[$3->getIdentifier()] = setEntryOfId(lineno, $3->getDeclType(), getValueOfId(nullptr));
+                        fputs("idlist \n", yyout);
                     }
 | ID ASG expr   {   $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_DECL);
-                    TreeNode* node = new TreeNode(lineno, NODE_Stmt); node->setStatementType(STMT_ASIG);
-                    node->setAssignmentType(ADDASIG); node->addChild($1); node->addChild($3);
-                    $$->addChild(node);
+                    assignId($1, $3);
+                    $$->addChild($1);
+                    identifierTable[$1->getIdentifier()] = setEntryOfId(lineno, $1->getDeclType(), getValueOfId($3));
+                    fputs("id with assignment \n", yyout);
                 }
 | ID            {   $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_DECL);
                     $$->addChild($1);
+                    identifierTable[$1->getIdentifier()] = setEntryOfId(lineno, $1->getDeclType(), getValueOfId(nullptr));
+                    fputs("id \n", yyout);
                 }
 ;
 
 declaration
-: type idlist   {   $$ = setType($2, $1, 0); }
-| CONST type idlist {   $$ = setType($3, $2, 1); }
+: type idlist   {   $$ = setType($2, $1, 0); fputs("declaration <= variable \n", yyout); }
+| CONST type idlist {   $$ = setType($3, $2, 1); fputs("declaration <= const \n", yyout); }
 ;
 
 type
-: T_BOOL { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_BOOL); }
-| T_INT { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_INT); }
-| T_CHAR { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_CHAR); }
-| T_STRING { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_STRING); }
+: T_BOOL { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_BOOL); fputs("type <= bool \n", yyout); }
+| T_INT { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_INT); fputs("type <= int \n", yyout); }
+| T_CHAR { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_CHAR); fputs("type <= char \n", yyout); }
+| T_STRING { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_STRING); fputs("type <= string \n", yyout); }
 ;
 
 loop
@@ -98,31 +110,34 @@ loop
                                                         } else {
                                                             yyerror("FOR error, check failed!");
                                                             $$ = nullptr;
-                                                        }                                                        
-                                                    }
-| WHILE LBRACE expr RBRACE LPAREN statements RPAREN     { if(checkWhile($3, $6)) {
-                                                              $$ = new TreeNode(lineno, NODE_Stmt);
-                                                              $$->addChild($3);
-                                                              $$->addChild($6);
-                                                              $$->setStatementType(STMT_WHILE);
-                                                          } else {
-                                                              yyerror("WHILE error, check failed!");
-                                                              $$ = nullptr;
-                                                          }                 
                                                         }
+                                                        fputs("loop <= for \n", yyout);                                                        
+                                                    }
+| WHILE LBRACE expr RBRACE LPAREN statements RPAREN {   if(checkWhile($3, $6)) {
+                                                            $$ = new TreeNode(lineno, NODE_Stmt);
+                                                            $$->addChild($3);
+                                                            $$->addChild($6);
+                                                            $$->setStatementType(STMT_WHILE);
+                                                        } else {
+                                                            yyerror("WHILE error, check failed!");
+                                                            $$ = nullptr;
+                                                        }
+                                                        fputs("loop <= while \n", yyout); 
+                                                    }
 ;
 
 forcon
 : statement SEMICOLON expr SEMICOLON assignment {   if(checkIfCon($1, $3, $5)) {
-                                                                $$ = new TreeNode(lineno, NODE_Stmt);
-                                                                $$->addChild($1);
-                                                                $$->addChild($3);
-                                                                $$->addChild($5);
-                                                            } else {
-                                                                yyerror("FOR CON error, check failed!");
-                                                                $$ = nullptr;
-                                                            }
-                                                        }
+                                                        $$ = new TreeNode(lineno, NODE_Stmt);
+                                                        $$->addChild($1);
+                                                        $$->addChild($3);
+                                                        $$->addChild($5);
+                                                    } else {
+                                                        yyerror("FOR CON error, check failed!");
+                                                        $$ = nullptr;
+                                                    }
+                                                    fputs("for conditions \n", yyout);
+                                                }
 ;
 
 control
@@ -135,7 +150,7 @@ control
                                                             yyerror("IF error, check failed!");
                                                             $$ = nullptr;
                                                         }
-                                                            
+                                                        fputs("control <= if then \n", yyout); 
                                                     }
 | IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN  {   if(checkIf($3, $6, $10)) {
                                                                                         $$ = new TreeNode(lineno, NODE_Stmt);
@@ -147,15 +162,15 @@ control
                                                                                         yyerror("IF error, check failed!");
                                                                                         $$ = nullptr;
                                                                                     }
-                                                                                        
+                                                                                    fputs("control <= if then else \n", yyout);  
                                                                                 }
 ;
 
 jump
-: BREAK { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_BREAK); }
-| CONTINUE { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_CONTINUE); }
-| RETURN  expr { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_RETURN); $$->addChild($2);}
-| RETURN { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_RETURN); }
+: BREAK { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_BREAK); fputs("jump <= break \n", yyout); }
+| CONTINUE { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_CONTINUE); fputs("jump <= continue \n", yyout); }
+| RETURN  expr { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_RETURN); $$->addChild($2); fputs("jump <= return expr \n", yyout); }
+| RETURN { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_RETURN); fputs("jump <= return \n", yyout); }
 ;
 
 assignment
@@ -170,6 +185,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= = \n", yyout);
                     }
 | ID ADDASG expr    {   if(checkAsg($1, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -181,6 +197,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= += \n", yyout);
                     }
 | ID MINASG expr    {   if(checkAsg($1, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -192,6 +209,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= -= \n", yyout);
                     }
 | ID MULASG expr    {   if(checkAsg($1, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -203,6 +221,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= *= \n", yyout);
                     }
 | ID DIVASG expr    {   if(checkAsg($1, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -214,6 +233,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= \\= \n", yyout);
                     }
 | ID MODASG expr    {   if(checkAsg($1, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -225,6 +245,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= %= \n", yyout);
                     }
 | ADDASGO ID        {   if(checkAsg($2, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -235,6 +256,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= ++i \n", yyout);
                     }
 | MINASGO ID        {   if(checkAsg($2, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -245,6 +267,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= --i \n", yyout);
                     }
 | ID ADDASGO        {   if(checkAsg($1, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -255,6 +278,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= i++ \n", yyout);
                     }
 | ID MINASGO        {   if(checkAsg($1, 1)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
@@ -265,6 +289,7 @@ assignment
                             yyerror("ASSIGN error!");
                             $$ = nullptr;
                         }
+                        fputs("assignment <= i-- \n", yyout);
                     }
 ;
 
@@ -282,10 +307,11 @@ expr
 | expr LTQ expr { $$ = addOperatorNode($1, $3, OP_LTQ, lineno);}
 | expr NEQ expr { $$ = addOperatorNode($1, $3, OP_NEQ, lineno);}
 | expr EQU expr { $$ = addOperatorNode($1, $3, OP_EQU, lineno);}
-| NOT  expr     { if($1->getNodeType() == NODE_Var || $1->getNodeType() == NODE_Const) {
+| NOT  expr     { if($2->getNodeType() == NODE_Var || $2->getNodeType() == NODE_Const) {
                     if ($1->getDeclType() != D_STRING) {
                         TreeNode* node = new TreeNode(lineno, NODE_Op);
                         node->setOperatorType(OP_NOT);
+                        node->setDeclType($2->getDeclType());
                         node->addChild($2);
                         $$ = node;
                     }
@@ -304,10 +330,11 @@ expr
                       $$ = nullptr;
                   }
                 }
-| REF  expr     { if($1->getNodeType() == NODE_Var || $1->getNodeType() == NODE_Const) {
+| REF  expr     { if($2->getNodeType() == NODE_Var || $2->getNodeType() == NODE_Const) {
                     if ($1->getIdentifier() != "") {
                         TreeNode* node = new TreeNode(lineno, NODE_Op);
                         node->setOperatorType(OP_REF);
+                        node->setDeclType($2->getDeclType());
                         node->addChild($2);
                         $$ = node;
                     }
@@ -331,6 +358,10 @@ TreeNode* addOperatorNode(TreeNode* t1, TreeNode* t2, OperatorType op, int linen
     if ((t1->getNodeType() == NODE_Const || t1->getNodeType() == NODE_Var) &&
         (t2->getNodeType() == NODE_Const || t2->getNodeType() == NODE_Var)) {
             // arithmetics type check
+            if (t1->getDeclType() != t2->getDeclType()) {
+                cerr << "expression: Two operands have different types." << endl;
+            }
+            node->setDeclType(t1->getDeclType());
             TreeNode* node = new TreeNode(lineno, NODE_Op);
             node->setOperatorType(op);
             node->addChild(t1);
@@ -414,8 +445,90 @@ bool checkAsg(TreeNode* t1, bool i)
 TreeNode* setType(TreeNode* idlist, TreeNode* type, bool ifConst) {
     if(ifConst){
         // iterate nodes to set type and const
+        TreeNode* child = idlist->getChild();
+        assert (child != nullptr);
+        child->setNodeType(NODE_Const);
+        child->setDeclType(type->getDeclType());
+        while ((child = child->getSibling()) != nullptr) {
+            child->setNodeType(NODE_Const);
+            child->setDeclType(type->getDeclType());
+        }
     } else {
-
+        TreeNode* child = idlist->getChild();
+        assert (child != nullptr);
+        child->setDeclType(type->getDeclType());
+        while ((child = child->getSibling()) != nullptr) {
+            child->setDeclType(type->getDeclType());
+        }
     }
+    // idlist->setDeclType(type->getDeclType());
+    // no type check
     return idlist;
+}
+
+string getValueOfId(TreeNode* n) {
+    if (n == nullptr){
+        cout << "nullptr" << endl;
+        string res = to_string(0);
+        return res;
+    }
+    switch(n->getDeclType()){
+        case D_BOOL:
+            return to_string((int)n->getBoolValue());
+        case D_INT:
+            return to_string(n->getIntValue());
+        case D_CHAR:{
+            string res(1, n->getCharValue());
+            return res;
+        }
+        case D_STRING:{
+            return n->getStringValue();
+        }
+        default:
+            return (string)"";
+    }
+}
+
+stack<idAttr> setEntryOfId(int level, DeclType type, string value){
+    idAttr attr;
+    attr.level = level;
+    attr.type = type;
+    // type check
+    attr.value = value;
+    stack<idAttr> s;
+    s.push(attr);
+    return s;
+}
+
+int assignId(TreeNode* &id, TreeNode* expr){
+    id->setDeclType(expr->getDeclType());
+    cout << "assignID: ";
+    switch(id->getDeclType()){
+        case D_BOOL:
+        {
+            id->setBoolValue(expr->getBoolValue());
+            cout << id->getBoolValue() << endl;
+            break;
+        }
+        case D_CHAR:
+        {
+            id->setCharValue(expr->getCharValue());
+            cout << id->getCharValue() << endl;
+            break;
+        }
+        case D_INT:
+        {
+            id->setIntValue(expr->getIntValue());
+            cout << id->getIntValue() << endl;
+            break;
+        }
+        case D_STRING:
+        {
+            id->setStringValue(expr->getStringValue());
+            cout << id->getStringValue() << endl;
+            break;
+        }
+    }
+    return 0;
+    
 }

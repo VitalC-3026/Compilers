@@ -34,11 +34,14 @@ private:
     string identifier = "";
 
 public:
-    int generateNodeID();
+    void generateNodeID();
     int getNodeId();
     void printAST();
-    void addChild(TreeNode*);
-    void addSibling(TreeNode*);
+    void addChild(TreeNode*&);
+    void addSibling(TreeNode*&);
+    TreeNode* getChild();
+    TreeNode* getSibling();
+
     void setNodeType(NodeType); // type of nodes
     void setStatementType(StatementType); // type of statement nodes
     void setAssignmentType(AssignmentType); // type of assignment

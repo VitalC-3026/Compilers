@@ -1,7 +1,8 @@
 #include "parseTree.h"
 extern FILE *yyout;
+extern string getValueOfId(TreeNode*);
 
-void TreeNode::addChild(TreeNode* child) {
+void TreeNode::addChild(TreeNode* &child) {
     if (this->child == nullptr) {
         this->child = child;
     } else {
@@ -9,10 +10,11 @@ void TreeNode::addChild(TreeNode* child) {
     }
 }
 
-void TreeNode::addSibling(TreeNode* sibling) {
+void TreeNode::addSibling(TreeNode* &sibling) {
     TreeNode* node = this->sibling;
     if (node == nullptr) {
-        node = sibling;
+        fputs("node == nullptr\n", yyout);
+        this->sibling = sibling;
     } else {
         while(node->sibling != nullptr){
             node = node->sibling;
@@ -22,16 +24,25 @@ void TreeNode::addSibling(TreeNode* sibling) {
     
 }
 
+
+TreeNode* TreeNode::getChild(){
+        return this->child;
+}
+
+TreeNode* TreeNode::getSibling(){
+        return this->sibling;
+}
+
 TreeNode::TreeNode(int lineno, NodeType type) {
     this->lineno = lineno;
     this->nodeType = type;
+    generateNodeID();
 }
 
 // TreeNode::TreeNode(){}
 
-int TreeNode::generateNodeID() {
+void TreeNode::generateNodeID() {
     this->nodeID = ++count;
-    return this->nodeID;
 }
 
 int TreeNode::getNodeId() {
@@ -42,7 +53,7 @@ int TreeNode::getNodeId() {
 void TreeNode::printAST() {
     string info = (string)"NodeID: " + to_string(this->nodeID);
     info += (string)" NodeType: " + TreeNode::nodeType2String(this->nodeType);
-    info += (string)" Attributes: " + TreeNode::attributes();
+    info += (string)" Attributes: " + getValueOfId(this) + "\n";
     fputs(info.c_str(), yyout);
     if (this->child != nullptr) {
         TreeNode* node = this->child->sibling;
@@ -52,6 +63,9 @@ void TreeNode::printAST() {
             node = node->sibling;
         }
     }
+    // if (this->sibling != nullptr) {
+    //     this->sibling->printAST();
+    // }
 }
 
 void TreeNode::setNodeType(NodeType type) {
@@ -172,36 +186,38 @@ string TreeNode::attributes(){
             return (string)"Root";
         case 1: {
             string decl = declType2String(this->declType);
-            string value = " ";
-            switch(this->declType){
-                case 0:
-                    value += to_string(this->getIntValue());
-                case 1:
-                    value += to_string(this->getCharValue());
-                case 2:
-                    value += this->getStringValue();
-                case 3:
-                    value += to_string(this->getBoolValue());
-                default:
-                    break;
-            }
+            string value = (string)" ";
+            value += getValueOfId(this);
+            // switch(this->declType){
+            //     case 0: {
+            //         value += to_string(this->getIntValue());
+            //         cout << this->getNodeId() << " variable attribute: " << value << endl;
+            //         cout << this->getIntValue() << endl;
+            //     }
+            //     case 1: {
+            //         value += to_string(this->getCharValue());
+            //         cout << this->getNodeId() << " variable attribute: " << value << endl;
+            //         cout << this->getCharValue() << endl;
+            //     }
+            //     case 2: {
+            //         value += this->getStringValue();
+            //         cout<< this->getNodeId() << " variable attribute: " << value << endl;
+            //         cout << this->getStringValue() << endl;
+            //     }
+            //     case 3: {
+            //         value += to_string(this->getBoolValue());
+            //         cout << this->getNodeId() << " variable attribute: " << value << endl;
+            //         cout << this->getBoolValue() << endl;
+            //     }
+            //     default:
+            //         break;
+            // }
             return decl + value;
         }
         case 2: {
             string decl = declType2String(this->declType);
             string value = " ";
-            switch(this->declType){
-                case 0:
-                    value += to_string(this->getIntValue());
-                case 1:
-                    value += to_string(this->getCharValue());
-                case 2:
-                    value += this->getStringValue();
-                case 3:
-                    value += to_string(this->getBoolValue());
-                default:
-                    break;
-            }
+            value += getValueOfId(this);
             return decl + value;
         }
         case 3:

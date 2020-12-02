@@ -539,9 +539,12 @@ char *yytext;
 #include "common.h"
 #include "type.h"
 #include "main.tab.h" 
+using std::cerr;
+using std::cout;
+using std::endl;
 int lineno = 1, level = 0;
 extern void yyerror(const char*);
-extern map<string, stack<int>> idenfierTable;
+extern map<string, stack<int>> identifierTable;
 
 void createIntNode(int lineno, RadixType radix){
     TreeNode* node = new TreeNode(lineno, NODE_Const);
@@ -550,6 +553,7 @@ void createIntNode(int lineno, RadixType radix){
     switch (radix){
         case DECIMAL: {
             node->setIntValue(atoi(yytext));
+            cout << "ID value: INT" << atoi(yytext) << endl;
             break;
         }
         case OCTAL: {
@@ -558,6 +562,7 @@ void createIntNode(int lineno, RadixType radix){
                 num += (int)yytext[i] * pow(8, (strlen(yytext) - i - 1));
             }
             node->setIntValue(num);
+            cout << "ID value: INT" << num << endl;
             break;
         }
         case HEXA: {
@@ -578,6 +583,7 @@ void createIntNode(int lineno, RadixType radix){
                 num += tmp * pow(16, (strlen(yytext) - i - 1));
             }
             node->setIntValue(num);
+            cout << "ID value: INT" << num << endl;
             break;
         }
         default:
@@ -585,9 +591,9 @@ void createIntNode(int lineno, RadixType radix){
     }
     yylval = node;
 }
-#line 589 "main.lex.yy.cpp"
+#line 595 "main.lex.yy.cpp"
 
-#line 591 "main.lex.yy.cpp"
+#line 597 "main.lex.yy.cpp"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -648,8 +654,6 @@ extern int yywrap ( void );
 #endif
 
 #ifndef YY_NO_UNPUT
-    
-    static void yyunput ( int c, char *buf_ptr  );
     
 #endif
 
@@ -805,10 +809,10 @@ YY_DECL
 		}
 
 	{
-#line 76 "main.l"
+#line 82 "main.l"
 
 
-#line 812 "main.lex.yy.cpp"
+#line 816 "main.lex.yy.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -867,258 +871,258 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 78 "main.l"
+#line 84 "main.l"
 {BEGIN COMMENT;}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 79 "main.l"
+#line 85 "main.l"
 {}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 80 "main.l"
+#line 86 "main.l"
 {BEGIN INITIAL;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 81 "main.l"
-/*do nothing*/
+#line 87 "main.l"
+{/*do nothing*/}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 84 "main.l"
+#line 90 "main.l"
 return T_BOOL;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 85 "main.l"
+#line 91 "main.l"
 return T_INT; 
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 86 "main.l"
+#line 92 "main.l"
 return T_CHAR; 
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 87 "main.l"
+#line 93 "main.l"
 return T_STRING;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 88 "main.l"
+#line 94 "main.l"
 return CONST;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 89 "main.l"
+#line 95 "main.l"
 return STRUCT;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 90 "main.l"
+#line 96 "main.l"
 return IF;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 91 "main.l"
+#line 97 "main.l"
 return ELSE;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 92 "main.l"
+#line 98 "main.l"
 return WHILE;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 93 "main.l"
+#line 99 "main.l"
 return FOR;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 94 "main.l"
+#line 100 "main.l"
 return RETURN;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 95 "main.l"
+#line 101 "main.l"
 return CONTINUE;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 96 "main.l"
+#line 102 "main.l"
 return BREAK;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 97 "main.l"
-return PRINTF
+#line 103 "main.l"
+return PRINTF;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 98 "main.l"
+#line 104 "main.l"
 return SCANF;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 100 "main.l"
+#line 106 "main.l"
 return ASG;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 101 "main.l"
+#line 107 "main.l"
 return ADDASG;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 102 "main.l"
+#line 108 "main.l"
 return MINASG;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 103 "main.l"
+#line 109 "main.l"
 return MULASG;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 104 "main.l"
+#line 110 "main.l"
 return DIVASG;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 105 "main.l"
+#line 111 "main.l"
 return MODASG;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 106 "main.l"
+#line 112 "main.l"
 return ADDASGO;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 107 "main.l"
+#line 113 "main.l"
 return MINASGO;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 109 "main.l"
+#line 115 "main.l"
 return DOT;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 110 "main.l"
+#line 116 "main.l"
 return REF;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 111 "main.l"
+#line 117 "main.l"
 return POI;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 112 "main.l"
+#line 118 "main.l"
 return NOT;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 114 "main.l"
+#line 120 "main.l"
 return ADD;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 115 "main.l"
+#line 121 "main.l"
 return MIN;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 116 "main.l"
+#line 122 "main.l"
 return MUL;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 117 "main.l"
+#line 123 "main.l"
 return DIV;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 118 "main.l"
+#line 124 "main.l"
 return MOD;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 120 "main.l"
+#line 126 "main.l"
 return EQU;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 121 "main.l"
+#line 127 "main.l"
 return GT;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 122 "main.l"
+#line 128 "main.l"
 return LT;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 123 "main.l"
+#line 129 "main.l"
 return GTQ;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 124 "main.l"
+#line 130 "main.l"
 return LTQ;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 125 "main.l"
+#line 131 "main.l"
 return NEQ;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 127 "main.l"
+#line 133 "main.l"
 return AND;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 128 "main.l"
+#line 134 "main.l"
 return OR;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 130 "main.l"
+#line 136 "main.l"
 return LBRACE;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 131 "main.l"
+#line 137 "main.l"
 return RBRACE;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 132 "main.l"
+#line 138 "main.l"
 { level++; return LPAREN; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 133 "main.l"
+#line 139 "main.l"
 { level--; return RPAREN; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 134 "main.l"
+#line 140 "main.l"
 return SEMICOLON;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 135 "main.l"
+#line 141 "main.l"
 return COMMA;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 137 "main.l"
+#line 143 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Var);
             string identifier = (string) yytext;
@@ -1129,7 +1133,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 144 "main.l"
+#line 150 "main.l"
 {
             createIntNode(lineno, DECIMAL);
             return INTEGER;
@@ -1137,7 +1141,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 148 "main.l"
+#line 154 "main.l"
 {
             createIntNode(lineno, OCTAL);
             return INTEGER;
@@ -1145,7 +1149,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 152 "main.l"
+#line 158 "main.l"
 {
             createIntNode(lineno, HEXA);
             return INTEGER;
@@ -1153,51 +1157,53 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 156 "main.l"
+#line 162 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
             cout << "lex, char: " << yytext << endl;
-            node->setCharValue(yytext[0]);
+            node->setCharValue(yytext[1]);
             yylval = node;
+            cout << "ID value: CHAR" << yytext[1] << endl;
             return CHAR;
         }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 164 "main.l"
+#line 171 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_STRING);
             node->setStringValue((string)yytext);
             yylval = node;
-            return CHAR;
+            cout << "ID value: STRING" << yytext << endl;
+            return STRING;
         }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 172 "main.l"
+#line 180 "main.l"
 /*do nothing*/
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 174 "main.l"
+#line 182 "main.l"
 { lineno++; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 176 "main.l"
+#line 184 "main.l"
 {
             cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
         }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 179 "main.l"
+#line 187 "main.l"
 ECHO;
 	YY_BREAK
-#line 1201 "main.lex.yy.cpp"
+#line 1207 "main.lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -1533,43 +1539,6 @@ static int yy_get_next_buffer (void)
 }
 
 #ifndef YY_NO_UNPUT
-
-    static void yyunput (int c, char * yy_bp )
-{
-	char *yy_cp;
-    
-    yy_cp = (yy_c_buf_p);
-
-	/* undo effects of setting up yytext */
-	*yy_cp = (yy_hold_char);
-
-	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-		{ /* need to shift things up to make room */
-		/* +2 for EOB chars. */
-		int number_to_move = (yy_n_chars) + 2;
-		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
-					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
-		char *source =
-				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
-
-		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
-			*--dest = *--source;
-
-		yy_cp += (int) (dest - source);
-		yy_bp += (int) (dest - source);
-		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
-			(yy_n_chars) = (int) YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
-
-		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-			YY_FATAL_ERROR( "flex scanner push-back overflow" );
-		}
-
-	*--yy_cp = (char) c;
-
-	(yytext_ptr) = yy_bp;
-	(yy_hold_char) = *yy_cp;
-	(yy_c_buf_p) = yy_cp;
-}
 
 #endif
 
@@ -2203,4 +2172,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 179 "main.l"
+#line 187 "main.l"

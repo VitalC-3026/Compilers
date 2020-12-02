@@ -1,0 +1,55 @@
+type <= int 
+id with assignment 
+declaration <= variable 
+statement <= declaration 
+statements <= statement 
+type <= int 
+id with assignment 
+declaration <= variable 
+statement <= declaration 
+node == nullptr
+statements <= statements statement 
+type <= int 
+id with assignment 
+declaration <= variable 
+statement <= declaration 
+statements <= statements statement 
+type <= int 
+id with assignment 
+node == nullptr
+idlist 
+declaration <= variable 
+statement <= declaration 
+statements <= statements statement 
+type <= int 
+id with assignment 
+declaration <= const 
+statement <= declaration 
+statements <= statements statement 
+type <= char 
+id with assignment 
+declaration <= variable 
+statement <= declaration 
+statements <= statements statement 
+type <= string 
+id with assignment 
+declaration <= variable 
+statement <= declaration 
+statements <= statements statement 
+root 
+NodeID: 31 NodeType: Program Root Attributes: 0
+NodeID: 4 NodeType: Statement Attributes: 0
+NodeID: 2 NodeType: Variable Attributes: 0
+NodeID: 8 NodeType: Statement Attributes: 0
+NodeID: 6 NodeType: Variable Attributes: 1
+NodeID: 12 NodeType: Statement Attributes: 0
+NodeID: 10 NodeType: Variable Attributes: 1
+NodeID: 16 NodeType: Statement Attributes: 0
+NodeID: 14 NodeType: Variable Attributes: 2
+NodeID: 17 NodeType: Variable Attributes: 0
+NodeID: 21 NodeType: Statement Attributes: 0
+NodeID: 19 NodeType: Const Variable Attributes: 25
+NodeID: 25 NodeType: Statement Attributes: 0
+NodeID: 23 NodeType: Variable Attributes: 3
+NodeID: 29 NodeType: Statement Attributes: 0
+NodeID: 27 NodeType: Variable Attributes: "happy"
