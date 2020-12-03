@@ -27,6 +27,7 @@ private:
     AssignmentType asigType;
     DeclType declType;
     RadixType radixType;
+    FunctionType funcType;
     int intVal;
     char charVal;
     string stringVal;
@@ -50,6 +51,7 @@ public:
     void setOperatorType(OperatorType); // type of operator nodes
     void setDeclType(DeclType); // type of type nodes
     void setRadixType(RadixType); // type of integer nodes
+    void setFunctionType(FunctionType);
 
     void setIntValue(int);
     void setCharValue(char);
@@ -69,6 +71,7 @@ public:
     OperatorType getOperatorType();
     AssignmentType getAssignmentType();
     RadixType getRadixType();
+    FunctionType getFunctionType();
 
     TreeNode(int, NodeType);
     // TreeNode();
@@ -79,6 +82,7 @@ public:
     static string radixType2String(RadixType);
     static string assignmentType2String(AssignmentType);
     static string statementType2String(StatementType);
+    static string functionType2String(FunctionType);
 };
 
 #endif

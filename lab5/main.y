@@ -17,6 +17,7 @@
     string getValueOfId(TreeNode* n);
     void setEntryOfId(string identifier, int level, DeclType type, string value, int nodeId);
     int assignId(TreeNode* &id, TreeNode* expr);
+    bool checkFuncCall(TreeNode* id, TreeNode* param);
 %}
 
 %token  ASG ADDASG MINASG MULASG DIVASG MODASG ADDASGO MINASGO
@@ -25,10 +26,10 @@
 %token  EQU GT LT GTQ LTQ NEQ
 %token  AND OR
 %token  LBRACE RBRACE LPAREN RPAREN
-%token  ID INTEGER
+%token  ID INTEGER MAIN
 %token  DEC OCT HEX
 %token  CHAR BOOL STRING
-%token  T_BOOL T_INT T_CHAR T_STRING
+%token  T_BOOL T_INT T_CHAR T_STRING T_VOID
 %token  CONST STRUCT IF ELSE WHILE FOR RETURN CONTINUE BREAK
 %token  PRINTF SCANF
 %token  SEMICOLON COMMA
@@ -47,6 +48,7 @@
 
 program 
 : statements    { root = new TreeNode(0, NODE_Prog); root->addChild($1); fputs("root \n", yyout); }
+| T_VOID MAIN LBRACE RBRACE LPAREN statements RPAREN { root = new TreeNode(0, NODE_Prog); root->addChild($6); fputs("root with main function\n", yyout); }
 ;
 
 statements
@@ -56,33 +58,131 @@ statements
 
 statement
 : SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->setStatementType(STMT_SKIP); fputs("skip \n", yyout);}
-| function  { $$ = $1; fputs("statement <= function\n", yyout); }
 | declaration SEMICOLON { $$ = $1; fputs("statement <= declaration \n", yyout); }
 | assignment SEMICOLON  { $$ = $1; fputs("statement <= assignment \n", yyout); }
-| expr SEMICOLON  { $$ = $1; fputs("statement <= expr \n", yyout); }
 | jump SEMICOLON { $$ = $1; fputs("statement <= jump \n", yyout); }
 | loop      { $$ = $1; fputs("statement <= loop \n", yyout); }
 | control   { $$ = $1; fputs("statement <= control \n", yyout); }
+| function  { $$ = $1; fputs("statement <= function\n", yyout); }
 ;
 
 function
-: functionDecl {}
-| functionCall {}
-| functionDefi {}
+: functionDecl SEMICOLON { $$ = $1; }
+| functionCall SEMICOLON { $$ = $1; }
+| functionDefi { $$ = $1; }
 ;
 
 functionDefi
-: type ID LBRACE RBRACE LPAREN statements RPAREN {}
+: type ID LBRACE paramList RBRACE LPAREN statements RPAREN {  TreeNode* node = new TreeNode(lineno, NODE_Func);
+                                                    node->setFunctionType(FUNC_DEFI);
+                                                    node->setDeclType($1->getDeclType());
+                                                    node->setIdentifier($2->getIdentifier());
+                                                    $1->setFunctionType(FUNC_TYPE);
+                                                    node->addChild($1);
+                                                    $1->setFunctionType(FUNC_ID);
+                                                    node->addChild($2);
+                                                    TreeNode* param = new TreeNode(lineno, NODE_Func);
+                                                    param->setDeclType(D_VOID);
+                                                    param->setFunctionType(FUNC_PARAM);
+                                                    node->addChild(param);
+                                                    $6->setFunctionType(FUNC_BODY);
+                                                    node->addChild($6);
+                                                    $$ = node;
+                                                }
 ;
 
 functionDecl
-: type ID LBRACE RBRACE SEMICOLON
+: type ID LBRACE RBRACE
 ;
 
 functionCall
-: ID LBRACE RBRACE
+: SCANF LBRACE STRING scanfIdlist RBRACE {   TreeNode* node = new TreeNode(lineno, NODE_Func);
+                                    node->setFunctionType(FUNC_CALL);
+                                    TreeNode* id = new TreeNode(lineno, NODE_Func);
+                                    id->setFunctionType(FUNC_ID);
+                                    id->setIdentifier((string)"scanf");
+                                    node->setIdentifier((string)"scanf");
+                                    node->addChild($3);
+                                    node->addChild($4);
+                                    $$ = node;
+                                    // if(checkFuncCall(id, $3)) {
+                                    //     node->addChild(id);
+                                    //     if (checkFuncIO($3)) {
+                                    //         cout << id->getSibling() << endl;
+                                    //         cout << $3->getSibling() << endl;
+                                    //         node->addChild($3);
+                                    //     } else {
+                                    //         yyerror("check function scanf call failed\n");
+                                    //     }
+                                    //     $$ = node;
+                                    // } else {
+                                    //     yyerror("check function call failed!\n");
+                                    // }
+                                    fputs("function call <= scanf \n", yyout);
+                                }
+| PRINTF LBRACE STRING printfIdlist RBRACE  {   TreeNode* node = new TreeNode(lineno, NODE_Func);
+                                                node->setFunctionType(FUNC_CALL);
+                                                TreeNode* id = new TreeNode(lineno, NODE_Func);
+                                                id->setFunctionType(FUNC_ID);
+                                                id->setIdentifier((string)"printf");
+                                                node->setIdentifier((string)"printf");
+                                                node->addChild(id);
+                                                node->addChild($3);
+                                                node->addChild($4);
+                                                $$ = node;
+                                                fputs("function call <= printf \n", yyout);
+                                            }
+| ID LBRACE paramList RBRACE  { TreeNode* node = new TreeNode(lineno, NODE_Stmt);
+                                node->setFunctionType(FUNC_CALL);
+                                node->setIdentifier($1->getIdentifier());
+                                if(checkFuncCall($1, $3)){
+                                    node->addChild($1);
+                                    node->addChild($3);
+                                    $$ = node;
+                                } else {
+                                    yyerror("check function call failed!\n");
+                                }
+                                fputs("function call <= general \n", yyout);
+                            }
 ;
 
+paramList
+: paramList COMMA expr  {   $3->setFunctionType(FUNC_PARAM);
+                            $$ = $1;
+                            $$->addSibling($3);
+                            fputs("param , expr\n", yyout);
+                        }
+| expr  {   $1->setFunctionType(FUNC_PARAM);
+            $$ = $1; 
+            fputs("expr\n", yyout);
+        }
+|   {  TreeNode* node = new TreeNode(lineno, NODE_Func);
+        node->setFunctionType(FUNC_PARAM);
+        node->setDeclType(D_VOID);
+        fputs("Empty paramList\n", yyout);
+        $$ = node;
+    }
+; 
+
+scanfIdlist
+: scanfIdlist COMMA REF ID  {   $$ = $1;
+                                $$->addSibling($4);
+                                fputs("scanf idlist\n", yyout);
+                            }
+| COMMA REF ID  {   $$ = $3;
+                    fputs("scanf id\n", yyout);
+                }
+;
+
+printfIdlist
+: printfIdlist COMMA ID  {   $$ = $1;
+                            $$->addSibling($3);
+                            fputs("scanf idlist\n", yyout);
+                        }
+| COMMA ID  {   $$ = $2;
+                fputs("scanf id\n", yyout);
+            }
+;
 
 idlist
 : idlist COMMA ID ASG expr  {   $$ = $1; 
@@ -121,6 +221,7 @@ type
 | T_INT { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_INT); fputs("type <= int \n", yyout); }
 | T_CHAR { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_CHAR); fputs("type <= char \n", yyout); }
 | T_STRING { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_STRING); fputs("type <= string \n", yyout); }
+| T_VOID { $$ = new TreeNode(lineno, NODE_Type); $$->setDeclType(D_VOID); fputs("type <= bool \n", yyout); }
 ;
 
 loop
@@ -171,7 +272,6 @@ forcon
 
 control
 : IF LBRACE expr RBRACE LPAREN statements RPAREN    {   if(checkIf($3, $6, NULL)) {
-                                                            cout << "if here" << endl;
                                                             $$ = new TreeNode(lineno, NODE_Stmt);
                                                             $$->addChild($3);
                                                             $$->addChild($6);
@@ -478,7 +578,7 @@ bool checkFor(TreeNode* t1, TreeNode* t2)
 
 bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
     if(t1->getStatementType() != STMT_ASIG && t1->getStatementType() != STMT_DECL) {
-        cout << "check declaration/assignment" << endl;
+        // cout << "check declaration/assignment" << endl;
         return false;
     }
     if(t1->getStatementType() == STMT_ASIG) {
@@ -487,7 +587,7 @@ bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
     if(t2->getOperatorType() != OP_EQU && t2->getOperatorType() != OP_NEQ &&
         t2->getOperatorType() != OP_GT && t2->getOperatorType() != OP_GTQ &&
         t2->getOperatorType() != OP_LT && t2->getOperatorType() != OP_LTQ) {
-            cout << "check comparison" << endl;
+            // cout << "check comparison" << endl;
             return false;
     }
     return true;
@@ -512,16 +612,21 @@ bool checkWhile(TreeNode* t1, TreeNode* t2)
 bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
 {
     if (t1->getNodeType() != NODE_Var && t1->getNodeType() != NODE_Const && t1->getNodeType() != NODE_Op) {
+        // cout << "checkIf 1" << endl;
         return false;
     }
-    if (t2->getNodeType() != NODE_Stmt) {
+    if (t2->getNodeType() != NODE_Stmt && t2->getNodeType() != NODE_Func) {
+        // cout << "checkIf 2" << endl;
+        // cout << TreeNode::nodeType2String(t2->getNodeType()) << endl;
         return false;
     }
     if (t3 != NULL && t3->getNodeType() != NODE_Stmt) {
+        // cout << "checkIf 3" << endl;
         return false;
     }
     if (t1->getNodeType() != NODE_Var || t1->getNodeType() != NODE_Const) {
         if (t1->getDeclType() == D_STRING) {
+            // cout << "checkIf 4" << endl;
             return false;
         }
     }
@@ -531,7 +636,8 @@ bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
 bool checkAsg(TreeNode* t1, bool i)
 {
     if (t1->getNodeType() != NODE_Var) {
-        cout << TreeNode::nodeType2String(t1->getNodeType()) << endl;
+        string msg = (string)"variable should be a left value instead of" + TreeNode::nodeType2String(t1->getNodeType());
+        yyerror(msg.c_str());
         return false;
     }
     if (i) {
@@ -549,7 +655,7 @@ bool checkAsg(TreeNode* t1, bool i)
 void setType(TreeNode* &idlist, TreeNode* type, bool ifConst) {
     if(ifConst){
         // iterate nodes to set type and const
-        cout << "ifConst here" << endl;
+        // cout << "ifConst here" << endl;
         TreeNode* node = idlist;
         assert (node != nullptr);
         node->setNodeType(NODE_Const);
@@ -596,7 +702,7 @@ string getValueOfId(TreeNode* n) {
 }
 
 void setEntryOfId(string identifier, int level, DeclType type, string value, int nodeId){
-    cout << identifier << " declaration " << level << endl;
+    // cout << identifier << " declared in level " << level << endl;
     idAttr attr;
     attr.level = level;
     attr.type = type;
@@ -613,33 +719,44 @@ void setEntryOfId(string identifier, int level, DeclType type, string value, int
 
 int assignId(TreeNode* &id, TreeNode* expr){
     id->setDeclType(expr->getDeclType());
-    cout << "assignID: ";
     switch(id->getDeclType()){
         case D_BOOL:
         {
             id->setBoolValue(expr->getBoolValue());
-            cout << id->getBoolValue() << endl;
             break;
         }
         case D_CHAR:
         {
             id->setCharValue(expr->getCharValue());
-            cout << id->getCharValue() << endl;
             break;
         }
         case D_INT:
         {
             id->setIntValue(expr->getIntValue());
-            cout << id->getIntValue() << endl;
             break;
         }
         case D_STRING:
         {
             id->setStringValue(expr->getStringValue());
-            cout << id->getStringValue() << endl;
             break;
         }
     }
     return 0;
     
+}
+
+bool checkFuncCall(TreeNode* id, TreeNode* param){
+    // cout << "checkFuncCall" << endl;
+    if (identifierTable.find(id->getIdentifier()) == identifierTable.end()) {
+        if (id->getIdentifier() != (string)"scanf" && id->getIdentifier() != (string)"printf") {
+            return false;
+        }
+    }
+    if (id->getFunctionType() != FUNC_ID) {
+        return false;
+    }
+    if (param->getFunctionType() != FUNC_PARAM) {
+        return false;
+    }
+    return true;
 }

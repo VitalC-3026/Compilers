@@ -3,6 +3,8 @@ extern FILE *yyout;
 extern string getValueOfId(TreeNode*);
 
 void TreeNode::addChild(TreeNode* &child) {
+    string info = to_string(this->getNodeId()) + (string)" add child " + to_string(child->getNodeId()) + "\n";
+    //fputs(info.c_str(), yyout);
     if (this->child == nullptr) {
         this->child = child;
     } else {
@@ -12,12 +14,13 @@ void TreeNode::addChild(TreeNode* &child) {
 
 void TreeNode::addSibling(TreeNode* &sibling) {
     TreeNode* node = this;
-    string info = to_string(sibling->getNodeId()) + (string)" add sibling\n";
-    fputs(info.c_str(), yyout);
+    string info = to_string(this->getNodeId()) + (string)" add sibiling " + to_string(sibling->getNodeId()) + "\n";
+    //fputs(info.c_str(), yyout);
     
     while(node->sibling != nullptr){
         node = node->sibling;
     } 
+    
     node->sibling = sibling;
 }
 
@@ -48,7 +51,6 @@ int TreeNode::getNodeId() {
 
 void TreeNode::setNodeId(int i) {
     this->nodeID = i;
-    count--;
 }
 
 void TreeNode::printInfo() {
@@ -116,6 +118,10 @@ void TreeNode::setRadixType(RadixType type) {
     this->radixType = type;
 }
 
+void TreeNode::setFunctionType(FunctionType type) {
+    this->funcType = type;
+}
+
 void TreeNode::setIntValue(int i) {
     this->intVal = i;
 }  
@@ -178,6 +184,10 @@ AssignmentType TreeNode::getAssignmentType() {
 
 RadixType TreeNode::getRadixType(){
     return this->radixType;
+}
+
+FunctionType TreeNode::getFunctionType(){
+    return this->funcType;
 }
 
 string TreeNode::nodeType2String(NodeType t){
@@ -256,9 +266,10 @@ string TreeNode::attributes(){
             }
             return stmt;
         }
-        case 6:
+        case 6: {
         // function
-            return "";
+            return functionType2String(this->funcType);
+        }
         case 7:
             return declType2String(this->declType);
         default:
@@ -380,6 +391,27 @@ string TreeNode::statementType2String(StatementType t){
             return (string)"Return";
         case 9:
             return (string)"Skip";
+        default:
+            return (string)"";
+    }
+}
+
+string TreeNode::functionType2String(FunctionType t){
+    switch(t) {
+        case 0:
+            return (string)"function declaration";
+        case 1:
+            return (string)"function definition";
+        case 2:
+            return (string)"function call";
+        case 3:
+            return (string)"function type";
+        case 4:
+            return (string)"function identifier";
+        case 5:
+            return (string)"function parameters";
+        case 6:
+            return (string)"funtion body";
         default:
             return (string)"";
     }

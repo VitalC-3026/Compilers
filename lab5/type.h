@@ -43,7 +43,8 @@ enum DeclType
     D_INT,
     D_CHAR,
     D_STRING,
-    D_BOOL
+    D_BOOL,
+    D_VOID
 };
 
 enum StatementType
@@ -77,6 +78,17 @@ enum AssignmentType
     MODASIG,
     ADDASIGO,
     MINASIGO
+};
+
+enum FunctionType
+{
+    FUNC_DECL,
+    FUNC_DEFI,
+    FUNC_CALL,
+    FUNC_TYPE,
+    FUNC_ID,
+    FUNC_PARAM,
+    FUNC_BODY
 };
 
 #endif

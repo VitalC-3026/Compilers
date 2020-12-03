@@ -92,6 +92,8 @@ STRING \".*\"
 "int"   return T_INT; 
 "char"  return T_CHAR; 
 "string" return T_STRING;
+"void"  return T_VOID;
+"main"  return MAIN;
 "const"  return CONST;
 "struct" return STRUCT;
 "if"    return IF;
@@ -137,18 +139,29 @@ STRING \".*\"
 "("     return LBRACE;
 ")"     return RBRACE;
 "{"     { level++; return LPAREN; }
-"}"     { level--; return RPAREN; }
+"}"     {   
+            map<string, stack<idAttr>>::iterator iter;
+            for (iter = identifierTable.begin(); iter != identifierTable.end(); iter++) {
+                stack<idAttr> s = iter->second;
+                if (s.top().level == level) {
+                    s.pop();
+                    identifierTable[iter->first] = s;
+                }
+            }
+            level--; 
+            return RPAREN; 
+        }
 ";"     return SEMICOLON;
 ","     return COMMA;
 
 {ID}    {
             if (identifierTable.find(yytext) != identifierTable.end()){
-                cout << yytext << " exists!" << endl;
+                // cout << yytext << " exists!" << endl;
                 stack<idAttr> s = (identifierTable.find(yytext)->second);
                 int id = -1;
-                cout << s.top().level << " " << level;
+                // cout << s.top().level << " " << level;
                 if(s.top().level <= level) {
-                    cout << yytext << " use before" << endl;
+                    // cout << yytext << " use before" << endl;
                     id = s.top().id;
                 }
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
@@ -166,7 +179,7 @@ STRING \".*\"
                 yylval = node;
                 
             } else {
-                cout << yytext << " doesn't exist!" << endl;
+                // cout << yytext << " doesn't exist!" << endl;
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 string identifier = (string) yytext;
                 node->setIdentifier(identifier);
@@ -200,7 +213,7 @@ STRING \".*\"
             cout << "ID value: CHAR" << yytext[1] << endl;
             return CHAR;
         }
-{STRING}    {
+{STRING} {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_STRING);
             node->setStringValue((string)yytext);
