@@ -13,7 +13,7 @@
 using std::cerr;
 using std::cout;
 using std::endl;
-int lineno = 1, level = 0, ifFor = 0;
+int lineno = 1, level = 0;
 extern void yyerror(const char*);
 extern map<string, stack<idAttr>> identifierTable;
 
@@ -116,7 +116,7 @@ STRING \".*\"
 "if"    return IF;
 "else"  return ELSE;
 "while" return WHILE;
-"for"   { ifFor = 1; return FOR;}
+"for"   return FOR;
 "return" return RETURN;
 "continue" return CONTINUE;
 "break" return BREAK;
@@ -153,27 +153,13 @@ STRING \".*\"
 "&&"    return AND;
 "||"    return OR;
 
-"("     {   
-            // if(ifFor == 1) {   
-            //     cout << "LBRACE" << ifFor << " " << level << endl; 
-            //     level++;
-            // } 
-            return LBRACE; }
-")"     {   
-            return RBRACE; 
-        }
-"{"     {   cout << "LPAREN" << level << endl; 
+"("     { return LBRACE; }
+")"     { return RBRACE; }
+"{"     {  
             level++;
-            // if(ifFor == 0){   
-            //     cout << "LPAREN" << ifFor << " " << level << endl; 
-            //     level++; 
-            // } 
             return LPAREN;
         }
-"}"     {
-            ifFor = 0;
-            --level; 
-            cout << lineno << "RPAREN" << level << endl;
+"}"     {   --level; 
             return RPAREN; 
         }
 ";"     return SEMICOLON;

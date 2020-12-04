@@ -177,5 +177,5 @@ lno@33	ID@87	NodeType: Variable		Attributes: int a	Declared level@1 same as ID@3
 lno@33	ID@88	NodeType: Const			Attributes: int 2
 lno@34	ID@93	NodeType: Statement		Attributes: Declaration	Childern:[ @90 @91 ]
 lno@34	ID@90	NodeType: Data Type		Attributes: string
-lno@34	ID@91	NodeType: Const Variable		Attributes: string str	Childern:[ @92 ]
+lno@34	ID@91	NodeType: Const Var		Attributes: string str	Childern:[ @92 ]
 lno@34	ID@92	NodeType: Const			Attributes: string "string"

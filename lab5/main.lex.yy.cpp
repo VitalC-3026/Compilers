@@ -546,7 +546,7 @@ char *yytext;
 using std::cerr;
 using std::cout;
 using std::endl;
-int lineno = 1, level = 0, ifFor = 0;
+int lineno = 1, level = 0;
 extern void yyerror(const char*);
 extern map<string, stack<idAttr>> identifierTable;
 
@@ -969,7 +969,7 @@ return WHILE;
 case 16:
 YY_RULE_SETUP
 #line 119 "main.l"
-{ ifFor = 1; return FOR;}
+return FOR;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
@@ -1124,55 +1124,41 @@ return OR;
 case 47:
 YY_RULE_SETUP
 #line 156 "main.l"
-{   
-            // if(ifFor == 1) {   
-            //     cout << "LBRACE" << ifFor << " " << level << endl; 
-            //     level++;
-            // } 
-            return LBRACE; }
+{ return LBRACE; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 162 "main.l"
-{   
-            return RBRACE; 
-        }
+#line 157 "main.l"
+{ return RBRACE; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 165 "main.l"
-{   cout << "LPAREN" << level << endl; 
+#line 158 "main.l"
+{  
             level++;
-            // if(ifFor == 0){   
-            //     cout << "LPAREN" << ifFor << " " << level << endl; 
-            //     level++; 
-            // } 
             return LPAREN;
         }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 173 "main.l"
-{
-            ifFor = 0;
-            --level; 
-            cout << lineno << "RPAREN" << level << endl;
+#line 162 "main.l"
+{   --level; 
             return RPAREN; 
         }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 179 "main.l"
+#line 165 "main.l"
 return SEMICOLON;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 180 "main.l"
+#line 166 "main.l"
 return COMMA;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 182 "main.l"
+#line 168 "main.l"
 {
             if (identifierTable.find(yytext) != identifierTable.end()){
                 // cout << yytext << " exists!" << endl;
@@ -1219,7 +1205,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 225 "main.l"
+#line 211 "main.l"
 {
             createIntNode(lineno, DECIMAL);
             return INTEGER;
@@ -1227,7 +1213,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 229 "main.l"
+#line 215 "main.l"
 {
             createIntNode(lineno, OCTAL);
             return INTEGER;
@@ -1235,7 +1221,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 233 "main.l"
+#line 219 "main.l"
 {
             createIntNode(lineno, HEXA);
             return INTEGER;
@@ -1243,7 +1229,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 237 "main.l"
+#line 223 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
@@ -1255,7 +1241,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 245 "main.l"
+#line 231 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_STRING);
@@ -1267,28 +1253,28 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 254 "main.l"
+#line 240 "main.l"
 /*do nothing*/
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 256 "main.l"
+#line 242 "main.l"
 { lineno++; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 258 "main.l"
+#line 244 "main.l"
 {
             cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
         }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 261 "main.l"
+#line 247 "main.l"
 ECHO;
 	YY_BREAK
-#line 1292 "main.lex.yy.cpp"
+#line 1278 "main.lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -2257,4 +2243,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 261 "main.l"
+#line 247 "main.l"

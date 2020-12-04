@@ -595,20 +595,23 @@ bool checkForCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
             // cout << "check comparison" << endl;
             return false;
     }
-    TreeNode* node = t1->getChild();
-    while(node != nullptr) {
-        if (node->getNodeType() == NODE_Var){
-            if(identifierTable.find(node->getIdentifier()) != identifierTable.end()) {
-                stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
-                idAttr attr = s.top();
-                attr.level += 1;
-                s.pop();
-                s.push(attr);
-                identifierTable[node->getIdentifier()] = s;
+    if(t1->getStatementType() == STMT_DECL) {
+        TreeNode* node = t1->getChild();
+        while(node != nullptr) {
+            if (node->getNodeType() == NODE_Var){
+                if(identifierTable.find(node->getIdentifier()) != identifierTable.end()) {
+                    stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
+                    idAttr attr = s.top();
+                    attr.level += 1;
+                    s.pop();
+                    s.push(attr);
+                    identifierTable[node->getIdentifier()] = s;
+                }
             }
+            node = node->getSibling();
         }
-        node = node->getSibling();
     }
+    
 
     return true;
 }

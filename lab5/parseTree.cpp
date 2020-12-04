@@ -75,9 +75,6 @@ string TreeNode::printInfo() {
 }
 
 void TreeNode::printAST() {
-    if (this->nodeID == 87) {
-        cout << "@87 former: " << this->formerDeclID << endl;
-    }
     string info = this->printInfo();
     string childrenInfo = (string)"\tChildern:[ ";
     list<int> children;
@@ -213,7 +210,7 @@ string TreeNode::nodeType2String(NodeType t){
         case 1:
             return (string)"Const";
         case 2:
-            return (string)"Const Variable";
+            return (string)"Const Var";
         case 3:
             return (string)"Variable";
         case 4:
