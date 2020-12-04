@@ -75,7 +75,7 @@
     extern int checkRange(string id, int level);
     TreeNode* addOperatorNode(TreeNode* t1, TreeNode* t2, OperatorType op, int lineno);
     bool checkFor(TreeNode* t1, TreeNode* t2);
-    bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3);
+    bool checkForCon(TreeNode* t1, TreeNode* t2, TreeNode* t3);
     bool checkWhile(TreeNode* t1, TreeNode* t2);
     bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3);
     bool checkAsg(TreeNode* t1, bool i);
@@ -499,13 +499,13 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    51,    51,    57,    58,    62,    63,    64,    65,    66,
-      67,    68,    72,    73,    74,    78,    91,    95,   119,   131,
-     146,   152,   157,   166,   170,   176,   180,   186,   193,   199,
-     205,   213,   214,   218,   219,   220,   221,   222,   226,   237,
-     250,   262,   276,   286,   300,   301,   302,   303,   306,   308,
-     319,   330,   341,   352,   363,   374,   384,   394,   404,   417,
-     423,   429,   435,   441,   447,   453,   459,   465,   471,   477,
-     483,   489,   495,   508,   509,   522,   535,   536,   537,   538
+      67,    68,    72,    73,    74,    78,    91,    95,   120,   132,
+     147,   153,   158,   167,   171,   177,   181,   187,   195,   201,
+     208,   216,   217,   221,   222,   223,   224,   225,   229,   240,
+     253,   265,   279,   289,   303,   304,   305,   306,   309,   311,
+     322,   333,   344,   355,   366,   377,   387,   397,   407,   420,
+     426,   432,   438,   444,   450,   456,   462,   468,   474,   480,
+     486,   492,   498,   511,   512,   525,   538,   539,   540,   541
 };
 #endif
 
@@ -1526,6 +1526,7 @@ yyreduce:
                                     id->setFunctionType(FUNC_ID);
                                     id->setIdentifier((string)"scanf");
                                     node->setIdentifier((string)"scanf");
+                                    node->addChild(id);
                                     node->addChild((yyvsp[-2]));
                                     node->addChild((yyvsp[-1]));
                                     (yyval) = node;
@@ -1544,11 +1545,11 @@ yyreduce:
                                     // }
                                     fputs("function call <= scanf \n", yyout);
                                 }
-#line 1548 "main.tab.cpp" /* yacc.c:1646  */
+#line 1549 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 119 "main.y" /* yacc.c:1646  */
+#line 120 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = new TreeNode(lineno, NODE_Func);
                                                 node->setFunctionType(FUNC_CALL);
                                                 TreeNode* id = new TreeNode(lineno, NODE_Func);
@@ -1561,11 +1562,11 @@ yyreduce:
                                                 (yyval) = node;
                                                 fputs("function call <= printf \n", yyout);
                                             }
-#line 1565 "main.tab.cpp" /* yacc.c:1646  */
+#line 1566 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 131 "main.y" /* yacc.c:1646  */
+#line 132 "main.y" /* yacc.c:1646  */
     { TreeNode* node = new TreeNode(lineno, NODE_Stmt);
                                 node->setFunctionType(FUNC_CALL);
                                 node->setIdentifier((yyvsp[-3])->getIdentifier());
@@ -1578,163 +1579,165 @@ yyreduce:
                                 }
                                 fputs("function call <= general \n", yyout);
                             }
-#line 1582 "main.tab.cpp" /* yacc.c:1646  */
+#line 1583 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 146 "main.y" /* yacc.c:1646  */
+#line 147 "main.y" /* yacc.c:1646  */
     {   (yyvsp[0])->setFunctionType(FUNC_PARAM);
                             (yyval) = (yyvsp[-2]);
                             (yyval)->addSibling((yyvsp[0]));
                             // cout << $$->getNodeId() << " " << $3->getNodeId();
                             fputs("param , expr\n", yyout);
                         }
-#line 1593 "main.tab.cpp" /* yacc.c:1646  */
+#line 1594 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 152 "main.y" /* yacc.c:1646  */
+#line 153 "main.y" /* yacc.c:1646  */
     {   (yyvsp[0])->setFunctionType(FUNC_PARAM);
             (yyval) = (yyvsp[0]); 
             // cout << $$->getNodeId();
             fputs("expr\n", yyout);
         }
-#line 1603 "main.tab.cpp" /* yacc.c:1646  */
+#line 1604 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 157 "main.y" /* yacc.c:1646  */
+#line 158 "main.y" /* yacc.c:1646  */
     {  TreeNode* node = new TreeNode(lineno, NODE_Func);
         node->setFunctionType(FUNC_PARAM);
         node->setDeclType(D_VOID);
         fputs("Empty paramList\n", yyout);
         (yyval) = node;
     }
-#line 1614 "main.tab.cpp" /* yacc.c:1646  */
+#line 1615 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 166 "main.y" /* yacc.c:1646  */
+#line 167 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[-3]);
                                 (yyval)->addSibling((yyvsp[0]));
                                 fputs("scanf idlist\n", yyout);
                             }
-#line 1623 "main.tab.cpp" /* yacc.c:1646  */
+#line 1624 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 170 "main.y" /* yacc.c:1646  */
+#line 171 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[0]);
                     fputs("scanf id\n", yyout);
                 }
-#line 1631 "main.tab.cpp" /* yacc.c:1646  */
+#line 1632 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 176 "main.y" /* yacc.c:1646  */
+#line 177 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[-2]);
                             (yyval)->addSibling((yyvsp[0]));
                             fputs("printf idlist\n", yyout);
                         }
-#line 1640 "main.tab.cpp" /* yacc.c:1646  */
+#line 1641 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 180 "main.y" /* yacc.c:1646  */
+#line 181 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[0]);
                 fputs("printf id\n", yyout);
             }
-#line 1648 "main.tab.cpp" /* yacc.c:1646  */
+#line 1649 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 186 "main.y" /* yacc.c:1646  */
+#line 187 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[-4]); 
                                 assignId((yyvsp[-2]), (yyvsp[0]));
-                                (yyvsp[-2])->generateNodeID();
+                                // $3->generateNodeID();
+                                (yyvsp[-2])->addChild((yyvsp[0]));
                                 (yyval)->addSibling((yyvsp[-2]));
                                 setEntryOfId((yyvsp[-2])->getIdentifier(), level, (yyvsp[-2])->getDeclType(), getValueOfId((yyvsp[0])), (yyvsp[-2])->getNodeId());
                                 fputs("idlist with assignment \n", yyout);
                             }
-#line 1660 "main.tab.cpp" /* yacc.c:1646  */
+#line 1662 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 193 "main.y" /* yacc.c:1646  */
+#line 195 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[-2]); 
-                        (yyvsp[0])->generateNodeID();
+                        // $3->generateNodeID();
                         (yyval)->addSibling((yyvsp[0]));
                         setEntryOfId((yyvsp[0])->getIdentifier(), level, (yyvsp[0])->getDeclType(), getValueOfId(nullptr), (yyvsp[0])->getNodeId());
                         fputs("idlist \n", yyout);
                     }
-#line 1671 "main.tab.cpp" /* yacc.c:1646  */
+#line 1673 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 199 "main.y" /* yacc.c:1646  */
+#line 201 "main.y" /* yacc.c:1646  */
     {   assignId((yyvsp[-2]), (yyvsp[0]));
-                    (yyvsp[-2])->generateNodeID();
+                    // $1->generateNodeID();
+                    (yyvsp[-2])->addChild((yyvsp[0]));
                     (yyval) = (yyvsp[-2]);
                     setEntryOfId((yyvsp[-2])->getIdentifier(), level, (yyvsp[-2])->getDeclType(), getValueOfId((yyvsp[0])), (yyvsp[-2])->getNodeId());
                     fputs("id with assignment \n", yyout);
                 }
-#line 1682 "main.tab.cpp" /* yacc.c:1646  */
+#line 1685 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 205 "main.y" /* yacc.c:1646  */
+#line 208 "main.y" /* yacc.c:1646  */
     {   (yyval) = (yyvsp[0]);
-                    (yyvsp[0])->generateNodeID();
+                    // $1->generateNodeID();
                     setEntryOfId((yyvsp[0])->getIdentifier(), level, (yyvsp[0])->getDeclType(), getValueOfId(nullptr), (yyvsp[0])->getNodeId());
                     fputs("id \n", yyout);
                 }
-#line 1692 "main.tab.cpp" /* yacc.c:1646  */
+#line 1695 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 213 "main.y" /* yacc.c:1646  */
+#line 216 "main.y" /* yacc.c:1646  */
     {   setType((yyvsp[0]), (yyvsp[-1]), 0); (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_DECL); (yyval)->addChild((yyvsp[-1])); (yyval)->addChild((yyvsp[0])); fputs("declaration <= variable \n", yyout); }
-#line 1698 "main.tab.cpp" /* yacc.c:1646  */
+#line 1701 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 214 "main.y" /* yacc.c:1646  */
+#line 217 "main.y" /* yacc.c:1646  */
     {   setType((yyvsp[0]), (yyvsp[-1]), 1); (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_DECL); (yyval)->addChild((yyvsp[-1])); (yyval)->addChild((yyvsp[0])); fputs("declaration <= const \n", yyout); }
-#line 1704 "main.tab.cpp" /* yacc.c:1646  */
+#line 1707 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 218 "main.y" /* yacc.c:1646  */
+#line 221 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Type); (yyval)->setDeclType(D_BOOL); fputs("type <= bool \n", yyout); }
-#line 1710 "main.tab.cpp" /* yacc.c:1646  */
+#line 1713 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 219 "main.y" /* yacc.c:1646  */
+#line 222 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Type); (yyval)->setDeclType(D_INT); fputs("type <= int \n", yyout); }
-#line 1716 "main.tab.cpp" /* yacc.c:1646  */
+#line 1719 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 220 "main.y" /* yacc.c:1646  */
+#line 223 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Type); (yyval)->setDeclType(D_CHAR); fputs("type <= char \n", yyout); }
-#line 1722 "main.tab.cpp" /* yacc.c:1646  */
+#line 1725 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 221 "main.y" /* yacc.c:1646  */
+#line 224 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Type); (yyval)->setDeclType(D_STRING); fputs("type <= string \n", yyout); }
-#line 1728 "main.tab.cpp" /* yacc.c:1646  */
+#line 1731 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 222 "main.y" /* yacc.c:1646  */
+#line 225 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Type); (yyval)->setDeclType(D_VOID); fputs("type <= bool \n", yyout); }
-#line 1734 "main.tab.cpp" /* yacc.c:1646  */
+#line 1737 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 226 "main.y" /* yacc.c:1646  */
+#line 229 "main.y" /* yacc.c:1646  */
     {   if(checkFor((yyvsp[-4]), (yyvsp[-1]))) {
                                                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                                                             (yyval)->addChild((yyvsp[-4]));
@@ -1746,11 +1749,11 @@ yyreduce:
                                                         }
                                                         fputs("loop <= for \n", yyout);                                                        
                                                     }
-#line 1750 "main.tab.cpp" /* yacc.c:1646  */
+#line 1753 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 237 "main.y" /* yacc.c:1646  */
+#line 240 "main.y" /* yacc.c:1646  */
     {   if(checkWhile((yyvsp[-4]), (yyvsp[-1]))) {
                                                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                                                             (yyval)->addChild((yyvsp[-4]));
@@ -1761,12 +1764,12 @@ yyreduce:
                                                         }
                                                         fputs("loop <= while \n", yyout); 
                                                     }
-#line 1765 "main.tab.cpp" /* yacc.c:1646  */
+#line 1768 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 250 "main.y" /* yacc.c:1646  */
-    { if(checkIfCon((yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]))) {
+#line 253 "main.y" /* yacc.c:1646  */
+    { if(checkForCon((yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]))) {
                                                         // fputs(to_string(level).c_str(), yyout);
                                                         (yyval) = new TreeNode(lineno, NODE_Stmt);
                                                         (yyval)->setStatementType(STMT_FORCON);
@@ -1778,12 +1781,12 @@ yyreduce:
                                                     }
                                                     fputs("for conditions \n", yyout);
                                                 }
-#line 1782 "main.tab.cpp" /* yacc.c:1646  */
+#line 1785 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 262 "main.y" /* yacc.c:1646  */
-    { if(checkIfCon((yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]))) {
+#line 265 "main.y" /* yacc.c:1646  */
+    { if(checkForCon((yyvsp[-4]), (yyvsp[-2]), (yyvsp[0]))) {
                                                         (yyval) = new TreeNode(lineno, NODE_Stmt);
                                                         (yyval)->setStatementType(STMT_FORCON);
                                                         (yyval)->addChild((yyvsp[-4]));
@@ -1794,11 +1797,11 @@ yyreduce:
                                                     }
                                                     fputs("for conditions \n", yyout);
                                                 }
-#line 1798 "main.tab.cpp" /* yacc.c:1646  */
+#line 1801 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 276 "main.y" /* yacc.c:1646  */
+#line 279 "main.y" /* yacc.c:1646  */
     {   if(checkIf((yyvsp[-4]), (yyvsp[-1]), NULL)) {
                                                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                                                             (yyval)->addChild((yyvsp[-4]));
@@ -1809,11 +1812,11 @@ yyreduce:
                                                         }
                                                         fputs("control <= if then \n", yyout); 
                                                     }
-#line 1813 "main.tab.cpp" /* yacc.c:1646  */
+#line 1816 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 286 "main.y" /* yacc.c:1646  */
+#line 289 "main.y" /* yacc.c:1646  */
     {   if(checkIf((yyvsp[-8]), (yyvsp[-5]), (yyvsp[-1]))) {
                                                                                         (yyval) = new TreeNode(lineno, NODE_Stmt);
                                                                                         (yyval)->addChild((yyvsp[-8]));
@@ -1825,35 +1828,35 @@ yyreduce:
                                                                                     }
                                                                                     fputs("control <= if then else \n", yyout);  
                                                                                 }
-#line 1829 "main.tab.cpp" /* yacc.c:1646  */
+#line 1832 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 300 "main.y" /* yacc.c:1646  */
+#line 303 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_BREAK); fputs("jump <= break \n", yyout); }
-#line 1835 "main.tab.cpp" /* yacc.c:1646  */
+#line 1838 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 301 "main.y" /* yacc.c:1646  */
+#line 304 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_CONTINUE); fputs("jump <= continue \n", yyout); }
-#line 1841 "main.tab.cpp" /* yacc.c:1646  */
+#line 1844 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 302 "main.y" /* yacc.c:1646  */
+#line 305 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_RETURN); (yyval)->addChild((yyvsp[0])); fputs("jump <= return expr \n", yyout); }
-#line 1847 "main.tab.cpp" /* yacc.c:1646  */
+#line 1850 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 303 "main.y" /* yacc.c:1646  */
+#line 306 "main.y" /* yacc.c:1646  */
     { (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->setStatementType(STMT_RETURN); fputs("jump <= return \n", yyout); }
-#line 1853 "main.tab.cpp" /* yacc.c:1646  */
+#line 1856 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 308 "main.y" /* yacc.c:1646  */
+#line 311 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-2]), 0)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1865,11 +1868,11 @@ yyreduce:
                         }
                         fputs("assignment <= = \n", yyout);
                     }
-#line 1869 "main.tab.cpp" /* yacc.c:1646  */
+#line 1872 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 319 "main.y" /* yacc.c:1646  */
+#line 322 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-2]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1881,11 +1884,11 @@ yyreduce:
                         }
                         fputs("assignment <= += \n", yyout);
                     }
-#line 1885 "main.tab.cpp" /* yacc.c:1646  */
+#line 1888 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 330 "main.y" /* yacc.c:1646  */
+#line 333 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-2]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1897,11 +1900,11 @@ yyreduce:
                         }
                         fputs("assignment <= -= \n", yyout);
                     }
-#line 1901 "main.tab.cpp" /* yacc.c:1646  */
+#line 1904 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 341 "main.y" /* yacc.c:1646  */
+#line 344 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-2]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1913,11 +1916,11 @@ yyreduce:
                         }
                         fputs("assignment <= *= \n", yyout);
                     }
-#line 1917 "main.tab.cpp" /* yacc.c:1646  */
+#line 1920 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 352 "main.y" /* yacc.c:1646  */
+#line 355 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-2]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1929,11 +1932,11 @@ yyreduce:
                         }
                         fputs("assignment <= \\= \n", yyout);
                     }
-#line 1933 "main.tab.cpp" /* yacc.c:1646  */
+#line 1936 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 363 "main.y" /* yacc.c:1646  */
+#line 366 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-2]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1945,11 +1948,11 @@ yyreduce:
                         }
                         fputs("assignment <= %= \n", yyout);
                     }
-#line 1949 "main.tab.cpp" /* yacc.c:1646  */
+#line 1952 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 374 "main.y" /* yacc.c:1646  */
+#line 377 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[0]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1960,11 +1963,11 @@ yyreduce:
                         }
                         fputs("assignment <= ++i \n", yyout);
                     }
-#line 1964 "main.tab.cpp" /* yacc.c:1646  */
+#line 1967 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 384 "main.y" /* yacc.c:1646  */
+#line 387 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[0]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1975,11 +1978,11 @@ yyreduce:
                         }
                         fputs("assignment <= --i \n", yyout);
                     }
-#line 1979 "main.tab.cpp" /* yacc.c:1646  */
+#line 1982 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 394 "main.y" /* yacc.c:1646  */
+#line 397 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-1]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -1990,11 +1993,11 @@ yyreduce:
                         }
                         fputs("assignment <= i++ \n", yyout);
                     }
-#line 1994 "main.tab.cpp" /* yacc.c:1646  */
+#line 1997 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 404 "main.y" /* yacc.c:1646  */
+#line 407 "main.y" /* yacc.c:1646  */
     {   if(checkAsg((yyvsp[-1]), 1)) {
                             (yyval) = new TreeNode(lineno, NODE_Stmt);
                             (yyval)->setStatementType(STMT_ASIG);
@@ -2005,154 +2008,154 @@ yyreduce:
                         }
                         fputs("assignment <= i-- \n", yyout);
                     }
-#line 2009 "main.tab.cpp" /* yacc.c:1646  */
+#line 2012 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 417 "main.y" /* yacc.c:1646  */
+#line 420 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_ADD, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2020 "main.tab.cpp" /* yacc.c:1646  */
+#line 2023 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 423 "main.y" /* yacc.c:1646  */
+#line 426 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_MIN, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2031 "main.tab.cpp" /* yacc.c:1646  */
+#line 2034 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 429 "main.y" /* yacc.c:1646  */
+#line 432 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_MUL, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2042 "main.tab.cpp" /* yacc.c:1646  */
+#line 2045 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 435 "main.y" /* yacc.c:1646  */
+#line 438 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_DIV, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2053 "main.tab.cpp" /* yacc.c:1646  */
+#line 2056 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 441 "main.y" /* yacc.c:1646  */
+#line 444 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_MOD, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2064 "main.tab.cpp" /* yacc.c:1646  */
+#line 2067 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 447 "main.y" /* yacc.c:1646  */
+#line 450 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_AND, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2075 "main.tab.cpp" /* yacc.c:1646  */
+#line 2078 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 453 "main.y" /* yacc.c:1646  */
+#line 456 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_OR, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2086 "main.tab.cpp" /* yacc.c:1646  */
+#line 2089 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 459 "main.y" /* yacc.c:1646  */
+#line 462 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_GT, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2097 "main.tab.cpp" /* yacc.c:1646  */
+#line 2100 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 465 "main.y" /* yacc.c:1646  */
+#line 468 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_GTQ, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2108 "main.tab.cpp" /* yacc.c:1646  */
+#line 2111 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 471 "main.y" /* yacc.c:1646  */
+#line 474 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_LT, lineno); 
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2119 "main.tab.cpp" /* yacc.c:1646  */
+#line 2122 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 477 "main.y" /* yacc.c:1646  */
+#line 480 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_LTQ, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2130 "main.tab.cpp" /* yacc.c:1646  */
+#line 2133 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 483 "main.y" /* yacc.c:1646  */
+#line 486 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_NEQ, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2141 "main.tab.cpp" /* yacc.c:1646  */
+#line 2144 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 489 "main.y" /* yacc.c:1646  */
+#line 492 "main.y" /* yacc.c:1646  */
     {   TreeNode* node = addOperatorNode((yyvsp[-2]), (yyvsp[0]), OP_EQU, lineno);
                     if (node == nullptr) {
                         yyerror("expr is not variable type");
                     }
                     (yyval) = node;
                 }
-#line 2152 "main.tab.cpp" /* yacc.c:1646  */
+#line 2155 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 495 "main.y" /* yacc.c:1646  */
+#line 498 "main.y" /* yacc.c:1646  */
     { if((yyvsp[0])->getNodeType() == NODE_Var || (yyvsp[0])->getNodeType() == NODE_ConstVar || (yyvsp[0])->getNodeType() == NODE_Const) {
                     if ((yyvsp[-1])->getDeclType() != D_STRING) {
                         TreeNode* node = new TreeNode(lineno, NODE_Op);
@@ -2166,17 +2169,17 @@ yyreduce:
                       yyerror("NOT Type error, this node is a string.");
                   }
                 }
-#line 2170 "main.tab.cpp" /* yacc.c:1646  */
+#line 2173 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 508 "main.y" /* yacc.c:1646  */
+#line 511 "main.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]);}
-#line 2176 "main.tab.cpp" /* yacc.c:1646  */
+#line 2179 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 509 "main.y" /* yacc.c:1646  */
+#line 512 "main.y" /* yacc.c:1646  */
     { if(((yyvsp[0])->getNodeType() == NODE_Var || (yyvsp[0])->getNodeType() == NODE_ConstVar  || (yyvsp[0])->getNodeType() == NODE_Const) && (yyvsp[0])->getDeclType() == D_INT) {
                     int value = (yyvsp[0])->getIntValue();
                     TreeNode* node = new TreeNode(lineno, NODE_Op);
@@ -2190,11 +2193,11 @@ yyreduce:
                       yyerror("UMINUS Type error, this node is not an integer.");
                   }
                 }
-#line 2194 "main.tab.cpp" /* yacc.c:1646  */
+#line 2197 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 522 "main.y" /* yacc.c:1646  */
+#line 525 "main.y" /* yacc.c:1646  */
     { if((yyvsp[0])->getNodeType() == NODE_Var || (yyvsp[0])->getNodeType() == NODE_ConstVar) {
                     if ((yyvsp[-1])->getIdentifier() != "") {
                         TreeNode* node = new TreeNode(lineno, NODE_Op);
@@ -2208,35 +2211,35 @@ yyreduce:
                       yyerror("REF Type error, this node is not an identifier.");
                   }
                 }
-#line 2212 "main.tab.cpp" /* yacc.c:1646  */
+#line 2215 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 535 "main.y" /* yacc.c:1646  */
+#line 538 "main.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 2218 "main.tab.cpp" /* yacc.c:1646  */
+#line 2221 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 536 "main.y" /* yacc.c:1646  */
+#line 539 "main.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 2224 "main.tab.cpp" /* yacc.c:1646  */
+#line 2227 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 537 "main.y" /* yacc.c:1646  */
+#line 540 "main.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 2230 "main.tab.cpp" /* yacc.c:1646  */
+#line 2233 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 538 "main.y" /* yacc.c:1646  */
+#line 541 "main.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 2236 "main.tab.cpp" /* yacc.c:1646  */
+#line 2239 "main.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 2240 "main.tab.cpp" /* yacc.c:1646  */
+#line 2243 "main.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2464,7 +2467,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 542 "main.y" /* yacc.c:1906  */
+#line 545 "main.y" /* yacc.c:1906  */
 
 
 TreeNode* addOperatorNode(TreeNode* t1, TreeNode* t2, OperatorType op, int lineno)
@@ -2504,7 +2507,7 @@ bool checkFor(TreeNode* t1, TreeNode* t2)
     return true;
 }
 
-bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
+bool checkForCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
     if(t1->getStatementType() != STMT_ASIG && t1->getStatementType() != STMT_DECL) {
         // cout << "check declaration/assignment" << endl;
         return false;
@@ -2518,6 +2521,21 @@ bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
             // cout << "check comparison" << endl;
             return false;
     }
+    TreeNode* node = t1->getChild();
+    while(node != nullptr) {
+        if (node->getNodeType() == NODE_Var){
+            if(identifierTable.find(node->getIdentifier()) != identifierTable.end()) {
+                stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
+                idAttr attr = s.top();
+                attr.level += 1;
+                s.pop();
+                s.push(attr);
+                identifierTable[node->getIdentifier()] = s;
+            }
+        }
+        node = node->getSibling();
+    }
+
     return true;
 }
 
@@ -2598,18 +2616,22 @@ void setType(TreeNode* &idlist, TreeNode* type, bool ifConst) {
         TreeNode* node = idlist;
         assert (node != nullptr);
         node->setNodeType(NODE_ConstVar);
+        node->setStatementType(STMT_DECL);
         node->setDeclType(type->getDeclType());
         while ((node = node->getSibling()) != nullptr) {
             node->setNodeType(NODE_ConstVar);
             node->setDeclType(type->getDeclType());
+            node->setStatementType(STMT_DECL);
         }
     } else {
         TreeNode* node = idlist;
         assert (node != nullptr);
         node->setNodeType(NODE_Var);
+        node->setStatementType(STMT_DECL);
         node->setDeclType(type->getDeclType());
         while ((node = node->getSibling()) != nullptr) {
             node->setNodeType(NODE_Var);
+            node->setStatementType(STMT_DECL);
             node->setDeclType(type->getDeclType());
         }
     }
@@ -2676,6 +2698,8 @@ int assignId(TreeNode* &id, TreeNode* expr){
             id->setStringValue(expr->getStringValue());
             break;
         }
+        default:
+            break;
     }
     return 0;
     

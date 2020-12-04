@@ -10,7 +10,7 @@
     extern int checkRange(string id, int level);
     TreeNode* addOperatorNode(TreeNode* t1, TreeNode* t2, OperatorType op, int lineno);
     bool checkFor(TreeNode* t1, TreeNode* t2);
-    bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3);
+    bool checkForCon(TreeNode* t1, TreeNode* t2, TreeNode* t3);
     bool checkWhile(TreeNode* t1, TreeNode* t2);
     bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3);
     bool checkAsg(TreeNode* t1, bool i);
@@ -98,6 +98,7 @@ functionCall
                                     id->setFunctionType(FUNC_ID);
                                     id->setIdentifier((string)"scanf");
                                     node->setIdentifier((string)"scanf");
+                                    node->addChild(id);
                                     node->addChild($3);
                                     node->addChild($4);
                                     $$ = node;
@@ -185,25 +186,27 @@ printfIdlist
 idlist
 : idlist COMMA ID ASG expr  {   $$ = $1; 
                                 assignId($3, $5);
-                                $3->generateNodeID();
+                                // $3->generateNodeID();
+                                $3->addChild($5);
                                 $$->addSibling($3);
                                 setEntryOfId($3->getIdentifier(), level, $3->getDeclType(), getValueOfId($5), $3->getNodeId());
                                 fputs("idlist with assignment \n", yyout);
                             }
 | idlist COMMA ID   {   $$ = $1; 
-                        $3->generateNodeID();
+                        // $3->generateNodeID();
                         $$->addSibling($3);
                         setEntryOfId($3->getIdentifier(), level, $3->getDeclType(), getValueOfId(nullptr), $3->getNodeId());
                         fputs("idlist \n", yyout);
                     }
 | ID ASG expr   {   assignId($1, $3);
-                    $1->generateNodeID();
+                    // $1->generateNodeID();
+                    $1->addChild($3);
                     $$ = $1;
                     setEntryOfId($1->getIdentifier(), level, $1->getDeclType(), getValueOfId($3), $1->getNodeId());
                     fputs("id with assignment \n", yyout);
                 }
 | ID            {   $$ = $1;
-                    $1->generateNodeID();
+                    // $1->generateNodeID();
                     setEntryOfId($1->getIdentifier(), level, $1->getDeclType(), getValueOfId(nullptr), $1->getNodeId());
                     fputs("id \n", yyout);
                 }
@@ -247,7 +250,7 @@ loop
 ;
 
 forcon
-: declaration SEMICOLON expr SEMICOLON assignment { if(checkIfCon($1, $3, $5)) {
+: declaration SEMICOLON expr SEMICOLON assignment { if(checkForCon($1, $3, $5)) {
                                                         // fputs(to_string(level).c_str(), yyout);
                                                         $$ = new TreeNode(lineno, NODE_Stmt);
                                                         $$->setStatementType(STMT_FORCON);
@@ -259,7 +262,7 @@ forcon
                                                     }
                                                     fputs("for conditions \n", yyout);
                                                 }
-| assignment SEMICOLON expr SEMICOLON assignment { if(checkIfCon($1, $3, $5)) {
+| assignment SEMICOLON expr SEMICOLON assignment { if(checkForCon($1, $3, $5)) {
                                                         $$ = new TreeNode(lineno, NODE_Stmt);
                                                         $$->setStatementType(STMT_FORCON);
                                                         $$->addChild($1);
@@ -578,7 +581,7 @@ bool checkFor(TreeNode* t1, TreeNode* t2)
     return true;
 }
 
-bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
+bool checkForCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
     if(t1->getStatementType() != STMT_ASIG && t1->getStatementType() != STMT_DECL) {
         // cout << "check declaration/assignment" << endl;
         return false;
@@ -592,6 +595,21 @@ bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
             // cout << "check comparison" << endl;
             return false;
     }
+    TreeNode* node = t1->getChild();
+    while(node != nullptr) {
+        if (node->getNodeType() == NODE_Var){
+            if(identifierTable.find(node->getIdentifier()) != identifierTable.end()) {
+                stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
+                idAttr attr = s.top();
+                attr.level += 1;
+                s.pop();
+                s.push(attr);
+                identifierTable[node->getIdentifier()] = s;
+            }
+        }
+        node = node->getSibling();
+    }
+
     return true;
 }
 
@@ -672,18 +690,22 @@ void setType(TreeNode* &idlist, TreeNode* type, bool ifConst) {
         TreeNode* node = idlist;
         assert (node != nullptr);
         node->setNodeType(NODE_ConstVar);
+        node->setStatementType(STMT_DECL);
         node->setDeclType(type->getDeclType());
         while ((node = node->getSibling()) != nullptr) {
             node->setNodeType(NODE_ConstVar);
             node->setDeclType(type->getDeclType());
+            node->setStatementType(STMT_DECL);
         }
     } else {
         TreeNode* node = idlist;
         assert (node != nullptr);
         node->setNodeType(NODE_Var);
+        node->setStatementType(STMT_DECL);
         node->setDeclType(type->getDeclType());
         while ((node = node->getSibling()) != nullptr) {
             node->setNodeType(NODE_Var);
+            node->setStatementType(STMT_DECL);
             node->setDeclType(type->getDeclType());
         }
     }
@@ -750,6 +772,8 @@ int assignId(TreeNode* &id, TreeNode* expr){
             id->setStringValue(expr->getStringValue());
             break;
         }
+        default:
+            break;
     }
     return 0;
     

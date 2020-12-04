@@ -75,6 +75,9 @@ string TreeNode::printInfo() {
 }
 
 void TreeNode::printAST() {
+    if (this->nodeID == 87) {
+        cout << "@87 former: " << this->formerDeclID << endl;
+    }
     string info = this->printInfo();
     string childrenInfo = (string)"\tChildern:[ ";
     list<int> children;
@@ -286,15 +289,18 @@ string TreeNode::attributes(){
             // if(getAttributesOfId(this) != ""){
             //     value += getAttributesOfId(this);
             // }
-            if (identifierTable.find(this->identifier)!=identifierTable.end()){
-                stack<idAttr> s = identifierTable.find(this->identifier)->second;
-                while(!s.empty()) {
-                    int l = s.top().level;
-                    int idx = s.top().id;
-                    if(idx == this->formerDeclID){
-                        value += "\tDeclared @level" + to_string(l) + " same as ID@" + to_string(idx);
+            if (this->stmtType != STMT_DECL) {
+                if (identifierTable.find(this->identifier)!=identifierTable.end()){
+                    stack<idAttr> s = identifierTable.find(this->identifier)->second;
+                    while(!s.empty()) {
+                        int l = s.top().level;
+                        int idx = s.top().id;
+                        if(idx == this->formerDeclID){
+                            value += "\tDeclared level@" + to_string(l) + " same as ID@" + to_string(idx);
+                            break;
+                        }
+                        s.pop();
                     }
-                    s.pop();
                 }
             }
             return decl + value;
@@ -306,15 +312,18 @@ string TreeNode::attributes(){
             // if(getAttributesOfId(this) != ""){
             //     value += getAttributesOfId(this);
             // }
-            if (identifierTable.find(this->identifier)!=identifierTable.end()){
-                stack<idAttr> s = identifierTable.find(this->identifier)->second;
-                while(!s.empty()) {
-                    int l = s.top().level;
-                    int idx = s.top().id;
-                    if(idx == this->formerDeclID){
-                        value += "\tDeclared @level" + to_string(l) + " same as ID@" + to_string(idx);
+            if (this->stmtType != STMT_DECL) {
+                if (identifierTable.find(this->identifier)!=identifierTable.end()){
+                    stack<idAttr> s = identifierTable.find(this->identifier)->second;
+                    while(!s.empty()) {
+                        int l = s.top().level;
+                        int idx = s.top().id;
+                        if(idx == this->formerDeclID){
+                            value += "\tDeclared level@" + to_string(l) + " same as ID@" + to_string(idx);
+                            break;
+                        }
+                        s.pop();
                     }
-                    s.pop();
                 }
             }
             return decl + value;

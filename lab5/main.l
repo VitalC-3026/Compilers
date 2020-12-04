@@ -13,8 +13,7 @@
 using std::cerr;
 using std::cout;
 using std::endl;
-int lineno = 1, level = 0;
-bool ifFor = false;
+int lineno = 1, level = 0, ifFor = 0;
 extern void yyerror(const char*);
 extern map<string, stack<idAttr>> identifierTable;
 
@@ -42,7 +41,7 @@ void createIntNode(int lineno, RadixType radix){
     switch (radix){
         case DECIMAL: {
             node->setIntValue(atoi(yytext));
-            cout << "ID value: INT" << atoi(yytext) << endl;
+            // cout << "ID value: INT" << atoi(yytext) << endl;
             break;
         }
         case OCTAL: {
@@ -51,7 +50,7 @@ void createIntNode(int lineno, RadixType radix){
                 num += (int)yytext[i] * pow(8, (strlen(yytext) - i - 1));
             }
             node->setIntValue(num);
-            cout << "ID value: INT" << num << endl;
+            // cout << "ID value: INT" << num << endl;
             break;
         }
         case HEXA: {
@@ -72,7 +71,7 @@ void createIntNode(int lineno, RadixType radix){
                 num += tmp * pow(16, (strlen(yytext) - i - 1));
             }
             node->setIntValue(num);
-            cout << "ID value: INT" << num << endl;
+            // cout << "ID value: INT" << num << endl;
             break;
         }
         default:
@@ -117,7 +116,7 @@ STRING \".*\"
 "if"    return IF;
 "else"  return ELSE;
 "while" return WHILE;
-"for"   { ifFor = true; return FOR;}
+"for"   { ifFor = 1; return FOR;}
 "return" return RETURN;
 "continue" return CONTINUE;
 "break" return BREAK;
@@ -154,37 +153,27 @@ STRING \".*\"
 "&&"    return AND;
 "||"    return OR;
 
-"("     {   if(ifFor) { level++;} return LBRACE; }
+"("     {   
+            // if(ifFor == 1) {   
+            //     cout << "LBRACE" << ifFor << " " << level << endl; 
+            //     level++;
+            // } 
+            return LBRACE; }
 ")"     {   
-            // map<string, stack<idAttr>>::iterator iter;
-            // for (iter = identifierTable.begin(); iter != identifierTable.end(); iter++) {
-            //     stack<idAttr> s = iter->second;
-            //     if (s.empty()) {
-            //         continue;
-            //     }
-            //     if (s.top().level == level) {
-            //         s.pop();
-            //         identifierTable[iter->first] = s;
-            //     }
-            // }
-            // level--; 
             return RBRACE; 
         }
-"{"     { if(!ifFor){ level++; } return LPAREN; }
-"}"     {   
-            // map<string, stack<idAttr>>::iterator iter;
-            // for (iter = identifierTable.begin(); iter != identifierTable.end(); iter++) {
-            //     stack<idAttr> s = iter->second;
-            //     if (s.empty()) {
-            //         continue;
-            //     }
-            //     if (s.top().level == level) {
-            //         s.pop();
-            //         identifierTable[iter->first] = s;
-            //     }
-            // }
-            ifFor = false;
-            level--; 
+"{"     {   cout << "LPAREN" << level << endl; 
+            level++;
+            // if(ifFor == 0){   
+            //     cout << "LPAREN" << ifFor << " " << level << endl; 
+            //     level++; 
+            // } 
+            return LPAREN;
+        }
+"}"     {
+            ifFor = 0;
+            --level; 
+            cout << lineno << "RPAREN" << level << endl;
             return RPAREN; 
         }
 ";"     return SEMICOLON;
@@ -220,6 +209,7 @@ STRING \".*\"
                 //     // identifierTable[yytext] = s;
                 // }
                 node->setIdentifier((string) yytext);
+                // cout << "ID@" << node->getNodeId() << " level" << level;
                 yylval = node;
                 
             } else {
@@ -249,7 +239,7 @@ STRING \".*\"
             node->setDeclType(D_CHAR);
             node->setCharValue(yytext[1]);
             yylval = node;
-            cout << "ID value: CHAR" << yytext[1] << endl;
+            // cout << "ID value: CHAR" << yytext[1] << endl;
             return CHAR;
         }
 {STRING} {
@@ -257,7 +247,7 @@ STRING \".*\"
             node->setDeclType(D_STRING);
             node->setStringValue((string)yytext);
             yylval = node;
-            cout << "ID value: STRING" << yytext << endl;
+            // cout << "ID value: STRING" << yytext << endl;
             return STRING;
         }
 
