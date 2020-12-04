@@ -1,11 +1,16 @@
 void main()
 {
+    // for(int i = 0; i < 10; i++){
+    //     // printf("Have Fun: %d\n", i);
+    //     i++;
+    // }
+    
     int a, s;
     a = 10;
     s = 0;
 
     char ch;
-    scanf("\%d", &ch);
+    scanf("%d", &ch);
     while(a > 0 && a <= 10 || a%100 == 10 && !a==10) {
         a -= 1;
         int a;
@@ -16,10 +21,10 @@ void main()
             int b;
             b = 10;
             for(int i = 0; i < b; i++){
-                i--;
                 printf("Have fun: %d\n", i);
             }
         }
     }
     a = 2;
+    
 }

@@ -1,21 +1,21 @@
-main.l:200: warning, rule cannot be matched
-main.y: warning: 15 shift/reduce conflicts [-Wconflicts-sr]
+main.l:239: warning, rule cannot be matched
+main.y: warning: 12 shift/reduce conflicts [-Wconflicts-sr]
 main.l: In function ‘void createIntNode(int, RadixType)’:
-main.l:32:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+main.l:50:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
              for (int i = 1; i < strlen(yytext); i++) {
                              ~~^~~~~~~~~~~~~~~~
-main.l:41:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+main.l:59:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
              for (int i = 2; i < strlen(yytext); i++) {
                              ~~^~~~~~~~~~~~~~~~
 main.y: In function ‘bool checkIfCon(TreeNode*, TreeNode*, TreeNode*)’:
-main.y:579:55: warning: unused parameter ‘t3’ [-Wunused-parameter]
+main.y:581:55: warning: unused parameter ‘t3’ [-Wunused-parameter]
  bool checkIfCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
                                                        ^~
 main.y: In function ‘int assignId(TreeNode*&, TreeNode*)’:
-main.y:722:11: warning: enumeration value ‘D_VOID’ not handled in switch [-Wswitch]
+main.y:732:11: warning: enumeration value ‘D_VOID’ not handled in switch [-Wswitch]
      switch(id->getDeclType()){
            ^
 ./parseTree.cpp: In static member function ‘static std::__cxx11::string TreeNode::operatorType2String(OperatorType)’:
-./parseTree.cpp:334:1: warning: control reaches end of non-void function [-Wreturn-type]
+./parseTree.cpp:405:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^

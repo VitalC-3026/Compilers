@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     }
 
     yyparse();
+    fputs("+++++++++++++Tree Structure++++++++++++++\n", yyout);
     if (root != nullptr) {
         root->generateNodeID();
         root->printAST();

@@ -14,8 +14,26 @@ using std::cerr;
 using std::cout;
 using std::endl;
 int lineno = 1, level = 0;
+bool ifFor = false;
 extern void yyerror(const char*);
 extern map<string, stack<idAttr>> identifierTable;
+
+int checkRange(string id, int level) {
+    int idx = -1;
+    if(identifierTable.find(id) != identifierTable.end()){
+        stack<idAttr> s = identifierTable.find(id)->second;
+        while(!s.empty()) {           
+            if(s.top().level <= level) {
+                // fputs("exists! use before\n", yyout);
+                // cout << s.size() << endl;
+                idx = s.top().id;
+                break;
+            }
+            s.pop();
+        }
+    }
+    return idx;
+}
 
 void createIntNode(int lineno, RadixType radix){
     TreeNode* node = new TreeNode(lineno, NODE_Const);
@@ -99,7 +117,7 @@ STRING \".*\"
 "if"    return IF;
 "else"  return ELSE;
 "while" return WHILE;
-"for"   return FOR;
+"for"   { ifFor = true; return FOR;}
 "return" return RETURN;
 "continue" return CONTINUE;
 "break" return BREAK;
@@ -136,18 +154,36 @@ STRING \".*\"
 "&&"    return AND;
 "||"    return OR;
 
-"("     return LBRACE;
-")"     return RBRACE;
-"{"     { level++; return LPAREN; }
+"("     {   if(ifFor) { level++;} return LBRACE; }
+")"     {   
+            // map<string, stack<idAttr>>::iterator iter;
+            // for (iter = identifierTable.begin(); iter != identifierTable.end(); iter++) {
+            //     stack<idAttr> s = iter->second;
+            //     if (s.empty()) {
+            //         continue;
+            //     }
+            //     if (s.top().level == level) {
+            //         s.pop();
+            //         identifierTable[iter->first] = s;
+            //     }
+            // }
+            // level--; 
+            return RBRACE; 
+        }
+"{"     { if(!ifFor){ level++; } return LPAREN; }
 "}"     {   
-            map<string, stack<idAttr>>::iterator iter;
-            for (iter = identifierTable.begin(); iter != identifierTable.end(); iter++) {
-                stack<idAttr> s = iter->second;
-                if (s.top().level == level) {
-                    s.pop();
-                    identifierTable[iter->first] = s;
-                }
-            }
+            // map<string, stack<idAttr>>::iterator iter;
+            // for (iter = identifierTable.begin(); iter != identifierTable.end(); iter++) {
+            //     stack<idAttr> s = iter->second;
+            //     if (s.empty()) {
+            //         continue;
+            //     }
+            //     if (s.top().level == level) {
+            //         s.pop();
+            //         identifierTable[iter->first] = s;
+            //     }
+            // }
+            ifFor = false;
             level--; 
             return RPAREN; 
         }
@@ -157,38 +193,41 @@ STRING \".*\"
 {ID}    {
             if (identifierTable.find(yytext) != identifierTable.end()){
                 // cout << yytext << " exists!" << endl;
-                stack<idAttr> s = (identifierTable.find(yytext)->second);
+                stack<idAttr> s = identifierTable.find(yytext)->second;
                 int id = -1;
-                // cout << s.top().level << " " << level;
-                if(s.top().level <= level) {
-                    // cout << yytext << " use before" << endl;
-                    id = s.top().id;
+                while(!s.empty()) {
+                    // cout << s.top().level << " " << level;
+                    if(s.top().level <= level) {
+                        // cout << yytext << " use before" << endl;
+                        //fputs("exists! use before ID@", yyout);
+                        // cout << s.size() << endl;
+                        id = s.top().id;
+                        //fputs(to_string(id).c_str(),yyout);
+                        break;
+                    }
+                    s.pop();
                 }
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 if (id != -1) {
-                    node->setNodeId(id);
-                } else {
-                    idAttr attr;
-                    attr.level = level;
-                    attr.id = node->getNodeId();
-                    s.push(attr);
-                    identifierTable[yytext] = s;
-                }
-                string identifier = (string) yytext;
-                node->setIdentifier(identifier);
+                    node->setFormerNodeId(id);
+                } // else {
+                //     cout << "exists! higher level!"<<endl;
+                //     fputs("exists! higher level\n", yyout);
+                //     // idAttr attr;
+                //     // attr.level = level;
+                //     // attr.id = node->getNodeId();
+                //     // s.push(attr);
+                //     // identifierTable[yytext] = s;
+                // }
+                node->setIdentifier((string) yytext);
                 yylval = node;
                 
             } else {
                 // cout << yytext << " doesn't exist!" << endl;
+                // fputs("nonexists!\n", yyout);
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 string identifier = (string) yytext;
                 node->setIdentifier(identifier);
-                idAttr attr;
-                attr.level = level;
-                attr.id = node->getNodeId();
-                stack<idAttr> s;
-                s.push(attr);
-                identifierTable[yytext] = s;
                 yylval = node;
             }
             return ID;

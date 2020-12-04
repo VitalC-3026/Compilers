@@ -21,6 +21,7 @@ private:
     TreeNode* sibling = nullptr;
     int nodeID;
     int lineno;
+    int formerDeclID;
 
     OperatorType opType;
     StatementType stmtType;
@@ -37,9 +38,10 @@ private:
 public:
     void generateNodeID();
     int getNodeId();
-    void setNodeId(int i);
+    void setFormerNodeId(int i);
+    int getFormerNodeId();
     void printAST();
-    void printInfo();
+    string printInfo();
     void addChild(TreeNode*&);
     void addSibling(TreeNode*&);
     TreeNode* getChild();

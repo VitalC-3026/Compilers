@@ -6,6 +6,7 @@ enum NodeType
 {   
     NODE_Prog,
     NODE_Const,
+    NODE_ConstVar,
     NODE_Var, 
     NODE_Op, 
     NODE_Expr,
@@ -58,7 +59,8 @@ enum StatementType
     STMT_BREAK,
     STMT_CONTINUE,
     STMT_RETURN,
-    STMT_SKIP
+    STMT_SKIP,
+    STMT_FORCON
 };
 
 enum RadixType

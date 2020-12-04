@@ -1,3 +1,4 @@
+type <= bool 
 type <= int 
 id 
 idlist 
@@ -33,7 +34,7 @@ statements <= statements statement
 assignment <= += 
 statement <= assignment 
 statements <= statements statement 
-scanf id
+printf id
 function call <= printf 
 statement <= function
 statements <= statement 
@@ -50,13 +51,10 @@ id with assignment
 declaration <= variable 
 assignment <= i++ 
 for conditions 
-assignment <= i-- 
-statement <= assignment 
-statements <= statement 
-scanf id
+printf id
 function call <= printf 
 statement <= function
-statements <= statements statement 
+statements <= statement 
 loop <= for 
 statement <= loop 
 statements <= statements statement 
@@ -69,252 +67,90 @@ statements <= statements statement
 assignment <= = 
 statement <= assignment 
 statements <= statements statement 
-root with main function
-NodeID: 92 NodeType: Program Root Attributes: Root
-0 92's children
-NodeID: 6 NodeType: Statement Attributes: Declaration
-3 6's children
-NodeID: 1 NodeType: Data Type Attributes: int
-3 1's children
-end 1's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-3 3's children
-end 3's children
-NodeID: 5 NodeType: Variable Attributes: int 0
-3 5's children
-end 5's children
-end 6's children
-NodeID: 9 NodeType: Statement Attributes: Assignment =
-4 9's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-4 3's children
-end 3's children
-NodeID: 8 NodeType: Const Variable Attributes: int 10
-4 8's children
-end 8's children
-end 9's children
-NodeID: 12 NodeType: Statement Attributes: Assignment =
-5 12's children
-NodeID: 5 NodeType: Variable Attributes: int 0
-5 5's children
-end 5's children
-NodeID: 11 NodeType: Const Variable Attributes: int 0
-5 11's children
-end 11's children
-end 12's children
-NodeID: 16 NodeType: Statement Attributes: Declaration
-7 16's children
-NodeID: 13 NodeType: Data Type Attributes: char
-7 13's children
-end 13's children
-NodeID: 15 NodeType: Variable Attributes: char 7 15's children
-end 15's children
-end 16's children
-NodeID: 19 NodeType: Function Attributes: function call
-8 19's children
-NodeID: 17 NodeType: Const Variable Attributes: string "\%d"
-8 17's children
-end 17's children
-NodeID: 15 NodeType: Variable Attributes: int 0
-8 15's children
-end 15's children
-end 19's children
-NodeID: 87 NodeType: Statement Attributes: While
-23 87's children
-NodeID: 38 NodeType: Operator Attributes: &&
-9 38's children
-NodeID: 33 NodeType: Operator Attributes: ||
-9 33's children
-NodeID: 27 NodeType: Operator Attributes: &&
-9 27's children
-NodeID: 23 NodeType: Operator Attributes: >
-9 23's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-9 3's children
-end 3's children
-NodeID: 22 NodeType: Const Variable Attributes: int 0
-9 22's children
-end 22's children
-end 23's children
-NodeID: 26 NodeType: Operator Attributes: <=
-9 26's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-9 3's children
-end 3's children
-NodeID: 25 NodeType: Const Variable Attributes: int 10
-9 25's children
-end 25's children
-end 26's children
-end 27's children
-NodeID: 32 NodeType: Operator Attributes: ==
-9 32's children
-NodeID: 30 NodeType: Operator Attributes: %
-9 30's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-9 3's children
-end 3's children
-NodeID: 29 NodeType: Const Variable Attributes: int 100
-9 29's children
-end 29's children
-end 30's children
-NodeID: 31 NodeType: Const Variable Attributes: int 10
-9 31's children
-end 31's children
-end 32's children
-end 33's children
-NodeID: 37 NodeType: Operator Attributes: ==
-9 37's children
-NodeID: 35 NodeType: Operator Attributes: !
-9 35's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-9 3's children
-end 3's children
-end 35's children
-NodeID: 36 NodeType: Const Variable Attributes: int 10
-9 36's children
-end 36's children
-end 37's children
-end 38's children
-NodeID: 41 NodeType: Statement Attributes: Assignment -=
-10 41's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-10 3's children
-end 3's children
-NodeID: 40 NodeType: Const Variable Attributes: int 1
-10 40's children
-end 40's children
-end 41's children
-NodeID: 45 NodeType: Statement Attributes: Declaration
-11 45's children
-NodeID: 42 NodeType: Data Type Attributes: int
-11 42's children
-end 42's children
-NodeID: 44 NodeType: Variable Attributes: int 0
-11 44's children
-end 44's children
-end 45's children
-NodeID: 48 NodeType: Statement Attributes: Assignment =
-12 48's children
-NodeID: 44 NodeType: Variable Attributes: int 0
-12 44's children
-end 44's children
-NodeID: 47 NodeType: Const Variable Attributes: int 10
-12 47's children
-end 47's children
-end 48's children
-NodeID: 51 NodeType: Statement Attributes: Assignment +=
-13 51's children
-NodeID: 5 NodeType: Variable Attributes: int 0
-13 5's children
-end 5's children
-NodeID: 44 NodeType: Variable Attributes: int 0
-13 44's children
-end 44's children
-end 51's children
-NodeID: 86 NodeType: Statement Attributes: If
-23 86's children
-NodeID: 56 NodeType: Operator Attributes: <
-14 56's children
-NodeID: 53 NodeType: Operator Attributes: -
-14 53's children
-NodeID: 5 NodeType: Variable Attributes: int 0
-14 5's children
-end 5's children
-end 53's children
-NodeID: 55 NodeType: Operator Attributes: -
-14 55's children
-NodeID: 54 NodeType: Const Variable Attributes: int 10
-14 54's children
-end 54's children
-end 55's children
-end 56's children
-NodeID: 59 NodeType: Function Attributes: function call
-15 59's children
-NodeID: 60 NodeType: Function Attributes: function identifier
-15 60's children
-end 60's children
-NodeID: 57 NodeType: Const Variable Attributes: string "result is: %d\n"
-15 57's children
-end 57's children
-NodeID: 5 NodeType: Variable Attributes: int 0
-15 5's children
-end 5's children
-end 59's children
-NodeID: 64 NodeType: Statement Attributes: Declaration
-16 64's children
-NodeID: 61 NodeType: Data Type Attributes: int
-16 61's children
-end 61's children
-NodeID: 63 NodeType: Variable Attributes: int 0
-16 63's children
-end 63's children
-end 64's children
-NodeID: 67 NodeType: Statement Attributes: Assignment =
-17 67's children
-NodeID: 63 NodeType: Variable Attributes: int 0
-17 63's children
-end 63's children
-NodeID: 66 NodeType: Const Variable Attributes: int 10
-17 66's children
-end 66's children
-end 67's children
-NodeID: 85 NodeType: Statement Attributes: For
-21 85's children
-NodeID: 78 NodeType: Statement Attributes: Assignment =
-18 78's children
-NodeID: 72 NodeType: Statement Attributes: Declaration
-18 72's children
-NodeID: 68 NodeType: Data Type Attributes: int
-18 68's children
-end 68's children
-NodeID: 71 NodeType: Variable Attributes: int 0
-18 71's children
-end 71's children
-end 72's children
-NodeID: 75 NodeType: Operator Attributes: <
-18 75's children
-NodeID: 71 NodeType: Variable Attributes: int 0
-18 71's children
-end 71's children
-NodeID: 63 NodeType: Variable Attributes: int 0
-18 63's children
-end 63's children
-end 75's children
-NodeID: 77 NodeType: Statement Attributes: Assignment ++
-18 77's children
-NodeID: 71 NodeType: Variable Attributes: int 0
-18 71's children
-end 71's children
-end 77's children
-end 78's children
-NodeID: 80 NodeType: Statement Attributes: Assignment --
-19 80's children
-NodeID: 71 NodeType: Variable Attributes: int 0
-19 71's children
-end 71's children
-end 80's children
-NodeID: 83 NodeType: Function Attributes: function call
-20 83's children
-NodeID: 84 NodeType: Function Attributes: function identifier
-20 84's children
-end 84's children
-NodeID: 81 NodeType: Const Variable Attributes: string "Have fun: %d\n"
-20 81's children
-end 81's children
-NodeID: 71 NodeType: Variable Attributes: int 0
-20 71's children
-end 71's children
-end 83's children
-end 85's children
-end 86's children
-end 87's children
-NodeID: 90 NodeType: Statement Attributes: Assignment =
-24 90's children
-NodeID: 3 NodeType: Variable Attributes: int 0
-24 3's children
-end 3's children
-NodeID: 89 NodeType: Const Variable Attributes: int 2
-24 89's children
-end 89's children
-end 90's children
-end 92's children
+statement <= function
+statements <= statement 
+root 
++++++++++++++Tree Structure++++++++++++++
+lno@0	ID@92	NodeType: Program Root	Attributes: Root	Childern:[ @90 ]
+lno@30	ID@90	NodeType: Function		Attributes: Definition	FuncName: main	Childern:[ @1 @7 @10 @13 @17 @20 @86 @89 ]
+lno@1	ID@1	NodeType: Data Type		Attributes: void
+lno@8	ID@7	NodeType: Statement		Attributes: Declaration	Childern:[ @2 @4 @6 ]
+lno@8	ID@2	NodeType: Data Type		Attributes: int
+lno@8	ID@4	NodeType: Variable		Attributes: int a
+lno@8	ID@6	NodeType: Variable		Attributes: int s
+lno@9	ID@10	NodeType: Statement		Attributes: Assignment =	Childern:[ @8 @9 ]
+lno@9	ID@8	NodeType: Variable		Attributes: int a	Declared @level1 same as ID@4
+lno@9	ID@9	NodeType: Const			Attributes: int 10
+lno@10	ID@13	NodeType: Statement		Attributes: Assignment =	Childern:[ @11 @12 ]
+lno@10	ID@11	NodeType: Variable		Attributes: int s	Declared @level1 same as ID@6
+lno@10	ID@12	NodeType: Const			Attributes: int 0
+lno@12	ID@17	NodeType: Statement		Attributes: Declaration	Childern:[ @14 @16 ]
+lno@12	ID@14	NodeType: Data Type		Attributes: char
+lno@12	ID@16	NodeType: Variable		Attributes: char ch
+lno@13	ID@20	NodeType: Function		Attributes: Call	FuncName: scanf	Childern:[ @18 @19 ]
+lno@13	ID@18	NodeType: Const			Attributes: string "%d"
+lno@13	ID@19	NodeType: Variable		Attributes: int ch	Declared @level1 same as ID@16
+lno@27	ID@86	NodeType: Statement		Attributes: While	Childern:[ @39 @42 @46 @49 @52 @85 ]
+lno@14	ID@39	NodeType: Operator		Attributes: &&	Childern:[ @34 @38 ]
+lno@14	ID@34	NodeType: Operator		Attributes: ||	Childern:[ @28 @33 ]
+lno@14	ID@28	NodeType: Operator		Attributes: &&	Childern:[ @24 @27 ]
+lno@14	ID@24	NodeType: Operator		Attributes: >	Childern:[ @22 @23 ]
+lno@14	ID@22	NodeType: Variable		Attributes: int a	Declared @level1 same as ID@4
+lno@14	ID@23	NodeType: Const			Attributes: int 0
+lno@14	ID@27	NodeType: Operator		Attributes: <=	Childern:[ @25 @26 ]
+lno@14	ID@25	NodeType: Variable		Attributes: int a	Declared @level1 same as ID@4
+lno@14	ID@26	NodeType: Const			Attributes: int 10
+lno@14	ID@33	NodeType: Operator		Attributes: ==	Childern:[ @31 @32 ]
+lno@14	ID@31	NodeType: Operator		Attributes: %	Childern:[ @29 @30 ]
+lno@14	ID@29	NodeType: Variable		Attributes: int a	Declared @level1 same as ID@4
+lno@14	ID@30	NodeType: Const			Attributes: int 100
+lno@14	ID@32	NodeType: Const			Attributes: int 10
+lno@14	ID@38	NodeType: Operator		Attributes: ==	Childern:[ @36 @37 ]
+lno@14	ID@36	NodeType: Operator		Attributes: !	Childern:[ @35 ]
+lno@14	ID@35	NodeType: Variable		Attributes: int a	Declared @level1 same as ID@4
+lno@14	ID@37	NodeType: Const			Attributes: int 10
+lno@15	ID@42	NodeType: Statement		Attributes: Assignment -=	Childern:[ @40 @41 ]
+lno@15	ID@40	NodeType: Variable		Attributes: int a	Declared @level1 same as ID@4
+lno@15	ID@41	NodeType: Const			Attributes: int 1
+lno@16	ID@46	NodeType: Statement		Attributes: Declaration	Childern:[ @43 @45 ]
+lno@16	ID@43	NodeType: Data Type		Attributes: int
+lno@16	ID@45	NodeType: Variable		Attributes: int a	Declared @level1 same as ID@4
+lno@17	ID@49	NodeType: Statement		Attributes: Assignment =	Childern:[ @47 @48 ]
+lno@17	ID@47	NodeType: Variable		Attributes: int a	Declared @level2 same as ID@45
+lno@17	ID@48	NodeType: Const			Attributes: int 10
+lno@18	ID@52	NodeType: Statement		Attributes: Assignment +=	Childern:[ @50 @51 ]
+lno@18	ID@50	NodeType: Variable		Attributes: int s	Declared @level1 same as ID@6
+lno@18	ID@51	NodeType: Variable		Attributes: int a	Declared @level2 same as ID@45
+lno@27	ID@85	NodeType: Statement		Attributes: If	Childern:[ @57 @60 @65 @68 @84 ]
+lno@19	ID@57	NodeType: Operator		Attributes: <	Childern:[ @54 @56 ]
+lno@19	ID@54	NodeType: Operator		Attributes: -	Childern:[ @53 ]
+lno@19	ID@53	NodeType: Variable		Attributes: int s	Declared @level1 same as ID@6
+lno@19	ID@56	NodeType: Operator		Attributes: -	Childern:[ @55 ]
+lno@19	ID@55	NodeType: Const			Attributes: int 10
+lno@20	ID@60	NodeType: Function		Attributes: Call	FuncName: printf	Childern:[ @61 @58 @59 ]
+lno@20	ID@61	NodeType: Function		Attributes: Identifier	FuncName: printf
+lno@20	ID@58	NodeType: Const			Attributes: string "result is: %d\n"
+lno@20	ID@59	NodeType: Variable		Attributes: int s	Declared @level1 same as ID@6
+lno@21	ID@65	NodeType: Statement		Attributes: Declaration	Childern:[ @62 @64 ]
+lno@21	ID@62	NodeType: Data Type		Attributes: int
+lno@21	ID@64	NodeType: Variable		Attributes: int b
+lno@22	ID@68	NodeType: Statement		Attributes: Assignment =	Childern:[ @66 @67 ]
+lno@22	ID@66	NodeType: Variable		Attributes: int b	Declared @level3 same as ID@64
+lno@22	ID@67	NodeType: Const			Attributes: int 10
+lno@25	ID@84	NodeType: Statement		Attributes: For	Childern:[ @79 @82 ]
+lno@23	ID@79	NodeType: Statement		Attributes: For conditions	Childern:[ @73 @76 @78 ]
+lno@23	ID@73	NodeType: Statement		Attributes: Declaration	Childern:[ @69 @72 ]
+lno@23	ID@69	NodeType: Data Type		Attributes: int
+lno@23	ID@72	NodeType: Variable		Attributes: int i
+lno@23	ID@76	NodeType: Operator		Attributes: <	Childern:[ @74 @75 ]
+lno@23	ID@74	NodeType: Variable		Attributes: int i	Declared @level4 same as ID@72
+lno@23	ID@75	NodeType: Variable		Attributes: int b	Declared @level3 same as ID@64
+lno@23	ID@78	NodeType: Statement		Attributes: Assignment ++	Childern:[ @77 ]
+lno@23	ID@77	NodeType: Variable		Attributes: int i	Declared @level4 same as ID@72
+lno@24	ID@82	NodeType: Function		Attributes: Call	FuncName: printf	Childern:[ @83 @80 @81 ]
+lno@24	ID@83	NodeType: Function		Attributes: Identifier	FuncName: printf
+lno@24	ID@80	NodeType: Const			Attributes: string "Have fun: %d\n"
+lno@24	ID@81	NodeType: Variable		Attributes: int i	Declared @level4 same as ID@72
+lno@28	ID@89	NodeType: Statement		Attributes: Assignment =	Childern:[ @87 @88 ]
+lno@28	ID@87	NodeType: Variable		Attributes: int a	Declared @level2 same as ID@45
+lno@28	ID@88	NodeType: Const			Attributes: int 2
