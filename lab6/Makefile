@@ -26,4 +26,4 @@ clean:
 	rm -f main.lex.yy.cpp main.tab.cpp  main.tab.h $(TARGET) *.o ./bin/*
 
 test:
-	./bin/main tests/test.cpp results/test.res.txt
+	./bin/main tests/test_var.cpp results/test.res.txt

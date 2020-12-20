@@ -22,6 +22,7 @@ private:
     int nodeID;
     int lineno;
     int formerDeclID;
+    bool isAlive = true;
 
     OperatorType opType;
     StatementType stmtType;
@@ -36,6 +37,13 @@ private:
     string identifier = "";
 
 public:
+    TreeNode(int, NodeType);
+    bool typeCheck();
+    void setIsAlive(bool alive){
+        this->isAlive = alive;
+    }
+    bool getIsAlive() { return this->isAlive; }
+
     void generateNodeID();
     int getNodeId();
     void setFormerNodeId(int i);
@@ -74,9 +82,7 @@ public:
     AssignmentType getAssignmentType();
     RadixType getRadixType();
     FunctionType getFunctionType();
-
-    TreeNode(int, NodeType);
-    // TreeNode();
+    
     string attributes();
     static string nodeType2String(NodeType);
     static string declType2String(DeclType);

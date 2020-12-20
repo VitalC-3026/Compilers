@@ -45,7 +45,8 @@ enum DeclType
     D_CHAR,
     D_STRING,
     D_BOOL,
-    D_VOID
+    D_VOID,
+    D_NONE
 };
 
 enum StatementType

@@ -7,11 +7,16 @@ main.l:49:31: warning: comparison between signed and unsigned integer expression
 main.l:58:31: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
              for (int i = 2; i < strlen(yytext); i++) {
                              ~~^~~~~~~~~~~~~~~~
-main.y: In function ‘bool checkForCon(TreeNode*, TreeNode*, TreeNode*)’:
-main.y:584:56: warning: unused parameter ‘t3’ [-Wunused-parameter]
- bool checkForCon(TreeNode* t1, TreeNode* t2, TreeNode* t3){
-                                                        ^~
-./parseTree.cpp: In static member function ‘static std::__cxx11::string TreeNode::operatorType2String(OperatorType)’:
-./parseTree.cpp:411:1: warning: control reaches end of non-void function [-Wreturn-type]
- }
- ^
+main.y: In function ‘bool checkWhile(TreeNode*, TreeNode*)’:
+main.y:635:27: warning: unused parameter ‘t1’ [-Wunused-parameter]
+ bool checkWhile(TreeNode* t1, TreeNode* t2)
+                           ^~
+main.y: In function ‘bool checkIf(TreeNode*, TreeNode*, TreeNode*)’:
+main.y:645:24: warning: unused parameter ‘t1’ [-Wunused-parameter]
+ bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
+                        ^~
+main.y: In function ‘bool checkAsg(TreeNode*, bool)’:
+main.y:660:34: warning: unused parameter ‘i’ [-Wunused-parameter]
+ bool checkAsg(TreeNode* t1, bool i)
+                                  ^
+make: *** [main] Hangup

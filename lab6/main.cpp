@@ -14,6 +14,7 @@ extern int yyparse();
 extern int lineno;
 extern FILE *yyin;
 extern FILE *yyout;
+int error = 0;
 
 int main(int argc, char *argv[]) 
 {
@@ -36,16 +37,20 @@ int main(int argc, char *argv[])
     yyparse();
     fputs("+++++++++++++Tree Structure++++++++++++++\n", yyout);
     if (root != nullptr) {
-        // root->generateNodeID();
         root->printAST();
     }
+    // if (error > 0){
+    //     exit(-1);
+    // }
+    return 0;
 }
 
 void yyerror(const char* msg)
 {   
     if(strcmp(msg, "syntax error") == 0){
-        cout << lineno;
+        cerr << "syntax error " << lineno << endl;
+        return;
     }
-    cout << msg << endl;
+    cerr << msg << endl;
 }
 

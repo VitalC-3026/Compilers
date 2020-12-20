@@ -6,6 +6,10 @@
 extern FILE *yyout;
 extern string getValueOfId(TreeNode*);
 extern map<string, stack<idAttr>> identifierTable;
+extern void yyerror(const char*);
+void typeIncompatible(int, string);
+void noOperands(int);
+
 
 void TreeNode::addChild(TreeNode* &child) {
     string info = to_string(this->getNodeId()) + (string)" add child " + to_string(child->getNodeId()) + "\n";
@@ -45,8 +49,6 @@ TreeNode::TreeNode(int lineno, NodeType type) {
     this->formerDeclID = this->nodeID;
 }
 
-// TreeNode::TreeNode(){}
-
 void TreeNode::generateNodeID() {
     this->nodeID = ++count;
 }
@@ -75,8 +77,11 @@ string TreeNode::printInfo() {
 }
 
 void TreeNode::printAST() {
+    if (this->getIsAlive() == false){
+        return;
+    }
     string info = this->printInfo();
-    string childrenInfo = (string)"\tChildern:[ ";
+    string childrenInfo = (string)"\tChildren:[ ";
     list<int> children;
     TreeNode* node = this->child;
     if(node != nullptr){
@@ -494,4 +499,292 @@ string TreeNode::functionType2String(FunctionType t){
         default:
             return (string)"";
     }
+}
+
+bool TreeNode::typeCheck(){
+    switch (this->nodeType)
+    {
+        case NODE_Op:{
+            TreeNode* child = this->child;
+            if (child == nullptr) {
+                noOperands(this->nodeID);
+                this->setDeclType(D_NONE);
+                this->setIsAlive(false);
+                return false;
+            } 
+            else {
+                // whether children are defined
+                if(child->getNodeType() == NODE_Var && identifierTable.find(child->getIdentifier()) == identifierTable.end()){
+                    string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Op: children not defined.";
+                    yyerror(msg.c_str());
+                    this->setIsAlive(false);
+                    return false;
+                }
+                if (child->sibling != nullptr && identifierTable.find(child->sibling->getIdentifier()) == identifierTable.end()) {
+                    string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Op: children not defined.";
+                    yyerror(msg.c_str());
+                    this->setIsAlive(false);
+                    return false;
+                }
+                DeclType dType = child->declType;
+                if (this->opType == OP_ADD || this->opType == OP_MIN || this->opType == OP_MUL ||
+                this->opType == OP_DIV || this->opType == OP_MOD) {
+                    if(child->sibling == nullptr) {
+                        noOperands(this->nodeID);
+                        this->setDeclType(D_NONE);
+                        this->setIsAlive(false);
+                        return false;
+                    } else {
+                        if(child->sibling->getDeclType() == dType && dType == D_INT){
+                            this->setDeclType(dType);
+                            return true;
+                        } else {
+                            if (dType != D_INT) {
+                                typeIncompatible(child->getNodeId(), (string)"Node_Var/ConstVar");
+                                this->setDeclType(D_NONE);
+                            }
+                            if (child->sibling->getDeclType() != D_INT) {
+                                typeIncompatible(child->sibling->getNodeId(), (string)"Node_Var/ConstVar");
+                                this->setDeclType(D_NONE);
+                            }
+                            this->setIsAlive(false);
+                            return false;
+                        }
+                    }
+                }
+                if (this->opType == OP_EQU ||this->opType == OP_GT ||this->opType == OP_LT ||
+                this->opType == OP_GTQ ||this->opType == OP_LTQ ||this->opType == OP_NEQ) {
+                    if(child->sibling == nullptr) {
+                        noOperands(this->nodeID);
+                        this->setDeclType(D_NONE);
+                        this->setIsAlive(false);
+                        return false;
+                    } else {
+                        if(child->sibling->getDeclType() == dType && (dType == D_INT || dType == D_CHAR || dType == D_STRING)){
+                            this->setDeclType(dType);
+                            return true;
+                        } else {
+                            if (dType != D_INT && dType != D_CHAR && dType != D_STRING) {
+                                this->setDeclType(D_NONE);
+                                typeIncompatible(child->nodeID, (string)"Node_Var/ConstVar");
+                            }
+                            if (child->sibling->getDeclType() != D_INT && child->sibling->getDeclType() != D_CHAR && child->sibling->getDeclType() != D_STRING) {
+                                this->setDeclType(D_NONE);
+    
+                                typeIncompatible(child->nodeID, (string)"Node_Var/ConstVar");
+                            }
+                            this->setIsAlive(false);
+                            return false;
+                        }
+                    }
+                }
+                if (this->opType == OP_NOT) {
+                    if(dType == D_BOOL){
+                        this->setDeclType(D_BOOL);
+                        return true;
+                    } else if (dType == D_INT){
+                        // type cast?
+                        this->setDeclType(D_BOOL);
+                        return true;
+                    } else {
+                        noOperands(this->nodeID);
+                        this->setDeclType(D_NONE);
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                }
+                if (this->opType == OP_AND || OP_OR){
+                    if (child->sibling==nullptr) {
+                        noOperands(this->nodeID);
+                        this->setDeclType(D_NONE);
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                    if(child->sibling->getDeclType() == dType && dType == D_BOOL){
+                        this->setDeclType(D_BOOL);
+                        this->setIsAlive(false);
+                        return true;
+                    } else {
+                        if (dType != D_BOOL) {
+                            this->setDeclType(D_NONE);
+                            typeIncompatible(child->nodeID, (string)"Node_Var/ConstVar");
+                        }
+                        if (child->sibling->getDeclType() != D_BOOL) {
+                            this->setDeclType(D_NONE);
+                            typeIncompatible(child->nodeID, (string)"Node_Var/ConstVar");
+                        }
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                }
+            
+            }
+            break;
+        }
+        case NODE_Stmt: {
+            switch (this->stmtType)
+            {
+                case STMT_ASIG: {
+                    assert (this->child != nullptr);
+                    if (this->child->getNodeType() != NODE_Var) {
+                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Assignment: we expect a left value.";
+                        yyerror(msg.c_str());
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                    DeclType dType = this->child->getDeclType();
+                    if (this->child->getSibling() != nullptr) {
+                        DeclType siblingDType = this->child->getSibling()->getDeclType();
+                        switch (dType)
+                        {
+                            case D_INT: {
+                                if (siblingDType == D_INT || siblingDType == D_CHAR || siblingDType == D_BOOL) {
+                                    return true;
+                                } else {
+                                    typeIncompatible(this->nodeID, (string)"NODE_Assignment");
+                                    this->setIsAlive(false);
+                                    return false;
+                                }
+                                break;
+                            }
+                            case D_CHAR: {
+                                if(siblingDType == D_CHAR || siblingDType == D_INT || siblingDType == D_BOOL) {
+                                    return true;
+                                } else {
+                                    typeIncompatible(this->nodeID, (string)"NODE_Assignment");
+                                    this->setIsAlive(false);
+                                    return false;
+                                }
+                                break;
+                            case D_STRING:
+                                if(siblingDType != D_STRING) {
+                                    typeIncompatible(this->nodeID, (string)"NODE_Assignment");
+                                    this->setIsAlive(false);
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                            case D_BOOL: {
+                                if(siblingDType == D_CHAR || siblingDType == D_INT || siblingDType == D_BOOL) {
+                                    return true;
+                                } else {
+                                    typeIncompatible(this->nodeID, (string)"NODE_Assignment");
+                                    this->setIsAlive(false);
+                                    return false;
+                                }
+                            }
+                            default: {
+                                typeIncompatible(this->nodeID, (string)"NODE_Assignment");
+                                this->setIsAlive(false);
+                                return false;
+                            }
+                        }
+                    } 
+                    else if (this->child->getSibling() == nullptr && 
+                    (this->child->getAssignmentType() == ADDASIGO || this->child->getAssignmentType() == MINASIGO)) {
+                        if(dType != D_INT){
+                            typeIncompatible(this->nodeID, (string)"NODE_Assignment");
+                            this->setIsAlive(false);
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } 
+                    else {
+                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Assignment: missing assignment value.";
+                        yyerror(msg.c_str());
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                }
+            
+                case STMT_IF:{
+                    if (this->child == nullptr) {
+                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_If: missing conditions.";
+                        yyerror(msg.c_str());
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                    DeclType dType = this->child->getDeclType();
+                    if (this->child->getSibling() == nullptr) {
+                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_If: missing true statements.";
+                        yyerror(msg.c_str());
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                    DeclType tType = this->child->getSibling()->getDeclType();
+                    if (this->child->getNodeType() == NODE_Const || this->child->getNodeType() == NODE_ConstVar 
+                    || this->child->getNodeType() == NODE_Var) {
+                        if (dType != D_STRING) {
+                            return true;
+                        }
+                        else {
+                            typeIncompatible(this->nodeID, (string)"NODE_IF");
+                            this->setIsAlive(false);
+                            return false;
+                        }
+                    }    
+                }
+                
+                case STMT_WHILE:{
+                    if (this->child == nullptr) {
+                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_While: missing conditions.";
+                        yyerror(msg.c_str());
+                        this->setIsAlive(false);
+                        return false;
+                    }
+                    DeclType dType = this->child->getDeclType();
+                    if (this->child->getNodeType() == NODE_Const || this->child->getNodeType() == NODE_ConstVar 
+                    || this->child->getNodeType() == NODE_Var) {
+                        if (dType != D_STRING) {
+                            return true;
+                        }
+                        else {
+                            typeIncompatible(this->nodeID, (string)"NODE_While");
+                            this->setIsAlive(false);
+                            return false;
+                        }
+                    }
+                }
+                
+                // case STMT_DECL: {
+                //     TreeNode* node = this->child;
+                //     if (node == nullptr){
+                //         string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Declaration: missing data type.";
+                //         yyerror(msg.c_str());
+                //         this->setIsAlive(false);
+                //         return false;
+                //     }
+                //     node = node->sibling;
+                //     while(node != nullptr){
+                //         if(identifierTable.find(node->getIdentifier()) == identifierTable.end()){
+                //             node->setIsAlive(false); 
+                //         }
+                //     }
+                // }
+                default:
+                    break;
+            }
+        break;
+        }
+        case NODE_Func:
+            if(this->getFunctionType() == FUNC_CALL){
+                // check funciton type
+            }
+        default: {
+            this->declType = D_NONE;
+            break;
+        }
+    }
+}
+
+void noOperands(int nodeID){
+    string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Op: missing operand(s).";
+    yyerror(msg.c_str());
+}
+
+void typeIncompatible(int nodeID, string nodeType){
+    string msg = (string)"Node@" + to_string(nodeID) + (string)" " + nodeType + (string)": type incompatible.";
+    yyerror(msg.c_str());
 }
