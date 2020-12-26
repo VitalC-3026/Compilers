@@ -10,6 +10,7 @@ using namespace std;
 TreeNode *root = nullptr;
 map<string, stack<idAttr>> identifierTable;
 int TreeNode::count = 0;
+int TreeNode::labelCount = 0;
 extern int yyparse();
 extern int lineno;
 extern FILE *yyin;

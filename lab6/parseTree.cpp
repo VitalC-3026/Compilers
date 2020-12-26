@@ -785,3 +785,91 @@ void typeIncompatible(int nodeID, string nodeType){
     string msg = (string)"Node@" + to_string(nodeID) + (string)" " + nodeType + (string)": type incompatible.";
     yyerror(msg.c_str());
 }
+
+
+void TreeNode::genStmtLabel(){
+    switch(this->stmtType){
+        case STMT_WHILE: {
+            TreeNode* expr = this->getChild();
+            TreeNode* body = this->getChild()->getSibling();
+            if (this->label.beginLabel == "") {
+                this->label.beginLabel = newLabel();
+            }
+            body->label.nextLabel = this->label.beginLabel;
+            body->label.beginLabel = expr->label.trueLabel = newLabel();
+            if(this->label.nextLabel == "") {
+                this->label.nextLabel = newLabel();
+            }
+            expr->label.falseLabel = this->label.nextLabel;
+            if (this->sibling != nullptr) {
+                this->sibling->label.beginLabel = this->label.nextLabel;
+                
+            }
+            expr->recursiveGenLabel();
+            body->recursiveGenLabel();
+            break;
+        }
+        case STMT_IF: {
+            TreeNode* expr = this->getChild();
+            TreeNode* trueBody = this->child->sibling;
+            TreeNode* falseBody = nullptr;
+            if(this->child->sibling->sibling){
+                falseBody = this->child->sibling->sibling;
+            }
+            if (this->label.beginLabel == "") {
+                this->label.beginLabel = newLabel();
+            }
+            trueBody->label.beginLabel = expr->label.trueLabel = newLabel();
+            if (falseBody) {
+                falseBody->label.beginLabel = expr->label.falseLabel = newLabel();
+            }
+            if(this->label.nextLabel == ""){
+                this->label.nextLabel = newLabel();
+            }
+            trueBody->label.nextLabel = this->label.nextLabel;
+            if (falseBody) {
+                falseBody->label.nextLabel = this->label.nextLabel;
+            }
+            if (this->sibling != nullptr) {
+                this->sibling->label.beginLabel = this->label.nextLabel;
+            }
+            expr->recursiveGenLabel();
+            trueBody->recursiveGenLabel();
+            falseBody->recursiveGenLabel();
+            break;
+        }
+        case STMT_FOR: {
+            TreeNode* forcon = this->child;
+            TreeNode* body = this->child->sibling;
+            TreeNode* forcon1 = forcon->child;
+            TreeNode* forconE = forcon->child->sibling;
+            TreeNode* forconI = forcon->child->sibling->sibling;
+        }
+        default:
+
+    }
+}
+}
+
+string TreeNode::newLabel(){
+    char tmp[20] = {0};
+    sprintf(tmp, "@%d", TreeNode::labelCount);
+    TreeNode::labelCount++;
+    return (string)tmp;
+}
+
+void TreeNode::recursiveGenLabel() {
+    if (this->nodeType == NODE_Stmt) {
+        this->genStmtLabel();
+    } 
+    else if ((this->nodeType == NODE_Op)) {
+        this->genExprLabel();
+    }
+    else if (this->nodeType == NODE_Func) {
+        this->genFuncLabel();
+    }
+    else {
+
+    }
+    
+}

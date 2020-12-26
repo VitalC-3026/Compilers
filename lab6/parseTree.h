@@ -12,9 +12,17 @@ using namespace std;
 
 #include "type.h"
 
+struct Label{
+    string beginLabel = "";
+    string nextLabel = "";
+    string trueLabel = "";
+    string falseLabel = "";
+};
+
 class TreeNode{
 private:
     static int count;
+    static int labelCount;
 
     NodeType nodeType;
     TreeNode* child = nullptr;
@@ -23,6 +31,7 @@ private:
     int lineno;
     int formerDeclID;
     bool isAlive = true;
+    Label label;
 
     OperatorType opType;
     StatementType stmtType;
@@ -44,6 +53,11 @@ public:
     }
     bool getIsAlive() { return this->isAlive; }
 
+    void genStmtLabel();
+    void genExprLabel();
+    void genFuncLabel();
+    void recursiveGenLabel();
+
     void generateNodeID();
     int getNodeId();
     void setFormerNodeId(int i);
@@ -62,6 +76,9 @@ public:
     void setDeclType(DeclType); // type of type nodes
     void setRadixType(RadixType); // type of integer nodes
     void setFunctionType(FunctionType);
+    void setLabel(Label label) {
+        this->label = label;
+    }
 
     void setIntValue(int);
     void setCharValue(char);
@@ -74,6 +91,9 @@ public:
     string getStringValue();
     bool getBoolValue();
     string getIdentifier();
+    Label getLabel() {
+        return this->label;
+    }
 
     NodeType getNodeType();
     DeclType getDeclType();
@@ -84,6 +104,7 @@ public:
     FunctionType getFunctionType();
     
     string attributes();
+    string newLabel();
     static string nodeType2String(NodeType);
     static string declType2String(DeclType);
     static string operatorType2String(OperatorType);
