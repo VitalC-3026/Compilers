@@ -1179,6 +1179,7 @@ YY_RULE_SETUP
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 if (id != -1) {
                     node->setFormerNodeId(id);
+                    node->setDeclType(s.top().type);
                 } // else {
                 //     cout << "exists! higher level!"<<endl;
                 //     fputs("exists! higher level\n", yyout);
@@ -1205,7 +1206,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 211 "main.l"
+#line 212 "main.l"
 {
             createIntNode(lineno, DECIMAL);
             return INTEGER;
@@ -1213,7 +1214,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 215 "main.l"
+#line 216 "main.l"
 {
             createIntNode(lineno, OCTAL);
             return INTEGER;
@@ -1221,7 +1222,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 219 "main.l"
+#line 220 "main.l"
 {
             createIntNode(lineno, HEXA);
             return INTEGER;
@@ -1229,13 +1230,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 223 "main.l"
+#line 224 "main.l"
 {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
             node->setCharValue(yytext[1]);
             yylval = node;
-            // cout << "ID value: CHAR" << yytext[1] << endl;
             return CHAR;
         }
 	YY_BREAK
@@ -1247,34 +1247,33 @@ YY_RULE_SETUP
             node->setDeclType(D_STRING);
             node->setStringValue((string)yytext);
             yylval = node;
-            // cout << "ID value: STRING" << yytext << endl;
             return STRING;
         }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 240 "main.l"
+#line 239 "main.l"
 /*do nothing*/
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 242 "main.l"
+#line 241 "main.l"
 { lineno++; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 244 "main.l"
+#line 243 "main.l"
 {
             cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
         }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 247 "main.l"
+#line 246 "main.l"
 ECHO;
 	YY_BREAK
-#line 1278 "main.lex.yy.cpp"
+#line 1277 "main.lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -2243,4 +2242,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 247 "main.l"
+#line 246 "main.l"

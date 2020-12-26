@@ -185,6 +185,7 @@ STRING \".*\"
                 TreeNode* node = new TreeNode(lineno, NODE_Var);
                 if (id != -1) {
                     node->setFormerNodeId(id);
+                    node->setDeclType(s.top().type);
                 } // else {
                 //     cout << "exists! higher level!"<<endl;
                 //     fputs("exists! higher level\n", yyout);
@@ -225,7 +226,6 @@ STRING \".*\"
             node->setDeclType(D_CHAR);
             node->setCharValue(yytext[1]);
             yylval = node;
-            // cout << "ID value: CHAR" << yytext[1] << endl;
             return CHAR;
         }
 {STRING} {
@@ -233,7 +233,6 @@ STRING \".*\"
             node->setDeclType(D_STRING);
             node->setStringValue((string)yytext);
             yylval = node;
-            // cout << "ID value: STRING" << yytext << endl;
             return STRING;
         }
 

@@ -214,8 +214,10 @@ loop
                                                             $$->addChild($3);
                                                             $$->addChild($6);
                                                             $$->setStatementType(STMT_FOR);
+                                                            $$->typeCheck();
                                                         } else {
-                                                            yyerror("FOR error, check failed!");
+                                                            string msg = (string)"Line@" + to_string(lineno) + (string)" For : Not syntactically defined.";
+                                                            yyerror(msg.c_str());
                                                         }                                                      
                                                     }
 | WHILE LBRACE expr RBRACE LPAREN statements RPAREN {   if(checkWhile($3, $6)) {
@@ -223,6 +225,7 @@ loop
                                                             $$->addChild($3);
                                                             $$->addChild($6);
                                                             $$->setStatementType(STMT_WHILE);
+                                                            $$->typeCheck();
                                                         } else {
                                                             string msg = (string)"Line@" + to_string(lineno) + (string)" While : Not syntactically defined.";
                                                             yyerror(msg.c_str());
@@ -261,6 +264,7 @@ control
                                                             $$->addChild($3);
                                                             $$->addChild($6);
                                                             $$->setStatementType(STMT_IF);
+                                                            $$->typeCheck();
                                                         } else {
                                                             string msg = (string)"Line@" + to_string(lineno) + (string)" ForCon : Not syntactically defined.";
                                                             yyerror(msg.c_str());
@@ -272,6 +276,7 @@ control
                                                                                         $$->addChild($6);
                                                                                         $$->addChild($10);
                                                                                         $$->setStatementType(STMT_IF);
+                                                                                        $$->typeCheck();
                                                                                     } else {
                                                                                         string msg = (string)"Line@" + to_string(lineno) + (string)" ForCon : Not syntactically defined.";
                                                                                         yyerror(msg.c_str());
@@ -294,6 +299,7 @@ assignment
                             $$->setAssignmentType(ASIG);
                             $$->addChild($1);
                             $$->addChild($3);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -305,6 +311,7 @@ assignment
                             $$->setAssignmentType(ADDASIG);
                             $$->addChild($1);
                             $$->addChild($3);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -316,6 +323,7 @@ assignment
                             $$->setAssignmentType(MINASIG);
                             $$->addChild($1);
                             $$->addChild($3);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -327,6 +335,7 @@ assignment
                             $$->setAssignmentType(MULASIG);
                             $$->addChild($1);
                             $$->addChild($3);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -338,6 +347,7 @@ assignment
                             $$->setAssignmentType(DIVASIG);
                             $$->addChild($1);
                             $$->addChild($3);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -349,6 +359,7 @@ assignment
                             $$->setAssignmentType(MODASIG);
                             $$->addChild($1);
                             $$->addChild($3);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -359,6 +370,7 @@ assignment
                             $$->setStatementType(STMT_ASIG);
                             $$->setAssignmentType(ADDASIGO);
                             $$->addChild($2);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -369,6 +381,7 @@ assignment
                             $$->setStatementType(STMT_ASIG);
                             $$->setAssignmentType(MINASIGO);
                             $$->addChild($2);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -379,6 +392,7 @@ assignment
                             $$->setStatementType(STMT_ASIG);
                             $$->setAssignmentType(ADDASIGO);
                             $$->addChild($1);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());
@@ -389,6 +403,7 @@ assignment
                             $$->setStatementType(STMT_ASIG);
                             $$->setAssignmentType(MINASIGO);
                             $$->addChild($1);
+                            $$->typeCheck();
                         } else {
                             string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
                             yyerror(msg.c_str());

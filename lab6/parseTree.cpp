@@ -520,7 +520,7 @@ bool TreeNode::typeCheck(){
                     this->setIsAlive(false);
                     return false;
                 }
-                if (child->sibling != nullptr && identifierTable.find(child->sibling->getIdentifier()) == identifierTable.end()) {
+                if (child->sibling != nullptr && child->sibling->getNodeType() == NODE_Var && identifierTable.find(child->sibling->getIdentifier()) == identifierTable.end()) {
                     string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Op: children not defined.";
                     yyerror(msg.c_str());
                     this->setIsAlive(false);
@@ -535,20 +535,27 @@ bool TreeNode::typeCheck(){
                         this->setIsAlive(false);
                         return false;
                     } else {
-                        if(child->sibling->getDeclType() == dType && dType == D_INT){
+                        if(child->sibling->getDeclType() == dType && (dType == D_INT || dType == D_CHAR || dType == D_BOOL)){
                             this->setDeclType(dType);
                             return true;
                         } else {
-                            if (dType != D_INT) {
-                                typeIncompatible(child->getNodeId(), (string)"Node_Var/ConstVar");
-                                this->setDeclType(D_NONE);
+                            bool left = true, right = true;
+                            if (!(dType == D_INT || dType == D_CHAR || dType == D_BOOL)) {
+                                left = false;
                             }
-                            if (child->sibling->getDeclType() != D_INT) {
+                            if (!(child->sibling->getDeclType() == D_CHAR || child->sibling->getDeclType() == D_BOOL || child->sibling->getDeclType() == D_INT)) {
+                                right = false;
+                            }
+                            if (left && right){
+                                return true;
+                            } 
+                            else {
                                 typeIncompatible(child->sibling->getNodeId(), (string)"Node_Var/ConstVar");
                                 this->setDeclType(D_NONE);
+                                this->setIsAlive(false);
+                                return false;
                             }
-                            this->setIsAlive(false);
-                            return false;
+                            
                         }
                     }
                 }
@@ -560,21 +567,25 @@ bool TreeNode::typeCheck(){
                         this->setIsAlive(false);
                         return false;
                     } else {
-                        if(child->sibling->getDeclType() == dType && (dType == D_INT || dType == D_CHAR || dType == D_STRING)){
+                        if(child->sibling->getDeclType() == dType && (dType == D_INT || dType == D_CHAR || dType == D_BOOL)){
                             this->setDeclType(dType);
                             return true;
                         } else {
-                            if (dType != D_INT && dType != D_CHAR && dType != D_STRING) {
-                                this->setDeclType(D_NONE);
-                                typeIncompatible(child->nodeID, (string)"Node_Var/ConstVar");
+                            bool left = true, right = true;
+                            if (dType != D_INT && dType != D_CHAR && dType != D_BOOL) {
+                                left = false;
                             }
                             if (child->sibling->getDeclType() != D_INT && child->sibling->getDeclType() != D_CHAR && child->sibling->getDeclType() != D_STRING) {
-                                this->setDeclType(D_NONE);
-    
-                                typeIncompatible(child->nodeID, (string)"Node_Var/ConstVar");
+                                right = false;
                             }
-                            this->setIsAlive(false);
-                            return false;
+                            if (left && right) {
+                                return true;
+                            } else {
+                                this->setDeclType(D_NONE);
+                                typeIncompatible(child->nodeID, (string)"Node_Var/ConstVar");
+                                this->setIsAlive(false);
+                                return false;
+                            }
                         }
                     }
                 }
@@ -625,6 +636,7 @@ bool TreeNode::typeCheck(){
             switch (this->stmtType)
             {
                 case STMT_ASIG: {
+                    cout << "assign here" << endl;
                     assert (this->child != nullptr);
                     if (this->child->getNodeType() != NODE_Var) {
                         string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Assignment: we expect a left value.";
@@ -716,7 +728,7 @@ bool TreeNode::typeCheck(){
                     DeclType tType = this->child->getSibling()->getDeclType();
                     if (this->child->getNodeType() == NODE_Const || this->child->getNodeType() == NODE_ConstVar 
                     || this->child->getNodeType() == NODE_Var) {
-                        if (dType != D_STRING) {
+                        if (dType != D_STRING && dType != D_NONE && dType != D_VOID) {
                             return true;
                         }
                         else {
@@ -748,21 +760,6 @@ bool TreeNode::typeCheck(){
                     }
                 }
                 
-                // case STMT_DECL: {
-                //     TreeNode* node = this->child;
-                //     if (node == nullptr){
-                //         string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Declaration: missing data type.";
-                //         yyerror(msg.c_str());
-                //         this->setIsAlive(false);
-                //         return false;
-                //     }
-                //     node = node->sibling;
-                //     while(node != nullptr){
-                //         if(identifierTable.find(node->getIdentifier()) == identifierTable.end()){
-                //             node->setIsAlive(false); 
-                //         }
-                //     }
-                // }
                 default:
                     break;
             }
