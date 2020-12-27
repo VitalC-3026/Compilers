@@ -8,7 +8,13 @@ struct idAttr{
     int level;
     DeclType type;
     string value;
+    bool isConst = false;
     int id;
+};
+
+struct functionAttr{
+    vector<DeclType> parameterList;
+    DeclType returnValue;
 };
 
 #endif

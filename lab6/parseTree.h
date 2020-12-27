@@ -6,6 +6,7 @@
 #include <cmath>
 #include <string>
 #include <map>
+#include <vector>
 #include <stack>
 
 using namespace std;
@@ -44,6 +45,7 @@ private:
     string stringVal;
     bool boolVal;
     string identifier = "";
+    string tempId = "";
 
 public:
     TreeNode(int, NodeType);
@@ -57,6 +59,13 @@ public:
     void genExprLabel();
     void genFuncLabel();
     void recursiveGenLabel();
+
+    void genCode(ostream &out);
+    void recursiveGenCode(ostream &out);
+    void genStmtCode(ostream &out);
+    void genExprCode(ostream &out);
+    void genFuncCode(ostream &out);
+    void genDeclCode(ostream &out);
 
     void generateNodeID();
     int getNodeId();

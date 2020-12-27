@@ -4,11 +4,13 @@
 #include <iostream>
 #include <stack>
 #include <cstring>
+#include <vector>
 
 using namespace std;
 
 TreeNode *root = nullptr;
 map<string, stack<idAttr>> identifierTable;
+map<string, vector<functionAttr>> functionTable;
 int TreeNode::count = 0;
 int TreeNode::labelCount = 0;
 extern int yyparse();

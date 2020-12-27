@@ -7,6 +7,7 @@
     extern int lineno, level, error;
     extern FILE* yyout;
     extern map<string, stack<idAttr>> identifierTable;
+    extern map<string, vector<functionAttr>> functionTable;
     extern int checkRange(string id, int level);
     TreeNode* addOperatorNode(TreeNode* t1, TreeNode* t2, OperatorType op, int lineno);
     bool checkFor(TreeNode* t1, TreeNode* t2);
@@ -19,6 +20,7 @@
     bool setEntryOfId(string identifier, int level, DeclType type, string value, int nodeId);
     int assignId(TreeNode* &id, TreeNode* expr);
     bool checkFuncCall(TreeNode* id, TreeNode* param);
+    void generateFuncTable(string funcName, TreeNode* parameterList, TreeNode* returnType);
 %}
 
 %token  ASG ADDASG MINASG MULASG DIVASG MODASG ADDASGO MINASGO
@@ -51,8 +53,6 @@ program
 : statements    { root = new TreeNode(0, NODE_Prog); root->addChild($1); }
 ;
 
-
-
 statements
 : statement { $$ = $1; }
 | statements statement { $$ = $1; $$->addSibling($2); }
@@ -83,6 +83,7 @@ functionDefi
                                                         node->addChild($1);
                                                         $6->setFunctionType(FUNC_BODY);
                                                         node->addChild($6);
+                                                        generateFuncTable((string)"main", nullptr, $1);
                                                         $$ = node;
                                                     }
 ;
@@ -711,10 +712,24 @@ void setType(TreeNode* &idlist, TreeNode* type, bool ifConst) {
         node->setNodeType(NODE_ConstVar);
         node->setStatementType(STMT_DECL);
         node->setDeclType(type->getDeclType());
+        stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
+        while(!s.empty()) {
+            idAttr attr = s.pop();
+            attr.isConst = true;
+            s.push(attr);
+        }
+        identifierTable[node->getIdentifier()] = s;
         while ((node = node->getSibling()) != nullptr) {
             node->setNodeType(NODE_ConstVar);
             node->setDeclType(type->getDeclType());
             node->setStatementType(STMT_DECL);
+            stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
+        while(!s.empty()) {
+            idAttr attr = s.pop();
+            attr.isConst = true;
+            s.push(attr);
+        }
+        identifierTable[node->getIdentifier()] = s;
         }
     } else {
         TreeNode* node = idlist;
@@ -827,3 +842,53 @@ bool checkFuncCall(TreeNode* id, TreeNode* param){
     }
     return true;
 }
+
+bool compareFuncAttr(functionAttr a1, functionAttr a2) {
+    if (a1.returnValue != a2.returnValue) {
+        return false;
+    }
+    if (a1.parameterList.size() != a2.parameterList.size()) {
+        return false;
+    }
+    for(int i = 0; i < a1.parameterList.size(); i++) {
+        if (a1.parameterList[i] != a2.parameterList[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void generateFuncTable(string funcName, TreeNode* parameterList, TreeNode* returnType){
+    functionAttr attr;
+    attr.returnValue = returnType->getDeclType();
+    if (parameterList != nullptr) {
+        attr.parameterList.push_back(parameterList->getDeclType());
+        TreeNode* node = parameterList->getSibling();
+        bool flagEqual = false;
+        while(node != nullptr) {
+            attr.parameterList.push_back(node->getDeclType());
+            node = node->getSibling();
+        }
+    }
+    
+    if (functionTable.find(funcName) != functionTable.end()) {
+        vector<functionAttr> v = functionTable.find(funcName)->second;
+        for(vector<functionAttr>::iterator it=v.begin(); it!=v.end();it++){
+            if(compareFuncAttr(*it, attr)) {
+                flagEqual = true;
+                break;
+            }
+        }
+        if (!flagEqual) {
+            v.push_back(attr);
+            functionTable[funcName] = v;
+        }
+    } 
+    else { 
+        vector<functionAttr> v;
+        v.push_back(attr);
+        functionTable[funcName] = v;
+    }
+}
+
+

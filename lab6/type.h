@@ -9,7 +9,6 @@ enum NodeType
     NODE_ConstVar,
     NODE_Var, 
     NODE_Op, 
-    NODE_Expr,
     NODE_Stmt,
     NODE_Func,
     NODE_Type
