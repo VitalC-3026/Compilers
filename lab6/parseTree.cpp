@@ -839,13 +839,63 @@ void TreeNode::genStmtLabel(){
             break;
         }
         case STMT_FOR: {
-            TreeNode* forcon = this->child;
             TreeNode* body = this->child->sibling;
-            TreeNode* forcon1 = forcon->child;
-            TreeNode* forconE = forcon->child->sibling;
-            TreeNode* forconI = forcon->child->sibling->sibling;
+            TreeNode* forcon1 = this->child->child; // assignment/declaration
+            TreeNode* forconE = this->child->child->sibling; // loop conditions
+            TreeNode* forconI = this->child->child->sibling->sibling; // iteration
+            if (this->label.beginLabel == "") {
+                this->label.beginLabel = newLabel();
+            }
+            body->label.beginLabel = forconE->label.trueLabel = newLabel();
+            body->label.nextLabel = forconI->label.beginLabel = newLabel();
+            forconI->label.nextLabel = this->label.beginLabel;
+            if (this->label.nextLabel == "") {
+                this->label.nextLabel = newLabel();
+            }
+            forconE->label.falseLabel = this->label.nextLabel;
+            if (this->sibling != nullptr) {
+                this->sibling->label.beginLabel = this->label.nextLabel;
+            }
+            forconE->recursiveGenLabel();
+            body->recursiveGenLabel();
+            break;
         }
-        default:
+        case STMT_EXPR: {
+            TreeNode* operand1 = this->child;
+            TreeNode* operand2 = this->child->sibling;
+            switch (this->opType)
+            {
+                case OP_AND: {
+                    operand2->label.trueLabel = this->label.trueLabel;
+                    operand1->label.trueLabel = newLabel();
+                    operand1->label.falseLabel = operand2->label.falseLabel = this->label.falseLabel;
+                    break;
+                }
+                case OP_OR: {
+                    operand1->label.trueLabel = operand2->label.trueLabel = this->label.trueLabel;
+                    operand1->label.falseLabel = newLabel();
+                    operand2->label.falseLabel = this->label.falseLabel;
+                }
+                case OP_NOT: {
+                    operand1->label.trueLabel = this->label.falseLabel;
+                    operand1->label.falseLabel = this->label.trueLabel;
+                }
+                default: {
+                    if (this->opType == OP_GT || this->opType == OP_GTQ ||
+                    this->opType == OP_LT || this->opType == OP_LTQ ||
+                    this->opType == OP_EQU || this->opType == OP_NEQ) {
+                        this->label.trueLabel = newLabel();
+                        this->label.falseLabel = newLabel();
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        default: {
+
+            break;
+        }
 
     }
 }
