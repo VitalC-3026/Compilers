@@ -1123,11 +1123,7 @@ void TreeNode::genExprCode(ostream& out) {
                 charFlag = false;
             }
             out << "\taddl %edx, %eax" << endl;
-            if (this->declType == D_CHAR) {
-                out << "\tmovb %al, t" << this->tempId << endl;
-            } else {
-                out << "\tmovl %eax, t" << this->tempId << endl;
-            }
+            out << "\tmovl %eax, t" << this->tempId << endl;
             break;
         }
         case OP_MIN: {
@@ -1200,11 +1196,7 @@ void TreeNode::genExprCode(ostream& out) {
                 charFlag = false;
             }
             out << "\tsubl %edx, %eax" << endl;
-            if (this->declType == D_CHAR) {
-                out << "\tmovb %al, t" << this->tempId << endl;
-            } else {
-                out << "\tmovl %eax, t" << this->tempId << endl;
-            }
+            out << "\tmovl %eax, t" << this->tempId << endl;
             break;
         }
         case OP_MUL: {
@@ -1277,11 +1269,7 @@ void TreeNode::genExprCode(ostream& out) {
                 charFlag = false;
             }
             out << "\timull %edx, %eax" << endl;
-            if (this->declType == D_CHAR) {
-                out << "\tmovb %al, t" << this->tempId << endl;
-            } else {
-                out << "\tmovl %eax, t" << this->tempId << endl;
-            }
+            out << "\tmovl %eax, t" << this->tempId << endl;
             break;
         }
         case OP_DIV: {
@@ -1355,11 +1343,7 @@ void TreeNode::genExprCode(ostream& out) {
             }
             out << "\tcltd" << endl;
             out << "\tidivl %ebx" << endl;
-            if (this->declType == D_CHAR) {
-                out << "\tmovb %al, t" << this->tempId << endl;
-            } else {
-                out << "\tmovl %eax, t" << this->tempId << endl;
-            }
+            out << "\tmovl %eax, t" << this->tempId << endl;
             break;
         }
         case OP_MOD: {
@@ -1434,11 +1418,7 @@ void TreeNode::genExprCode(ostream& out) {
             out << "\tcltd" << endl;
             out << "\tidivl %ebx" << endl;
             out << "\tmovl %edx, %eax" << endl; // remainder in %edx
-            if (this->declType == D_CHAR) {
-                out << "\tmovb %al, t" << this->tempId << endl;
-            } else {
-                out << "\tmovl %eax, t" << this->tempId << endl;
-            }
+            out << "\tmovl %eax, t" << this->tempId << endl;
             break;
         }
         case OP_AND: {
@@ -1465,7 +1445,7 @@ void TreeNode::genExprCode(ostream& out) {
             }
             out << ", %eax" << endl;
             out << "\tandl %edx, %eax" << endl;
-            out << "\tmovb %eax, t" << this->tempId << endl;
+            out << "\tmovl %eax, t" << this->tempId << endl;
             break;
         }
         case OP_OR: {
@@ -1492,7 +1472,429 @@ void TreeNode::genExprCode(ostream& out) {
             }
             out << ", %eax" << endl;
             out << "\torl %edx, %eax" << endl;
-            out << "\tmovb %eax, t" << this->tempId << endl;
+            out << "\tmovl %eax, t" << this->tempId << endl;
+            break;
+        }
+        case OP_NOT: {
+            bool value;
+            if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                out << "\tmovzbl _" << child1->identifier;
+            }
+            else if (child1->nodeType == NODE_Const) {
+                value = child1->getBoolValue();       
+            }
+            else {
+                // (child1->nodeType == NODE_Op) 
+                out << "\tmovzbl t" << child1->tempId;
+            }
+            if (child1->nodeType == NODE_Const) {
+                if (value) {
+                    out << "\tmovb $0, t" << this->tempId << endl;
+                } else {
+                    out << "\tmovb $1, t" << this->tempId << endl;
+                }
+            } 
+            else {
+                out << ", %eax" << endl;
+                out << "\txorl $1, %eax" << endl;
+                out << "\tmovl %al, t" << this->tempId << endl;
+            }
+            break;
+        }
+        case OP_EQU: {
+            if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                if (child1->declType == D_INT) {
+                    out << "\tmovl _" << child1->identifier;
+                } else if (child1->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child1->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child1->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child1->identifier;
+                }
+            }
+            else if (child1->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child1->declType == D_INT) {
+                    out << child1->getIntValue();
+                } else if (child1->declType == D_CHAR) {
+                    out << (int)child1->getCharValue();
+                } else if (child1->declType == D_BOOL) {
+                    if (child1->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child1->tempId;
+            }
+            out << ", %edx" << endl;
+            if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
+                if (child2->declType == D_INT) {
+                    out << "\tmovl _" << child2->identifier;
+                } else if (child2->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child2->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child2->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child2->identifier;
+                }
+            }
+            else if (child2->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child2->declType == D_INT) {
+                    out << child2->getIntValue();
+                } else if (child2->declType == D_CHAR) {
+                    out << (int)child2->getCharValue();
+                } else if (child2->declType == D_BOOL) {
+                    if (child2->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child2->tempId;
+            }
+            out << ", %eax" << endl;
+            if ((child1->declType == D_CHAR || child1->declType == D_BOOL) && ((child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar))) {
+                out << "\tcmpb %al, %dl" << endl;
+            } else {
+                out << "\tcmpl %eax, %edx" << endl;
+            }
+            out << "\tsete %al" << endl;
+            out << "movl %al t" << this->tempId << endl;
+            break;
+        }
+        case OP_GT: {
+            if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                if (child1->declType == D_INT) {
+                    out << "\tmovl _" << child1->identifier;
+                } else if (child1->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child1->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child1->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child1->identifier;
+                }
+            }
+            else if (child1->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child1->declType == D_INT) {
+                    out << child1->getIntValue();
+                } else if (child1->declType == D_CHAR) {
+                    out << (int)child1->getCharValue();
+                } else if (child1->declType == D_BOOL) {
+                    if (child1->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child1->tempId;
+            }
+            out << ", %edx" << endl;
+            if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
+                if (child2->declType == D_INT) {
+                    out << "\tmovl _" << child2->identifier;
+                } else if (child2->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child2->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child2->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child2->identifier;
+                }
+            }
+            else if (child2->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child2->declType == D_INT) {
+                    out << child2->getIntValue();
+                } else if (child2->declType == D_CHAR) {
+                    out << (int)child2->getCharValue();
+                } else if (child2->declType == D_BOOL) {
+                    if (child2->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child2->tempId;
+            }
+            out << ", %eax" << endl;
+            if ((child1->declType == D_CHAR || child1->declType == D_BOOL) && ((child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar))) {
+                out << "\tcmpb %al, %dl" << endl;
+            } else {
+                out << "\tcmpl %eax, %edx" << endl;
+            }
+            out << "\tsetg %al" << endl;
+            out << "movl %al t" << this->tempId << endl;
+            break;
+        }
+        case OP_LT: {
+            if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                if (child1->declType == D_INT) {
+                    out << "\tmovl _" << child1->identifier;
+                } else if (child1->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child1->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child1->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child1->identifier;
+                }
+            }
+            else if (child1->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child1->declType == D_INT) {
+                    out << child1->getIntValue();
+                } else if (child1->declType == D_CHAR) {
+                    out << (int)child1->getCharValue();
+                } else if (child1->declType == D_BOOL) {
+                    if (child1->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child1->tempId;
+            }
+            out << ", %edx" << endl;
+            if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
+                if (child2->declType == D_INT) {
+                    out << "\tmovl _" << child2->identifier;
+                } else if (child2->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child2->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child2->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child2->identifier;
+                }
+            }
+            else if (child2->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child2->declType == D_INT) {
+                    out << child2->getIntValue();
+                } else if (child2->declType == D_CHAR) {
+                    out << (int)child2->getCharValue();
+                } else if (child2->declType == D_BOOL) {
+                    if (child2->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child2->tempId;
+            }
+            out << ", %eax" << endl;
+            if ((child1->declType == D_CHAR || child1->declType == D_BOOL) && ((child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar))) {
+                out << "\tcmpb %al, %dl" << endl;
+            } else {
+                out << "\tcmpl %eax, %edx" << endl;
+            }
+            out << "\tsetl %al" << endl;
+            out << "movl %al t" << this->tempId << endl;
+            break;
+        }
+        case OP_GTQ: {
+            if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                if (child1->declType == D_INT) {
+                    out << "\tmovl _" << child1->identifier;
+                } else if (child1->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child1->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child1->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child1->identifier;
+                }
+            }
+            else if (child1->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child1->declType == D_INT) {
+                    out << child1->getIntValue();
+                } else if (child1->declType == D_CHAR) {
+                    out << (int)child1->getCharValue();
+                } else if (child1->declType == D_BOOL) {
+                    if (child1->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child1->tempId;
+            }
+            out << ", %edx" << endl;
+            if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
+                if (child2->declType == D_INT) {
+                    out << "\tmovl _" << child2->identifier;
+                } else if (child2->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child2->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child2->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child2->identifier;
+                }
+            }
+            else if (child2->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child2->declType == D_INT) {
+                    out << child2->getIntValue();
+                } else if (child2->declType == D_CHAR) {
+                    out << (int)child2->getCharValue();
+                } else if (child2->declType == D_BOOL) {
+                    if (child2->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child2->tempId;
+            }
+            out << ", %eax" << endl;
+            if ((child1->declType == D_CHAR || child1->declType == D_BOOL) && ((child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar))) {
+                out << "\tcmpb %al, %dl" << endl;
+            } else {
+                out << "\tcmpl %eax, %edx" << endl;
+            }
+            out << "\tsetge %al" << endl;
+            out << "movl %al t" << this->tempId << endl;
+            break;
+        }
+        case OP_LTQ: {
+            if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                if (child1->declType == D_INT) {
+                    out << "\tmovl _" << child1->identifier;
+                } else if (child1->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child1->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child1->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child1->identifier;
+                }
+            }
+            else if (child1->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child1->declType == D_INT) {
+                    out << child1->getIntValue();
+                } else if (child1->declType == D_CHAR) {
+                    out << (int)child1->getCharValue();
+                } else if (child1->declType == D_BOOL) {
+                    if (child1->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child1->tempId;
+            }
+            out << ", %edx" << endl;
+            if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
+                if (child2->declType == D_INT) {
+                    out << "\tmovl _" << child2->identifier;
+                } else if (child2->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child2->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child2->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child2->identifier;
+                }
+            }
+            else if (child2->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child2->declType == D_INT) {
+                    out << child2->getIntValue();
+                } else if (child2->declType == D_CHAR) {
+                    out << (int)child2->getCharValue();
+                } else if (child2->declType == D_BOOL) {
+                    if (child2->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child2->tempId;
+            }
+            out << ", %eax" << endl;
+            if ((child1->declType == D_CHAR || child1->declType == D_BOOL) && ((child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar))) {
+                out << "\tcmpb %al, %dl" << endl;
+            } else {
+                out << "\tcmpl %eax, %edx" << endl;
+            }
+            out << "\tsetle %al" << endl;
+            out << "movl %al t" << this->tempId << endl;
+            break;
+        }
+        case OP_NEQ: {
+            if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                if (child1->declType == D_INT) {
+                    out << "\tmovl _" << child1->identifier;
+                } else if (child1->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child1->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child1->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child1->identifier;
+                }
+            }
+            else if (child1->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child1->declType == D_INT) {
+                    out << child1->getIntValue();
+                } else if (child1->declType == D_CHAR) {
+                    out << (int)child1->getCharValue();
+                } else if (child1->declType == D_BOOL) {
+                    if (child1->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child1->tempId;
+            }
+            out << ", %edx" << endl;
+            if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
+                if (child2->declType == D_INT) {
+                    out << "\tmovl _" << child2->identifier;
+                } else if (child2->declType == D_CHAR) {
+                    out << "\tmovbzl _" << child2->identifier << ", %eax" << endl;
+                    out << "\tmovbsl $al";
+                } else if (child2->declType == D_BOOL) {
+                    out << "\tmovbzl _" << child2->identifier;
+                }
+            }
+            else if (child2->nodeType == NODE_Const) {
+                out << "\tmovl $";
+                if (child2->declType == D_INT) {
+                    out << child2->getIntValue();
+                } else if (child2->declType == D_CHAR) {
+                    out << (int)child2->getCharValue();
+                } else if (child2->declType == D_BOOL) {
+                    if (child2->getBoolValue()) {
+                        out << 1;
+                    } else {
+                        out << 0;
+                    }
+                }
+            }
+            else {
+                out << "\tmovl t" << child2->tempId;
+            }
+            out << ", %eax" << endl;
+            if ((child1->declType == D_CHAR || child1->declType == D_BOOL) && ((child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar))) {
+                out << "\tcmpb %al, %dl" << endl;
+            } else {
+                out << "\tcmpl %eax, %edx" << endl;
+            }
+            out << "\tsetne %al" << endl;
+            out << "movl %al t" << this->tempId << endl;
             break;
         }
         default:
