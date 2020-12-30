@@ -981,6 +981,148 @@ void TreeNode::recursiveGenCode(ostream &out) {
 void TreeNode::genStmtCode(ostream &out) {
     switch(this->stmtType) {
         case STMT_ASIG: {
+            TreeNode* id = this->child;
+            if(this->child->sibling != nullptr){
+                TreeNode* expr = this->child->sibling;
+                expr->recursiveGenCode(out);
+                switch (this->asigType)
+                {
+                    case ASIG: {
+                        out << "\tmovl t" << expr->tempId << ", %eax" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %eax, _" << id->identifier << endl;
+                        }
+                        break;
+                    }
+                    case ADDASIG: {
+                        out << "\tmovl t" << expr->tempId << ", %eax" << endl;
+                        out << "\tmovl _" << id->identifier << ", %ecx" << endl;
+                        out << "\taddl %ecx, %eax" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %eax, _" << id->identifier << endl;
+                        }
+                        break;
+                    }
+                    case MINASIG: {
+                        out << "\tmovl t" << expr->tempId << ", %ecx" << endl;
+                        out << "\tmovl _" << id->identifier << ", %eax" << endl;
+                        out << "\tsubl %ecx, %eax" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %eax, _" << id->identifier << endl;
+                        }
+                        break;
+                    }
+                    case MULASIG: {
+                        out << "\tmovl t" << expr->tempId << ", %ecx" << endl;
+                        out << "\tmovl _" << id->identifier << ", %eax" << endl;
+                        out << "\timull %ecx, %eax" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %eax, _" << id->identifier << endl;
+                        }
+                        break;
+                    }
+                    case DIVASIG: {
+                        out << "\tmovl t" << expr->tempId << ", %ecx" << endl;
+                        out << "\tmovl _" << id->identifier << ", %eax" << endl;
+                        out << "\tcltd" << endl;
+                        out << "\tidivl %ecx" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %eax, _" << id->identifier << endl;
+                        }
+                        break;
+                    }
+                    case MODASIG: {
+                        out << "\tmovl t" << expr->tempId << ", %ecx" << endl;
+                        out << "\tmovl _" << id->identifier << ", %eax" << endl;
+                        out << "\tcltd" << endl;
+                        out << "\tidivl %ecx" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %dl, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %edx, _" << id->identifier << endl;
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            else {
+                out << "\tmovl _" << this->identifier << ", %eax" << endl;
+                if (this->asigType == ADDASIGO) {
+                    out << "\taddl $1, %eax" << endl;
+                } else if (this->asigType == MINASIGO) {
+                    out << "\tsubl $1, %eax" << endl;
+                }
+                out << "\tmovl %eax, _" << this->identifier << endl;
+            }
+            break;
+        }
+        case STMT_FOR: {
+            TreeNode* forcon = this->child;
+            assert (forcon->stmtType == STMT_FORCON);
+            TreeNode* con1 = forcon->child;
+            out << this->label.beginLabel << ":" << endl; // for start label
+            if (con1 != nullptr) {
+                con1->recursiveGenCode(out);
+            }
+            out << this->label.beginLabel << ":" << endl;
+            TreeNode* con2 = forcon->child->sibling;
+            if (con2 != nullptr) {
+                con2->recursiveGenCode(out);
+                out << "\tmovl t" << con2->tempId << ", %eax" << endl;
+                out << "\tcmpl $1, %eax" << endl;
+                out << "\tjne " << con2->label.falseLabel << endl;
+            }
+            TreeNode* con3 = forcon->child->sibling->sibling;
+            TreeNode* stmt = this->child->sibling;
+            if (stmt) {
+                stmt->recursiveGenCode(out);
+            }
+            if (con3) {
+                con3->recursiveGenCode(out);
+            }
+            out << "\tjmp " << this->label.beginLabel << endl;
+            out << con2->label.falseLabel << ":" << endl;
+            break;
+        }
+        case STMT_WHILE: {
+            TreeNode* expr = this->child;
+            TreeNode* body = this->child->sibling;
+            out << this->label.beginLabel << ":" << endl;
+            assert (expr != nullptr);
+            assert (body != nullptr);
+            expr->recursiveGenCode(out);
+            out << "\tmovl t" << expr->tempId << ", %eax" << endl;
+            out << "\tcmpl $1, %eax" << endl;
+            out << "\tjne " << expr->label.falseLabel << endl;
+            body->recursiveGenCode(out);
+            out << "\tjmp " << this->label.beginLabel;
+            out << expr->label.falseLabel << ":" << endl;
+            break;
+        }
+        case STMT_IF: {
+            TreeNode* expr = this->child;
+            expr->recursiveGenCode(out);
+            out << "\ttestl t" << expr->tempId << ", $1" << endl;
+            out << "\tjne " << this->label.falseLabel << endl;
+            TreeNode* trueStmt = this->child->sibling;
+            trueStmt->recursiveGenCode(out);
+            out << this->label.falseLabel << ":" << endl;
+            if (trueStmt->sibling != nullptr) {
+                TreeNode* falseStmt = this->child->sibling->sibling;
+                falseStmt->recursiveGenCode(out);
+            }
             break;
         }
         case STMT_EXPR: {
@@ -1156,9 +1298,9 @@ void TreeNode::genExprCode(ostream& out) {
                 // (child1->nodeType == NODE_Op) 
                 out << "t" << child1->tempId;
             }
-            out << ", %edx" << endl;
+            out << ", %eax" << endl;
             if (this->declType == D_INT && charFlag) {
-                cout << "\tmovsbl %al, %edx" << endl;
+                cout << "\tmovsbl %al, %eax" << endl;
                 charFlag = false;
             }
             if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
@@ -1190,9 +1332,9 @@ void TreeNode::genExprCode(ostream& out) {
                 // (child1->nodeType == NODE_Op) 
                 out << "t" << child2->tempId;
             }
-            out << ", %eax" << endl;
+            out << ", %edx" << endl;
             if (this->declType == D_INT && charFlag) {
-                cout << "\tmovsbl %al, %eax" << endl;
+                cout << "\tmovsbl %dl, %edx" << endl;
                 charFlag = false;
             }
             out << "\tsubl %edx, %eax" << endl;
