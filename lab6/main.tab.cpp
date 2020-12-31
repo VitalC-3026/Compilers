@@ -1501,7 +1501,7 @@ yyreduce:
 
   case 14:
 #line 74 "main.y" /* yacc.c:1646  */
-    { (yyval) = new TreeNode(lineno, NODE_Stmt); (yyval)->addChild((yyvsp[0])); }
+    { (yyval) = (yyvsp[0]); }
 #line 1506 "main.tab.cpp" /* yacc.c:1646  */
     break;
 

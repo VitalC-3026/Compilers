@@ -22,7 +22,7 @@ int error = 0;
 
 int main(int argc, char *argv[]) 
 {
-    if (argc == 3) 
+    if (argc == 4) 
     {
         FILE *fin = fopen(argv[1], "r");
         FILE *fout = fopen(argv[2], "w");
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     }
     cout << "genLabel start" << endl;
     root->recursiveGenLabel();
-    ostream* asm_out = new ofstream(argv[2], ios::app);
+    ostream* asm_out = new ofstream(argv[3]);
     cout << "genCode start" << endl;
     root->genCode(*asm_out);
     return 0;

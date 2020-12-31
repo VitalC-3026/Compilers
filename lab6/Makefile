@@ -1,4 +1,4 @@
-CC := g++ -g
+CC := g++
 CFLAGS := -Wall -Wextra -std=c++11 # without debug
 TARGET := ./bin/main
 
@@ -25,4 +25,4 @@ clean:
 	rm -f main.lex.yy.cpp main.tab.cpp  main.tab.h $(TARGET) *.o ./bin/*
 
 test:
-	./bin/main tests/test_main.cpp results/test.res.txt
+	./bin/main tests/test_main.cpp results/test.res.txt results/test.s

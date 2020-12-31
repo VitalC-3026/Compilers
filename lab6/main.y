@@ -71,7 +71,7 @@ statement
 function
 : functionDecl SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->addChild($1); }
 | functionCall SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->addChild($1); }
-| functionDefi { $$ = new TreeNode(lineno, NODE_Stmt); $$->addChild($1); }
+| functionDefi { $$ = $1; }
 ;
 
 functionDefi

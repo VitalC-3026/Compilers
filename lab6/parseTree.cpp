@@ -221,12 +221,10 @@ string TreeNode::nodeType2String(NodeType t){
         case 4:
             return (string)"Operator";
         case 5:
-            return (string)"Expression";
-        case 6:
             return (string)"Statement";
-        case 7:
+        case 6:
             return (string)"Function";
-        case 8:
+        case 7:
             return (string)"Data Type";
         default:
             return (string)"Unknown Type";
@@ -332,10 +330,7 @@ string TreeNode::attributes(){
         }
         case 4:
             return operatorType2String(this->opType);
-        case 5:
-        // expression
-            return "";
-        case 6: {
+        case 5: {
             string stmt = statementType2String(this->stmtType);
             if(stmt == (string)"Assignment") {
                 string asig = assignmentType2String(this->asigType);
@@ -343,14 +338,14 @@ string TreeNode::attributes(){
             }
             return stmt;
         }
-        case 7: {
+        case 6: {
         // function
             string func = functionType2String(this->funcType);
             func += (string)"\tFuncName: ";
             func += this->identifier;
             return func;
         }
-        case 8:
+        case 7:
             return declType2String(this->declType);
         default:
             return (string)"";
@@ -954,10 +949,12 @@ void TreeNode::recursiveGenLabel() {
     else {
         if (this->nodeType == NODE_Prog) {
             this->label.beginLabel = "_start";
+            cout << "_start" << endl;
         }
         TreeNode* child = this->child;
         while(child != nullptr){
             child->recursiveGenLabel();
+            child = child->sibling;
         }
     }
 }
@@ -970,6 +967,7 @@ void TreeNode::genCode(ostream &out) {
         TreeNode* child = this->child;
         while(child != nullptr) {
             child->recursiveGenCode(out);
+            child = child->sibling;
         }
     }
 }
@@ -2053,8 +2051,21 @@ void TreeNode::genExprCode(ostream& out) {
 }
 
 void TreeNode::genFuncCode(ostream &out) {
-    out << this->identifier << ":" << endl;
-    TreeNode* body = this->child->sibling;
-    body->recursiveGenCode(out);
+    if (this->funcType == FUNC_DEFI) {
+        if (strcmp("main", this->identifier.c_str()) == 0) {
+            out << "\t.text" << endl;
+            out << "\t.global main" << endl;
+            out << "\t.type main, @function" << endl;
+            out << this->identifier << ":" << endl;
+            out << "\tpushl %ebp" << endl;
+            out << "\tmovl %esp, %ebp" << endl;
+            TreeNode* body = this->child->sibling;
+            body->recursiveGenCode(out);
+            out << "\tret" << endl;
+        }
+    }
+    else if (this->funcType == FUNC_CALL)
+    
+    
 }
 
