@@ -929,6 +929,14 @@ void TreeNode::genStmtLabel(){
 
 }
 
+void TreeNode::genFuncLabel() {
+    this->label.beginLabel = newLabel();
+    TreeNode* body = this->child->sibling;
+    if(body != nullptr) {
+        body->recursiveGenLabel();
+    }
+}
+
 string TreeNode::newLabel(){
     char tmp[20] = {0};
     sprintf(tmp, "@%d", TreeNode::labelCount);
@@ -2043,3 +2051,10 @@ void TreeNode::genExprCode(ostream& out) {
             break;
     }
 }
+
+void TreeNode::genFuncCode(ostream &out) {
+    out << this->identifier << ":" << endl;
+    TreeNode* body = this->child->sibling;
+    body->recursiveGenCode(out);
+}
+

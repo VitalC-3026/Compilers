@@ -56,7 +56,7 @@ public:
     bool getIsAlive() { return this->isAlive; }
 
     void genStmtLabel();
-    void genExprLabel();
+    // void genExprLabel();
     void genFuncLabel();
     void recursiveGenLabel();
 

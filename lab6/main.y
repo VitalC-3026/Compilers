@@ -714,8 +714,9 @@ void setType(TreeNode* &idlist, TreeNode* type, bool ifConst) {
         node->setDeclType(type->getDeclType());
         stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
         while(!s.empty()) {
-            idAttr attr = s.pop();
+            idAttr attr = s.top();
             attr.isConst = true;
+            s.pop();
             s.push(attr);
         }
         identifierTable[node->getIdentifier()] = s;
@@ -725,8 +726,9 @@ void setType(TreeNode* &idlist, TreeNode* type, bool ifConst) {
             node->setStatementType(STMT_DECL);
             stack<idAttr> s = identifierTable.find(node->getIdentifier())->second;
         while(!s.empty()) {
-            idAttr attr = s.pop();
+            idAttr attr = s.top();
             attr.isConst = true;
+            s.pop();
             s.push(attr);
         }
         identifierTable[node->getIdentifier()] = s;
@@ -861,10 +863,11 @@ bool compareFuncAttr(functionAttr a1, functionAttr a2) {
 void generateFuncTable(string funcName, TreeNode* parameterList, TreeNode* returnType){
     functionAttr attr;
     attr.returnValue = returnType->getDeclType();
+    bool flagEqual = false;
     if (parameterList != nullptr) {
         attr.parameterList.push_back(parameterList->getDeclType());
         TreeNode* node = parameterList->getSibling();
-        bool flagEqual = false;
+        flagEqual = false;
         while(node != nullptr) {
             attr.parameterList.push_back(node->getDeclType());
             node = node->getSibling();

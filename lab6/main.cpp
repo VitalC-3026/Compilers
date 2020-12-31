@@ -1,6 +1,7 @@
 #include "common.h"
 #include <fstream>
 #include <map>
+#include <ostream>
 #include <iostream>
 #include <stack>
 #include <cstring>
@@ -39,12 +40,15 @@ int main(int argc, char *argv[])
 
     yyparse();
     fputs("+++++++++++++Tree Structure++++++++++++++\n", yyout);
+    cout << "genTree start" << endl;
     if (root != nullptr) {
         root->printAST();
     }
-    // if (error > 0){
-    //     exit(-1);
-    // }
+    cout << "genLabel start" << endl;
+    root->recursiveGenLabel();
+    ostream* asm_out = new ofstream(argv[2], ios::app);
+    cout << "genCode start" << endl;
+    root->genCode(*asm_out);
     return 0;
 }
 
