@@ -8,61 +8,87 @@ main.l:58:31: warning: comparison between signed and unsigned integer expression
              for (int i = 2; i < strlen(yytext); i++) {
                              ~~^~~~~~~~~~~~~~~~
 main.y: In function ‘bool checkWhile(TreeNode*, TreeNode*)’:
-main.y:651:27: warning: unused parameter ‘t1’ [-Wunused-parameter]
+main.y:661:27: warning: unused parameter ‘t1’ [-Wunused-parameter]
  bool checkWhile(TreeNode* t1, TreeNode* t2)
                            ^~
 main.y: In function ‘bool checkIf(TreeNode*, TreeNode*, TreeNode*)’:
-main.y:661:24: warning: unused parameter ‘t1’ [-Wunused-parameter]
+main.y:671:24: warning: unused parameter ‘t1’ [-Wunused-parameter]
  bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
                         ^~
 main.y: In function ‘bool checkAsg(TreeNode*, bool)’:
-main.y:676:34: warning: unused parameter ‘i’ [-Wunused-parameter]
+main.y:686:34: warning: unused parameter ‘i’ [-Wunused-parameter]
  bool checkAsg(TreeNode* t1, bool i)
                                   ^
 main.y: In function ‘bool compareFuncAttr(functionAttr, functionAttr)’:
-main.y:855:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+main.y:865:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
      for(int i = 0; i < a1.parameterList.size(); i++) {
                     ~~^~~~~~~~~~~~~~~~~~~~~~~~~
 ./parseTree.cpp: In member function ‘bool TreeNode::typeCheck()’:
-./parseTree.cpp:602:47: warning: enum constant in boolean context [-Wint-in-bool-context]
+./parseTree.cpp:580:47: warning: enum constant in boolean context [-Wint-in-bool-context]
                  if (this->opType == OP_AND || OP_OR){
                                                ^~~~~
-./parseTree.cpp:723:30: warning: unused variable ‘tType’ [-Wunused-variable]
+./parseTree.cpp:701:30: warning: unused variable ‘tType’ [-Wunused-variable]
                      DeclType tType = this->child->getSibling()->getDeclType();
                               ^~~~~
 ./parseTree.cpp: In member function ‘void TreeNode::genStmtLabel()’:
-./parseTree.cpp:846:23: warning: unused variable ‘forcon1’ [-Wunused-variable]
+./parseTree.cpp:824:23: warning: unused variable ‘forcon1’ [-Wunused-variable]
              TreeNode* forcon1 = this->child->child; // assignment/declaration
                        ^~~~~~~
+./parseTree.cpp: In member function ‘void TreeNode::genFuncLabel()’:
+./parseTree.cpp:917:33: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             if (str.find("\\n") != -1) {
+                 ~~~~~~~~~~~~~~~~^~~~~
+./parseTree.cpp:922:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             else if (str.find("\\r") != -1) {
+                      ~~~~~~~~~~~~~~~~^~~~~
+./parseTree.cpp:926:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             else if (str.find("\\t") != -1) {
+                      ~~~~~~~~~~~~~~~~^~~~~
+./parseTree.cpp:930:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             else if (str.find("\\a") != -1) {
+                      ~~~~~~~~~~~~~~~~^~~~~
+./parseTree.cpp:934:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             else if (str.find("\\b") != -1) {
+                      ~~~~~~~~~~~~~~~~^~~~~
+./parseTree.cpp:938:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             else if (str.find("\\v") != -1) {
+                      ~~~~~~~~~~~~~~~~^~~~~
+./parseTree.cpp:942:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             else if (str.find("\\f") != -1) {
+                      ~~~~~~~~~~~~~~~~^~~~~
 ./parseTree.cpp: In member function ‘void TreeNode::genCode(std::ostream&)’:
-./parseTree.cpp:965:14: warning: unused variable ‘textHeader’ [-Wunused-variable]
+./parseTree.cpp:988:14: warning: unused variable ‘textHeader’ [-Wunused-variable]
          bool textHeader = true;
               ^~~~~~~~~~
 ./parseTree.cpp: In member function ‘void TreeNode::genStmtCode(std::ostream&)’:
-./parseTree.cpp:988:11: warning: enumeration value ‘STMT_BREAK’ not handled in switch [-Wswitch]
+./parseTree.cpp:1012:11: warning: enumeration value ‘STMT_BREAK’ not handled in switch [-Wswitch]
      switch(this->stmtType) {
            ^
-./parseTree.cpp:988:11: warning: enumeration value ‘STMT_CONTINUE’ not handled in switch [-Wswitch]
-./parseTree.cpp:988:11: warning: enumeration value ‘STMT_RETURN’ not handled in switch [-Wswitch]
-./parseTree.cpp:988:11: warning: enumeration value ‘STMT_SKIP’ not handled in switch [-Wswitch]
-./parseTree.cpp:988:11: warning: enumeration value ‘STMT_FORCON’ not handled in switch [-Wswitch]
+./parseTree.cpp:1012:11: warning: enumeration value ‘STMT_CONTINUE’ not handled in switch [-Wswitch]
+./parseTree.cpp:1012:11: warning: enumeration value ‘STMT_RETURN’ not handled in switch [-Wswitch]
+./parseTree.cpp:1012:11: warning: enumeration value ‘STMT_SKIP’ not handled in switch [-Wswitch]
+./parseTree.cpp:1012:11: warning: enumeration value ‘STMT_FORCON’ not handled in switch [-Wswitch]
+./parseTree.cpp: In member function ‘void TreeNode::genDeclCode(std::ostream&)’:
+./parseTree.cpp:1227:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for (int i = 0; i < rostring.size(); i++) {
+                     ~~^~~~~~~~~~~~~~~~~
 ./parseTree.cpp: In static member function ‘static std::__cxx11::string TreeNode::operatorType2String(OperatorType)’:
-./parseTree.cpp:411:1: warning: control reaches end of non-void function [-Wreturn-type]
+./parseTree.cpp:389:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 ./parseTree.cpp: In member function ‘bool TreeNode::typeCheck()’:
-./parseTree.cpp:706:21: warning: this statement may fall through [-Wimplicit-fallthrough=]
+./parseTree.cpp:684:21: warning: this statement may fall through [-Wimplicit-fallthrough=]
                      }
                      ^
-./parseTree.cpp:709:17: note: here
+./parseTree.cpp:687:17: note: here
                  case STMT_IF:{
                  ^~~~
-./parseTree.cpp:734:21: warning: this statement may fall through [-Wimplicit-fallthrough=]
+./parseTree.cpp:712:21: warning: this statement may fall through [-Wimplicit-fallthrough=]
                      }
                      ^
-./parseTree.cpp:737:17: note: here
+./parseTree.cpp:715:17: note: here
                  case STMT_WHILE:{
                  ^~~~
-./parseTree.cpp:780:1: warning: control reaches end of non-void function [-Wreturn-type]
+./parseTree.cpp:758:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^

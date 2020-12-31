@@ -1,9 +1,16 @@
 +++++++++++++Tree Structure++++++++++++++
-lno@0	ID@8	NodeType: Program Root	Attributes: Root	Children:[ @4 @7 ]
-lno@1	ID@4	NodeType: Statement		Attributes: Declaration	Children:[ @1 @2 ]
+lno@0	ID@15	NodeType: Program Root	Attributes: Root	Children:[ @3 @14 ]
+lno@1	ID@3	NodeType: Statement		Attributes: Declaration	Children:[ @1 @2 ]
 lno@1	ID@1	NodeType: Data Type		Attributes: int
-lno@1	ID@2	NodeType: Variable		Attributes: int a	Children:[ @3 ]
-lno@1	ID@3	NodeType: Const			Attributes: int 0
-lno@4	ID@7	NodeType: Function		Attributes: Definition	FuncName: main	Children:[ @5 @6 ]
-lno@2	ID@5	NodeType: Data Type		Attributes: void
-lno@3	ID@6	NodeType: Statement		Attributes: Return
+lno@1	ID@2	NodeType: Variable		Attributes: int a
+lno@6	ID@14	NodeType: Function		Attributes: Definition	FuncName: main	Children:[ @4 @7 @10 @13 ]
+lno@2	ID@4	NodeType: Data Type		Attributes: int
+lno@3	ID@7	NodeType: Statement		Attributes: Assignment =	Children:[ @5 @6 ]
+lno@3	ID@5	NodeType: Variable		Attributes: int a	Declared level@0 same as ID@2
+lno@3	ID@6	NodeType: Const			Attributes: int 10
+lno@4	ID@10	NodeType: Function		Attributes: Call	FuncName: printf	Children:[ @11 @8 @9 ]
+lno@4	ID@11	NodeType: Function		Attributes: Identifier	FuncName: printf
+lno@4	ID@8	NodeType: Const			Attributes: string "test:%d\n"
+lno@4	ID@9	NodeType: Variable		Attributes: int a	Declared level@0 same as ID@2
+lno@5	ID@13	NodeType: Statement		Attributes: Return	Children:[ @12 ]
+lno@5	ID@12	NodeType: Const			Attributes: int 0

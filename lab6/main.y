@@ -70,7 +70,7 @@ statement
 
 function
 : functionDecl SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->addChild($1); }
-| functionCall SEMICOLON { $$ = new TreeNode(lineno, NODE_Stmt); $$->addChild($1); }
+| functionCall SEMICOLON { $$ = $1; }
 | functionDefi { $$ = $1; }
 ;
 
@@ -81,7 +81,7 @@ functionDefi
                                                         node->setIdentifier((string)"main");
                                                         $1->setFunctionType(FUNC_TYPE);
                                                         node->addChild($1);
-                                                        $6->setFunctionType(FUNC_BODY);
+                                                        // $6->setFunctionType(FUNC_BODY);
                                                         node->addChild($6);
                                                         generateFuncTable((string)"main", nullptr, $1);
                                                         $$ = node;
@@ -104,6 +104,16 @@ functionCall
                                     node->addChild($4);
                                     $$ = node;
                                     
+                                }
+| PRINTF LBRACE STRING RBRACE   {   TreeNode* node = new TreeNode(lineno, NODE_Func);
+                                    node->setFunctionType(FUNC_CALL);
+                                    TreeNode* id = new TreeNode(lineno, NODE_Func);
+                                    id->setFunctionType(FUNC_ID);
+                                    id->setIdentifier((string)"printf");
+                                    node->setIdentifier((string)"printf");
+                                    node->addChild(id);
+                                    node->addChild($3);
+                                    $$ = node;
                                 }
 | PRINTF LBRACE STRING printfIdlist RBRACE  {   TreeNode* node = new TreeNode(lineno, NODE_Func);
                                                 node->setFunctionType(FUNC_CALL);

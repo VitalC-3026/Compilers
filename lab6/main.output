@@ -11,16 +11,16 @@ Terminals unused in grammar
 
 State 0 conflicts: 1 shift/reduce
 State 20 conflicts: 1 shift/reduce
-State 137 conflicts: 1 shift/reduce
 State 138 conflicts: 1 shift/reduce
-State 140 conflicts: 1 shift/reduce
-State 148 conflicts: 1 shift/reduce
-State 150 conflicts: 1 shift/reduce
+State 139 conflicts: 1 shift/reduce
+State 141 conflicts: 1 shift/reduce
+State 149 conflicts: 1 shift/reduce
 State 151 conflicts: 1 shift/reduce
-State 153 conflicts: 1 shift/reduce
-State 158 conflicts: 1 shift/reduce
-State 168 conflicts: 1 shift/reduce
+State 152 conflicts: 1 shift/reduce
+State 154 conflicts: 1 shift/reduce
+State 159 conflicts: 1 shift/reduce
 State 169 conflicts: 1 shift/reduce
+State 170 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -49,143 +49,144 @@ Grammar
    15 functionDecl: type ID LBRACE RBRACE
 
    16 functionCall: SCANF LBRACE STRING scanfIdlist RBRACE
-   17             | PRINTF LBRACE STRING printfIdlist RBRACE
-   18             | ID LBRACE paramList RBRACE
+   17             | PRINTF LBRACE STRING RBRACE
+   18             | PRINTF LBRACE STRING printfIdlist RBRACE
+   19             | ID LBRACE paramList RBRACE
 
-   19 paramList: paramList COMMA expr
-   20          | expr
-   21          | %empty
+   20 paramList: paramList COMMA expr
+   21          | expr
+   22          | %empty
 
-   22 scanfIdlist: scanfIdlist COMMA REF ID
-   23            | COMMA REF ID
+   23 scanfIdlist: scanfIdlist COMMA REF ID
+   24            | COMMA REF ID
 
-   24 printfIdlist: printfIdlist COMMA ID
-   25             | COMMA ID
+   25 printfIdlist: printfIdlist COMMA ID
+   26             | COMMA ID
 
-   26 idlist: idlist COMMA ID ASG expr
-   27       | idlist COMMA ID
-   28       | ID ASG expr
-   29       | ID
+   27 idlist: idlist COMMA ID ASG expr
+   28       | idlist COMMA ID
+   29       | ID ASG expr
+   30       | ID
 
-   30 declaration: type idlist
-   31            | CONST type idlist
+   31 declaration: type idlist
+   32            | CONST type idlist
 
-   32 type: T_BOOL
-   33     | T_INT
-   34     | T_CHAR
-   35     | T_STRING
-   36     | T_VOID
+   33 type: T_BOOL
+   34     | T_INT
+   35     | T_CHAR
+   36     | T_STRING
+   37     | T_VOID
 
-   37 loop: FOR LBRACE forcon RBRACE LPAREN statements RPAREN
-   38     | WHILE LBRACE expr RBRACE LPAREN statements RPAREN
+   38 loop: FOR LBRACE forcon RBRACE LPAREN statements RPAREN
+   39     | WHILE LBRACE expr RBRACE LPAREN statements RPAREN
 
-   39 forcon: declaration SEMICOLON expr SEMICOLON assignment
-   40       | assignment SEMICOLON expr SEMICOLON assignment
+   40 forcon: declaration SEMICOLON expr SEMICOLON assignment
+   41       | assignment SEMICOLON expr SEMICOLON assignment
 
-   41 control: IF LBRACE expr RBRACE LPAREN statements RPAREN
-   42        | IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
+   42 control: IF LBRACE expr RBRACE LPAREN statements RPAREN
+   43        | IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
 
-   43 jump: BREAK
-   44     | CONTINUE
-   45     | RETURN expr
-   46     | RETURN
+   44 jump: BREAK
+   45     | CONTINUE
+   46     | RETURN expr
+   47     | RETURN
 
-   47 assignment: %empty
-   48           | ID ASG expr
-   49           | ID ADDASG expr
-   50           | ID MINASG expr
-   51           | ID MULASG expr
-   52           | ID DIVASG expr
-   53           | ID MODASG expr
-   54           | ADDASGO ID
-   55           | MINASGO ID
-   56           | ID ADDASGO
-   57           | ID MINASGO
+   48 assignment: %empty
+   49           | ID ASG expr
+   50           | ID ADDASG expr
+   51           | ID MINASG expr
+   52           | ID MULASG expr
+   53           | ID DIVASG expr
+   54           | ID MODASG expr
+   55           | ADDASGO ID
+   56           | MINASGO ID
+   57           | ID ADDASGO
+   58           | ID MINASGO
 
-   58 expr: expr ADD expr
-   59     | expr MIN expr
-   60     | expr MUL expr
-   61     | expr DIV expr
-   62     | expr MOD expr
-   63     | expr AND expr
-   64     | expr OR expr
-   65     | expr GT expr
-   66     | expr GTQ expr
-   67     | expr LT expr
-   68     | expr LTQ expr
-   69     | expr NEQ expr
-   70     | expr EQU expr
-   71     | NOT expr
-   72     | ADD expr
-   73     | MIN expr
-   74     | REF expr
-   75     | ID
-   76     | INTEGER
-   77     | CHAR
-   78     | STRING
+   59 expr: expr ADD expr
+   60     | expr MIN expr
+   61     | expr MUL expr
+   62     | expr DIV expr
+   63     | expr MOD expr
+   64     | expr AND expr
+   65     | expr OR expr
+   66     | expr GT expr
+   67     | expr GTQ expr
+   68     | expr LT expr
+   69     | expr LTQ expr
+   70     | expr NEQ expr
+   71     | expr EQU expr
+   72     | NOT expr
+   73     | ADD expr
+   74     | MIN expr
+   75     | REF expr
+   76     | ID
+   77     | INTEGER
+   78     | CHAR
+   79     | STRING
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-ASG (258) 26 28 48
-ADDASG (259) 49
-MINASG (260) 50
-MULASG (261) 51
-DIVASG (262) 52
-MODASG (263) 53
-ADDASGO (264) 54 56
-MINASGO (265) 55 57
+ASG (258) 27 29 49
+ADDASG (259) 50
+MINASG (260) 51
+MULASG (261) 52
+DIVASG (262) 53
+MODASG (263) 54
+ADDASGO (264) 55 57
+MINASGO (265) 56 58
 DOT (266)
-REF (267) 22 23 74
+REF (267) 23 24 75
 POI (268)
-NOT (269) 71
-ADD (270) 58 72
-MIN (271) 59 73
-MUL (272) 60
-DIV (273) 61
-MOD (274) 62
-EQU (275) 70
-GT (276) 65
-LT (277) 67
-GTQ (278) 66
-LTQ (279) 68
-NEQ (280) 69
-AND (281) 63
-OR (282) 64
-LBRACE (283) 14 15 16 17 18 37 38 41 42
-RBRACE (284) 14 15 16 17 18 37 38 41 42
-LPAREN (285) 14 37 38 41 42
-RPAREN (286) 14 37 38 41 42
-ID (287) 15 18 22 23 24 25 26 27 28 29 48 49 50 51 52 53 54 55 56 57
-    75
-INTEGER (288) 76
+NOT (269) 72
+ADD (270) 59 73
+MIN (271) 60 74
+MUL (272) 61
+DIV (273) 62
+MOD (274) 63
+EQU (275) 71
+GT (276) 66
+LT (277) 68
+GTQ (278) 67
+LTQ (279) 69
+NEQ (280) 70
+AND (281) 64
+OR (282) 65
+LBRACE (283) 14 15 16 17 18 19 38 39 42 43
+RBRACE (284) 14 15 16 17 18 19 38 39 42 43
+LPAREN (285) 14 38 39 42 43
+RPAREN (286) 14 38 39 42 43
+ID (287) 15 19 23 24 25 26 27 28 29 30 49 50 51 52 53 54 55 56 57 58
+    76
+INTEGER (288) 77
 MAIN (289) 14
 DEC (290)
 OCT (291)
 HEX (292)
-CHAR (293) 77
+CHAR (293) 78
 BOOL (294)
-STRING (295) 16 17 78
-T_BOOL (296) 32
-T_INT (297) 33
-T_CHAR (298) 34
-T_STRING (299) 35
-T_VOID (300) 36
-CONST (301) 31
+STRING (295) 16 17 18 79
+T_BOOL (296) 33
+T_INT (297) 34
+T_CHAR (298) 35
+T_STRING (299) 36
+T_VOID (300) 37
+CONST (301) 32
 STRUCT (302)
-IF (303) 41 42
-ELSE (304) 42
-WHILE (305) 38
-FOR (306) 37
-RETURN (307) 45 46
-CONTINUE (308) 44
-BREAK (309) 43
-PRINTF (310) 17
+IF (303) 42 43
+ELSE (304) 43
+WHILE (305) 39
+FOR (306) 38
+RETURN (307) 46 47
+CONTINUE (308) 45
+BREAK (309) 44
+PRINTF (310) 17 18
 SCANF (311) 16
-SEMICOLON (312) 4 5 6 7 11 12 39 40
-COMMA (313) 19 22 23 24 25 26 27
+SEMICOLON (312) 4 5 6 7 11 12 40 41
+COMMA (313) 20 23 24 25 26 27 28
 
 
 Nonterminals, with rules where they appear
@@ -195,7 +196,7 @@ $accept (59)
 program (60)
     on left: 1, on right: 0
 statements (61)
-    on left: 2 3, on right: 1 3 14 37 38 41 42
+    on left: 2 3, on right: 1 3 14 38 39 42 43
 statement (62)
     on left: 4 5 6 7 8 9 10, on right: 2 3
 function (63)
@@ -205,33 +206,33 @@ functionDefi (64)
 functionDecl (65)
     on left: 15, on right: 11
 functionCall (66)
-    on left: 16 17 18, on right: 12
+    on left: 16 17 18 19, on right: 12
 paramList (67)
-    on left: 19 20 21, on right: 18 19
+    on left: 20 21 22, on right: 19 20
 scanfIdlist (68)
-    on left: 22 23, on right: 16 22
+    on left: 23 24, on right: 16 23
 printfIdlist (69)
-    on left: 24 25, on right: 17 24
+    on left: 25 26, on right: 18 25
 idlist (70)
-    on left: 26 27 28 29, on right: 26 27 30 31
+    on left: 27 28 29 30, on right: 27 28 31 32
 declaration (71)
-    on left: 30 31, on right: 5 39
+    on left: 31 32, on right: 5 40
 type (72)
-    on left: 32 33 34 35 36, on right: 14 15 30 31
+    on left: 33 34 35 36 37, on right: 14 15 31 32
 loop (73)
-    on left: 37 38, on right: 8
+    on left: 38 39, on right: 8
 forcon (74)
-    on left: 39 40, on right: 37
+    on left: 40 41, on right: 38
 control (75)
-    on left: 41 42, on right: 9
+    on left: 42 43, on right: 9
 jump (76)
-    on left: 43 44 45 46, on right: 7
+    on left: 44 45 46 47, on right: 7
 assignment (77)
-    on left: 47 48 49 50 51 52 53 54 55 56 57, on right: 6 39 40
+    on left: 48 49 50 51 52 53 54 55 56 57 58, on right: 6 40 41
 expr (78)
-    on left: 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75
-    76 77 78, on right: 19 20 26 28 38 39 40 41 42 45 48 49 50 51 52
-    53 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74
+    on left: 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76
+    77 78 79, on right: 20 21 27 29 39 40 41 42 43 46 49 50 51 52 53
+    54 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75
 
 
 State 0
@@ -257,7 +258,7 @@ State 0
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
     program       go to state 19
     statements    go to state 20
@@ -276,29 +277,29 @@ State 0
 
 State 1
 
-   54 assignment: ADDASGO . ID
+   55 assignment: ADDASGO . ID
 
     ID  shift, and go to state 32
 
 
 State 2
 
-   55 assignment: MINASGO . ID
+   56 assignment: MINASGO . ID
 
     ID  shift, and go to state 33
 
 
 State 3
 
-   18 functionCall: ID . LBRACE paramList RBRACE
-   48 assignment: ID . ASG expr
-   49           | ID . ADDASG expr
-   50           | ID . MINASG expr
-   51           | ID . MULASG expr
-   52           | ID . DIVASG expr
-   53           | ID . MODASG expr
-   56           | ID . ADDASGO
-   57           | ID . MINASGO
+   19 functionCall: ID . LBRACE paramList RBRACE
+   49 assignment: ID . ASG expr
+   50           | ID . ADDASG expr
+   51           | ID . MINASG expr
+   52           | ID . MULASG expr
+   53           | ID . DIVASG expr
+   54           | ID . MODASG expr
+   57           | ID . ADDASGO
+   58           | ID . MINASGO
 
     ASG      shift, and go to state 34
     ADDASG   shift, and go to state 35
@@ -313,42 +314,42 @@ State 3
 
 State 4
 
-   32 type: T_BOOL .
-
-    $default  reduce using rule 32 (type)
-
-
-State 5
-
-   33 type: T_INT .
+   33 type: T_BOOL .
 
     $default  reduce using rule 33 (type)
 
 
-State 6
+State 5
 
-   34 type: T_CHAR .
+   34 type: T_INT .
 
     $default  reduce using rule 34 (type)
 
 
-State 7
+State 6
 
-   35 type: T_STRING .
+   35 type: T_CHAR .
 
     $default  reduce using rule 35 (type)
 
 
-State 8
+State 7
 
-   36 type: T_VOID .
+   36 type: T_STRING .
 
     $default  reduce using rule 36 (type)
 
 
+State 8
+
+   37 type: T_VOID .
+
+    $default  reduce using rule 37 (type)
+
+
 State 9
 
-   31 declaration: CONST . type idlist
+   32 declaration: CONST . type idlist
 
     T_BOOL    shift, and go to state 4
     T_INT     shift, and go to state 5
@@ -361,30 +362,30 @@ State 9
 
 State 10
 
-   41 control: IF . LBRACE expr RBRACE LPAREN statements RPAREN
-   42        | IF . LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
+   42 control: IF . LBRACE expr RBRACE LPAREN statements RPAREN
+   43        | IF . LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
 
     LBRACE  shift, and go to state 44
 
 
 State 11
 
-   38 loop: WHILE . LBRACE expr RBRACE LPAREN statements RPAREN
+   39 loop: WHILE . LBRACE expr RBRACE LPAREN statements RPAREN
 
     LBRACE  shift, and go to state 45
 
 
 State 12
 
-   37 loop: FOR . LBRACE forcon RBRACE LPAREN statements RPAREN
+   38 loop: FOR . LBRACE forcon RBRACE LPAREN statements RPAREN
 
     LBRACE  shift, and go to state 46
 
 
 State 13
 
-   45 jump: RETURN . expr
-   46     | RETURN .
+   46 jump: RETURN . expr
+   47     | RETURN .
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -395,28 +396,29 @@ State 13
     CHAR     shift, and go to state 53
     STRING   shift, and go to state 54
 
-    $default  reduce using rule 46 (jump)
+    $default  reduce using rule 47 (jump)
 
     expr  go to state 55
 
 
 State 14
 
-   44 jump: CONTINUE .
+   45 jump: CONTINUE .
 
-    $default  reduce using rule 44 (jump)
+    $default  reduce using rule 45 (jump)
 
 
 State 15
 
-   43 jump: BREAK .
+   44 jump: BREAK .
 
-    $default  reduce using rule 43 (jump)
+    $default  reduce using rule 44 (jump)
 
 
 State 16
 
-   17 functionCall: PRINTF . LBRACE STRING printfIdlist RBRACE
+   17 functionCall: PRINTF . LBRACE STRING RBRACE
+   18             | PRINTF . LBRACE STRING printfIdlist RBRACE
 
     LBRACE  shift, and go to state 56
 
@@ -466,7 +468,7 @@ State 20
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
     $default   reduce using rule 1 (program)
 
     statement     go to state 59
@@ -528,7 +530,7 @@ State 27
 
    14 functionDefi: type . MAIN LBRACE RBRACE LPAREN statements RPAREN
    15 functionDecl: type . ID LBRACE RBRACE
-   30 declaration: type . idlist
+   31 declaration: type . idlist
 
     ID    shift, and go to state 63
     MAIN  shift, and go to state 64
@@ -566,21 +568,21 @@ State 31
 
 State 32
 
-   54 assignment: ADDASGO ID .
-
-    $default  reduce using rule 54 (assignment)
-
-
-State 33
-
-   55 assignment: MINASGO ID .
+   55 assignment: ADDASGO ID .
 
     $default  reduce using rule 55 (assignment)
 
 
+State 33
+
+   56 assignment: MINASGO ID .
+
+    $default  reduce using rule 56 (assignment)
+
+
 State 34
 
-   48 assignment: ID ASG . expr
+   49 assignment: ID ASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -596,7 +598,7 @@ State 34
 
 State 35
 
-   49 assignment: ID ADDASG . expr
+   50 assignment: ID ADDASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -612,7 +614,7 @@ State 35
 
 State 36
 
-   50 assignment: ID MINASG . expr
+   51 assignment: ID MINASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -628,7 +630,7 @@ State 36
 
 State 37
 
-   51 assignment: ID MULASG . expr
+   52 assignment: ID MULASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -644,7 +646,7 @@ State 37
 
 State 38
 
-   52 assignment: ID DIVASG . expr
+   53 assignment: ID DIVASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -660,7 +662,7 @@ State 38
 
 State 39
 
-   53 assignment: ID MODASG . expr
+   54 assignment: ID MODASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -676,21 +678,21 @@ State 39
 
 State 40
 
-   56 assignment: ID ADDASGO .
-
-    $default  reduce using rule 56 (assignment)
-
-
-State 41
-
-   57 assignment: ID MINASGO .
+   57 assignment: ID ADDASGO .
 
     $default  reduce using rule 57 (assignment)
 
 
+State 41
+
+   58 assignment: ID MINASGO .
+
+    $default  reduce using rule 58 (assignment)
+
+
 State 42
 
-   18 functionCall: ID LBRACE . paramList RBRACE
+   19 functionCall: ID LBRACE . paramList RBRACE
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -701,7 +703,7 @@ State 42
     CHAR     shift, and go to state 53
     STRING   shift, and go to state 54
 
-    $default  reduce using rule 21 (paramList)
+    $default  reduce using rule 22 (paramList)
 
     paramList  go to state 74
     expr       go to state 75
@@ -709,7 +711,7 @@ State 42
 
 State 43
 
-   31 declaration: CONST type . idlist
+   32 declaration: CONST type . idlist
 
     ID  shift, and go to state 76
 
@@ -718,8 +720,8 @@ State 43
 
 State 44
 
-   41 control: IF LBRACE . expr RBRACE LPAREN statements RPAREN
-   42        | IF LBRACE . expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
+   42 control: IF LBRACE . expr RBRACE LPAREN statements RPAREN
+   43        | IF LBRACE . expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -735,7 +737,7 @@ State 44
 
 State 45
 
-   38 loop: WHILE LBRACE . expr RBRACE LPAREN statements RPAREN
+   39 loop: WHILE LBRACE . expr RBRACE LPAREN statements RPAREN
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -751,7 +753,7 @@ State 45
 
 State 46
 
-   37 loop: FOR LBRACE . forcon RBRACE LPAREN statements RPAREN
+   38 loop: FOR LBRACE . forcon RBRACE LPAREN statements RPAREN
 
     ADDASGO   shift, and go to state 1
     MINASGO   shift, and go to state 2
@@ -763,7 +765,7 @@ State 46
     T_VOID    shift, and go to state 8
     CONST     shift, and go to state 9
 
-    $default  reduce using rule 47 (assignment)
+    $default  reduce using rule 48 (assignment)
 
     declaration  go to state 81
     type         go to state 82
@@ -773,7 +775,7 @@ State 46
 
 State 47
 
-   74 expr: REF . expr
+   75 expr: REF . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -789,7 +791,7 @@ State 47
 
 State 48
 
-   71 expr: NOT . expr
+   72 expr: NOT . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -805,7 +807,7 @@ State 48
 
 State 49
 
-   72 expr: ADD . expr
+   73 expr: ADD . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -821,7 +823,7 @@ State 49
 
 State 50
 
-   73 expr: MIN . expr
+   74 expr: MIN . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -837,48 +839,48 @@ State 50
 
 State 51
 
-   75 expr: ID .
-
-    $default  reduce using rule 75 (expr)
-
-
-State 52
-
-   76 expr: INTEGER .
+   76 expr: ID .
 
     $default  reduce using rule 76 (expr)
 
 
-State 53
+State 52
 
-   77 expr: CHAR .
+   77 expr: INTEGER .
 
     $default  reduce using rule 77 (expr)
 
 
-State 54
+State 53
 
-   78 expr: STRING .
+   78 expr: CHAR .
 
     $default  reduce using rule 78 (expr)
 
 
+State 54
+
+   79 expr: STRING .
+
+    $default  reduce using rule 79 (expr)
+
+
 State 55
 
-   45 jump: RETURN expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   46 jump: RETURN expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -894,12 +896,13 @@ State 55
     AND  shift, and go to state 100
     OR   shift, and go to state 101
 
-    $default  reduce using rule 45 (jump)
+    $default  reduce using rule 46 (jump)
 
 
 State 56
 
-   17 functionCall: PRINTF LBRACE . STRING printfIdlist RBRACE
+   17 functionCall: PRINTF LBRACE . STRING RBRACE
+   18             | PRINTF LBRACE . STRING printfIdlist RBRACE
 
     STRING  shift, and go to state 102
 
@@ -949,13 +952,13 @@ State 62
 State 63
 
    15 functionDecl: type ID . LBRACE RBRACE
-   28 idlist: ID . ASG expr
-   29       | ID .
+   29 idlist: ID . ASG expr
+   30       | ID .
 
     ASG     shift, and go to state 104
     LBRACE  shift, and go to state 105
 
-    $default  reduce using rule 29 (idlist)
+    $default  reduce using rule 30 (idlist)
 
 
 State 64
@@ -967,13 +970,13 @@ State 64
 
 State 65
 
-   26 idlist: idlist . COMMA ID ASG expr
-   27       | idlist . COMMA ID
-   30 declaration: type idlist .
+   27 idlist: idlist . COMMA ID ASG expr
+   28       | idlist . COMMA ID
+   31 declaration: type idlist .
 
     COMMA  shift, and go to state 107
 
-    $default  reduce using rule 30 (declaration)
+    $default  reduce using rule 31 (declaration)
 
 
 State 66
@@ -992,54 +995,20 @@ State 67
 
 State 68
 
-   48 assignment: ID ASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
-
-    $default  reduce using rule 48 (assignment)
-
-
-State 69
-
-   49 assignment: ID ADDASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   49 assignment: ID ASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -1058,22 +1027,22 @@ State 69
     $default  reduce using rule 49 (assignment)
 
 
-State 70
+State 69
 
-   50 assignment: ID MINASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   50 assignment: ID ADDASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -1092,22 +1061,22 @@ State 70
     $default  reduce using rule 50 (assignment)
 
 
-State 71
+State 70
 
-   51 assignment: ID MULASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   51 assignment: ID MINASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -1126,22 +1095,22 @@ State 71
     $default  reduce using rule 51 (assignment)
 
 
-State 72
+State 71
 
-   52 assignment: ID DIVASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   52 assignment: ID MULASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -1160,22 +1129,22 @@ State 72
     $default  reduce using rule 52 (assignment)
 
 
-State 73
+State 72
 
-   53 assignment: ID MODASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   53 assignment: ID DIVASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -1194,31 +1163,22 @@ State 73
     $default  reduce using rule 53 (assignment)
 
 
-State 74
+State 73
 
-   18 functionCall: ID LBRACE paramList . RBRACE
-   19 paramList: paramList . COMMA expr
-
-    RBRACE  shift, and go to state 108
-    COMMA   shift, and go to state 109
-
-
-State 75
-
-   20 paramList: expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   54 assignment: ID MODASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -1234,47 +1194,90 @@ State 75
     AND  shift, and go to state 100
     OR   shift, and go to state 101
 
-    $default  reduce using rule 20 (paramList)
+    $default  reduce using rule 54 (assignment)
+
+
+State 74
+
+   19 functionCall: ID LBRACE paramList . RBRACE
+   20 paramList: paramList . COMMA expr
+
+    RBRACE  shift, and go to state 108
+    COMMA   shift, and go to state 109
+
+
+State 75
+
+   21 paramList: expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+
+    ADD  shift, and go to state 89
+    MIN  shift, and go to state 90
+    MUL  shift, and go to state 91
+    DIV  shift, and go to state 92
+    MOD  shift, and go to state 93
+    EQU  shift, and go to state 94
+    GT   shift, and go to state 95
+    LT   shift, and go to state 96
+    GTQ  shift, and go to state 97
+    LTQ  shift, and go to state 98
+    NEQ  shift, and go to state 99
+    AND  shift, and go to state 100
+    OR   shift, and go to state 101
+
+    $default  reduce using rule 21 (paramList)
 
 
 State 76
 
-   28 idlist: ID . ASG expr
-   29       | ID .
+   29 idlist: ID . ASG expr
+   30       | ID .
 
     ASG  shift, and go to state 104
 
-    $default  reduce using rule 29 (idlist)
+    $default  reduce using rule 30 (idlist)
 
 
 State 77
 
-   26 idlist: idlist . COMMA ID ASG expr
-   27       | idlist . COMMA ID
-   31 declaration: CONST type idlist .
+   27 idlist: idlist . COMMA ID ASG expr
+   28       | idlist . COMMA ID
+   32 declaration: CONST type idlist .
 
     COMMA  shift, and go to state 107
 
-    $default  reduce using rule 31 (declaration)
+    $default  reduce using rule 32 (declaration)
 
 
 State 78
 
-   41 control: IF LBRACE expr . RBRACE LPAREN statements RPAREN
-   42        | IF LBRACE expr . RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   42 control: IF LBRACE expr . RBRACE LPAREN statements RPAREN
+   43        | IF LBRACE expr . RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD     shift, and go to state 89
     MIN     shift, and go to state 90
@@ -1294,20 +1297,20 @@ State 78
 
 State 79
 
-   38 loop: WHILE LBRACE expr . RBRACE LPAREN statements RPAREN
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   39 loop: WHILE LBRACE expr . RBRACE LPAREN statements RPAREN
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD     shift, and go to state 89
     MIN     shift, and go to state 90
@@ -1327,14 +1330,14 @@ State 79
 
 State 80
 
-   48 assignment: ID . ASG expr
-   49           | ID . ADDASG expr
-   50           | ID . MINASG expr
-   51           | ID . MULASG expr
-   52           | ID . DIVASG expr
-   53           | ID . MODASG expr
-   56           | ID . ADDASGO
-   57           | ID . MINASGO
+   49 assignment: ID . ASG expr
+   50           | ID . ADDASG expr
+   51           | ID . MINASG expr
+   52           | ID . MULASG expr
+   53           | ID . DIVASG expr
+   54           | ID . MODASG expr
+   57           | ID . ADDASGO
+   58           | ID . MINASGO
 
     ASG      shift, and go to state 34
     ADDASG   shift, and go to state 35
@@ -1348,14 +1351,14 @@ State 80
 
 State 81
 
-   39 forcon: declaration . SEMICOLON expr SEMICOLON assignment
+   40 forcon: declaration . SEMICOLON expr SEMICOLON assignment
 
     SEMICOLON  shift, and go to state 112
 
 
 State 82
 
-   30 declaration: type . idlist
+   31 declaration: type . idlist
 
     ID  shift, and go to state 76
 
@@ -1364,98 +1367,74 @@ State 82
 
 State 83
 
-   37 loop: FOR LBRACE forcon . RBRACE LPAREN statements RPAREN
+   38 loop: FOR LBRACE forcon . RBRACE LPAREN statements RPAREN
 
     RBRACE  shift, and go to state 113
 
 
 State 84
 
-   40 forcon: assignment . SEMICOLON expr SEMICOLON assignment
+   41 forcon: assignment . SEMICOLON expr SEMICOLON assignment
 
     SEMICOLON  shift, and go to state 114
 
 
 State 85
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-   74     | REF expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+   75     | REF expr .
 
-    $default  reduce using rule 74 (expr)
+    $default  reduce using rule 75 (expr)
 
 
 State 86
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-   71     | NOT expr .
-
-    $default  reduce using rule 71 (expr)
-
-
-State 87
-
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-   72     | ADD expr .
-
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+   72     | NOT expr .
 
     $default  reduce using rule 72 (expr)
 
 
-State 88
+State 87
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-   73     | MIN expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+   73     | ADD expr .
 
     MUL  shift, and go to state 91
     DIV  shift, and go to state 92
@@ -1464,9 +1443,33 @@ State 88
     $default  reduce using rule 73 (expr)
 
 
+State 88
+
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+   74     | MIN expr .
+
+    MUL  shift, and go to state 91
+    DIV  shift, and go to state 92
+    MOD  shift, and go to state 93
+
+    $default  reduce using rule 74 (expr)
+
+
 State 89
 
-   58 expr: expr ADD . expr
+   59 expr: expr ADD . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1482,7 +1485,7 @@ State 89
 
 State 90
 
-   59 expr: expr MIN . expr
+   60 expr: expr MIN . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1498,7 +1501,7 @@ State 90
 
 State 91
 
-   60 expr: expr MUL . expr
+   61 expr: expr MUL . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1514,7 +1517,7 @@ State 91
 
 State 92
 
-   61 expr: expr DIV . expr
+   62 expr: expr DIV . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1530,7 +1533,7 @@ State 92
 
 State 93
 
-   62 expr: expr MOD . expr
+   63 expr: expr MOD . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1546,7 +1549,7 @@ State 93
 
 State 94
 
-   70 expr: expr EQU . expr
+   71 expr: expr EQU . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1562,7 +1565,7 @@ State 94
 
 State 95
 
-   65 expr: expr GT . expr
+   66 expr: expr GT . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1578,7 +1581,7 @@ State 95
 
 State 96
 
-   67 expr: expr LT . expr
+   68 expr: expr LT . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1594,7 +1597,7 @@ State 96
 
 State 97
 
-   66 expr: expr GTQ . expr
+   67 expr: expr GTQ . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1610,7 +1613,7 @@ State 97
 
 State 98
 
-   68 expr: expr LTQ . expr
+   69 expr: expr LTQ . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1626,7 +1629,7 @@ State 98
 
 State 99
 
-   69 expr: expr NEQ . expr
+   70 expr: expr NEQ . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1642,7 +1645,7 @@ State 99
 
 State 100
 
-   63 expr: expr AND . expr
+   64 expr: expr AND . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1658,7 +1661,7 @@ State 100
 
 State 101
 
-   64 expr: expr OR . expr
+   65 expr: expr OR . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1674,25 +1677,27 @@ State 101
 
 State 102
 
-   17 functionCall: PRINTF LBRACE STRING . printfIdlist RBRACE
+   17 functionCall: PRINTF LBRACE STRING . RBRACE
+   18             | PRINTF LBRACE STRING . printfIdlist RBRACE
 
-    COMMA  shift, and go to state 128
+    RBRACE  shift, and go to state 128
+    COMMA   shift, and go to state 129
 
-    printfIdlist  go to state 129
+    printfIdlist  go to state 130
 
 
 State 103
 
    16 functionCall: SCANF LBRACE STRING . scanfIdlist RBRACE
 
-    COMMA  shift, and go to state 130
+    COMMA  shift, and go to state 131
 
-    scanfIdlist  go to state 131
+    scanfIdlist  go to state 132
 
 
 State 104
 
-   28 idlist: ID ASG . expr
+   29 idlist: ID ASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1703,41 +1708,41 @@ State 104
     CHAR     shift, and go to state 53
     STRING   shift, and go to state 54
 
-    expr  go to state 132
+    expr  go to state 133
 
 
 State 105
 
    15 functionDecl: type ID LBRACE . RBRACE
 
-    RBRACE  shift, and go to state 133
+    RBRACE  shift, and go to state 134
 
 
 State 106
 
    14 functionDefi: type MAIN LBRACE . RBRACE LPAREN statements RPAREN
 
-    RBRACE  shift, and go to state 134
+    RBRACE  shift, and go to state 135
 
 
 State 107
 
-   26 idlist: idlist COMMA . ID ASG expr
-   27       | idlist COMMA . ID
+   27 idlist: idlist COMMA . ID ASG expr
+   28       | idlist COMMA . ID
 
-    ID  shift, and go to state 135
+    ID  shift, and go to state 136
 
 
 State 108
 
-   18 functionCall: ID LBRACE paramList RBRACE .
+   19 functionCall: ID LBRACE paramList RBRACE .
 
-    $default  reduce using rule 18 (functionCall)
+    $default  reduce using rule 19 (functionCall)
 
 
 State 109
 
-   19 paramList: paramList COMMA . expr
+   20 paramList: paramList COMMA . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1748,27 +1753,27 @@ State 109
     CHAR     shift, and go to state 53
     STRING   shift, and go to state 54
 
-    expr  go to state 136
+    expr  go to state 137
 
 
 State 110
 
-   41 control: IF LBRACE expr RBRACE . LPAREN statements RPAREN
-   42        | IF LBRACE expr RBRACE . LPAREN statements RPAREN ELSE LPAREN statements RPAREN
-
-    LPAREN  shift, and go to state 137
-
-
-State 111
-
-   38 loop: WHILE LBRACE expr RBRACE . LPAREN statements RPAREN
+   42 control: IF LBRACE expr RBRACE . LPAREN statements RPAREN
+   43        | IF LBRACE expr RBRACE . LPAREN statements RPAREN ELSE LPAREN statements RPAREN
 
     LPAREN  shift, and go to state 138
 
 
+State 111
+
+   39 loop: WHILE LBRACE expr RBRACE . LPAREN statements RPAREN
+
+    LPAREN  shift, and go to state 139
+
+
 State 112
 
-   39 forcon: declaration SEMICOLON . expr SEMICOLON assignment
+   40 forcon: declaration SEMICOLON . expr SEMICOLON assignment
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1779,19 +1784,19 @@ State 112
     CHAR     shift, and go to state 53
     STRING   shift, and go to state 54
 
-    expr  go to state 139
+    expr  go to state 140
 
 
 State 113
 
-   37 loop: FOR LBRACE forcon RBRACE . LPAREN statements RPAREN
+   38 loop: FOR LBRACE forcon RBRACE . LPAREN statements RPAREN
 
-    LPAREN  shift, and go to state 140
+    LPAREN  shift, and go to state 141
 
 
 State 114
 
-   40 forcon: assignment SEMICOLON . expr SEMICOLON assignment
+   41 forcon: assignment SEMICOLON . expr SEMICOLON assignment
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -1802,49 +1807,25 @@ State 114
     CHAR     shift, and go to state 53
     STRING   shift, and go to state 54
 
-    expr  go to state 141
+    expr  go to state 142
 
 
 State 115
 
-   58 expr: expr . ADD expr
-   58     | expr ADD expr .
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-
-    $default  reduce using rule 58 (expr)
-
-
-State 116
-
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   59     | expr MIN expr .
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   59     | expr ADD expr .
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     MUL  shift, and go to state 91
     DIV  shift, and go to state 92
@@ -1853,82 +1834,106 @@ State 116
     $default  reduce using rule 59 (expr)
 
 
-State 117
+State 116
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   60     | expr MUL expr .
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   60     | expr MIN expr .
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+
+    MUL  shift, and go to state 91
+    DIV  shift, and go to state 92
+    MOD  shift, and go to state 93
 
     $default  reduce using rule 60 (expr)
 
 
-State 118
+State 117
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   61     | expr DIV expr .
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   61     | expr MUL expr .
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     $default  reduce using rule 61 (expr)
 
 
-State 119
+State 118
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   62     | expr MOD expr .
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   62     | expr DIV expr .
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     $default  reduce using rule 62 (expr)
 
 
+State 119
+
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   63     | expr MOD expr .
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+
+    $default  reduce using rule 63 (expr)
+
+
 State 120
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-   70     | expr EQU expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+   71     | expr EQU expr .
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -1936,77 +1941,25 @@ State 120
     DIV  shift, and go to state 92
     MOD  shift, and go to state 93
 
-    $default  reduce using rule 70 (expr)
+    $default  reduce using rule 71 (expr)
 
 
 State 121
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   65     | expr GT expr .
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-
-    $default  reduce using rule 65 (expr)
-
-
-State 122
-
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   67     | expr LT expr .
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-
-    $default  reduce using rule 67 (expr)
-
-
-State 123
-
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   66     | expr GTQ expr .
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   66     | expr GT expr .
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -2017,22 +1970,22 @@ State 123
     $default  reduce using rule 66 (expr)
 
 
-State 124
+State 122
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   68     | expr LTQ expr .
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   68     | expr LT expr .
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -2043,22 +1996,48 @@ State 124
     $default  reduce using rule 68 (expr)
 
 
-State 125
+State 123
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   69     | expr NEQ expr .
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   67     | expr GTQ expr .
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+
+    ADD  shift, and go to state 89
+    MIN  shift, and go to state 90
+    MUL  shift, and go to state 91
+    DIV  shift, and go to state 92
+    MOD  shift, and go to state 93
+
+    $default  reduce using rule 67 (expr)
+
+
+State 124
+
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   69     | expr LTQ expr .
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -2069,54 +2048,48 @@ State 125
     $default  reduce using rule 69 (expr)
 
 
-State 126
+State 125
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   63     | expr AND expr .
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   70     | expr NEQ expr .
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
     MUL  shift, and go to state 91
     DIV  shift, and go to state 92
     MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
 
-    $default  reduce using rule 63 (expr)
+    $default  reduce using rule 70 (expr)
 
 
-State 127
+State 126
 
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   64     | expr OR expr .
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   64     | expr AND expr .
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -2133,54 +2106,93 @@ State 127
     $default  reduce using rule 64 (expr)
 
 
+State 127
+
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   65     | expr OR expr .
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+
+    ADD  shift, and go to state 89
+    MIN  shift, and go to state 90
+    MUL  shift, and go to state 91
+    DIV  shift, and go to state 92
+    MOD  shift, and go to state 93
+    EQU  shift, and go to state 94
+    GT   shift, and go to state 95
+    LT   shift, and go to state 96
+    GTQ  shift, and go to state 97
+    LTQ  shift, and go to state 98
+    NEQ  shift, and go to state 99
+
+    $default  reduce using rule 65 (expr)
+
+
 State 128
 
-   25 printfIdlist: COMMA . ID
+   17 functionCall: PRINTF LBRACE STRING RBRACE .
 
-    ID  shift, and go to state 142
+    $default  reduce using rule 17 (functionCall)
 
 
 State 129
 
-   17 functionCall: PRINTF LBRACE STRING printfIdlist . RBRACE
-   24 printfIdlist: printfIdlist . COMMA ID
+   26 printfIdlist: COMMA . ID
 
-    RBRACE  shift, and go to state 143
-    COMMA   shift, and go to state 144
+    ID  shift, and go to state 143
 
 
 State 130
 
-   23 scanfIdlist: COMMA . REF ID
+   18 functionCall: PRINTF LBRACE STRING printfIdlist . RBRACE
+   25 printfIdlist: printfIdlist . COMMA ID
 
-    REF  shift, and go to state 145
+    RBRACE  shift, and go to state 144
+    COMMA   shift, and go to state 145
 
 
 State 131
 
-   16 functionCall: SCANF LBRACE STRING scanfIdlist . RBRACE
-   22 scanfIdlist: scanfIdlist . COMMA REF ID
+   24 scanfIdlist: COMMA . REF ID
 
-    RBRACE  shift, and go to state 146
-    COMMA   shift, and go to state 147
+    REF  shift, and go to state 146
 
 
 State 132
 
-   28 idlist: ID ASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   16 functionCall: SCANF LBRACE STRING scanfIdlist . RBRACE
+   23 scanfIdlist: scanfIdlist . COMMA REF ID
+
+    RBRACE  shift, and go to state 147
+    COMMA   shift, and go to state 148
+
+
+State 133
+
+   29 idlist: ID ASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -2196,49 +2208,49 @@ State 132
     AND  shift, and go to state 100
     OR   shift, and go to state 101
 
-    $default  reduce using rule 28 (idlist)
+    $default  reduce using rule 29 (idlist)
 
 
-State 133
+State 134
 
    15 functionDecl: type ID LBRACE RBRACE .
 
     $default  reduce using rule 15 (functionDecl)
 
 
-State 134
+State 135
 
    14 functionDefi: type MAIN LBRACE RBRACE . LPAREN statements RPAREN
 
-    LPAREN  shift, and go to state 148
-
-
-State 135
-
-   26 idlist: idlist COMMA ID . ASG expr
-   27       | idlist COMMA ID .
-
-    ASG  shift, and go to state 149
-
-    $default  reduce using rule 27 (idlist)
+    LPAREN  shift, and go to state 149
 
 
 State 136
 
-   19 paramList: paramList COMMA expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   27 idlist: idlist COMMA ID . ASG expr
+   28       | idlist COMMA ID .
+
+    ASG  shift, and go to state 150
+
+    $default  reduce using rule 28 (idlist)
+
+
+State 137
+
+   20 paramList: paramList COMMA expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -2254,52 +2266,13 @@ State 136
     AND  shift, and go to state 100
     OR   shift, and go to state 101
 
-    $default  reduce using rule 19 (paramList)
-
-
-State 137
-
-   41 control: IF LBRACE expr RBRACE LPAREN . statements RPAREN
-   42        | IF LBRACE expr RBRACE LPAREN . statements RPAREN ELSE LPAREN statements RPAREN
-
-    ADDASGO    shift, and go to state 1
-    MINASGO    shift, and go to state 2
-    ID         shift, and go to state 3
-    T_BOOL     shift, and go to state 4
-    T_INT      shift, and go to state 5
-    T_CHAR     shift, and go to state 6
-    T_STRING   shift, and go to state 7
-    T_VOID     shift, and go to state 8
-    CONST      shift, and go to state 9
-    IF         shift, and go to state 10
-    WHILE      shift, and go to state 11
-    FOR        shift, and go to state 12
-    RETURN     shift, and go to state 13
-    CONTINUE   shift, and go to state 14
-    BREAK      shift, and go to state 15
-    PRINTF     shift, and go to state 16
-    SCANF      shift, and go to state 17
-    SEMICOLON  shift, and go to state 18
-
-    SEMICOLON  [reduce using rule 47 (assignment)]
-
-    statements    go to state 150
-    statement     go to state 21
-    function      go to state 22
-    functionDefi  go to state 23
-    functionDecl  go to state 24
-    functionCall  go to state 25
-    declaration   go to state 26
-    type          go to state 27
-    loop          go to state 28
-    control       go to state 29
-    jump          go to state 30
-    assignment    go to state 31
+    $default  reduce using rule 20 (paramList)
 
 
 State 138
 
-   38 loop: WHILE LBRACE expr RBRACE LPAREN . statements RPAREN
+   42 control: IF LBRACE expr RBRACE LPAREN . statements RPAREN
+   43        | IF LBRACE expr RBRACE LPAREN . statements RPAREN ELSE LPAREN statements RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
@@ -2320,7 +2293,7 @@ State 138
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
     statements    go to state 151
     statement     go to state 21
@@ -2338,40 +2311,7 @@ State 138
 
 State 139
 
-   39 forcon: declaration SEMICOLON expr . SEMICOLON assignment
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
-
-    ADD        shift, and go to state 89
-    MIN        shift, and go to state 90
-    MUL        shift, and go to state 91
-    DIV        shift, and go to state 92
-    MOD        shift, and go to state 93
-    EQU        shift, and go to state 94
-    GT         shift, and go to state 95
-    LT         shift, and go to state 96
-    GTQ        shift, and go to state 97
-    LTQ        shift, and go to state 98
-    NEQ        shift, and go to state 99
-    AND        shift, and go to state 100
-    OR         shift, and go to state 101
-    SEMICOLON  shift, and go to state 152
-
-
-State 140
-
-   37 loop: FOR LBRACE forcon RBRACE LPAREN . statements RPAREN
+   39 loop: WHILE LBRACE expr RBRACE LPAREN . statements RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
@@ -2392,9 +2332,9 @@ State 140
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statements    go to state 153
+    statements    go to state 152
     statement     go to state 21
     function      go to state 22
     functionDefi  go to state 23
@@ -2408,22 +2348,22 @@ State 140
     assignment    go to state 31
 
 
-State 141
+State 140
 
-   40 forcon: assignment SEMICOLON expr . SEMICOLON assignment
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   40 forcon: declaration SEMICOLON expr . SEMICOLON assignment
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD        shift, and go to state 89
     MIN        shift, and go to state 90
@@ -2438,52 +2378,124 @@ State 141
     NEQ        shift, and go to state 99
     AND        shift, and go to state 100
     OR         shift, and go to state 101
-    SEMICOLON  shift, and go to state 154
+    SEMICOLON  shift, and go to state 153
+
+
+State 141
+
+   38 loop: FOR LBRACE forcon RBRACE LPAREN . statements RPAREN
+
+    ADDASGO    shift, and go to state 1
+    MINASGO    shift, and go to state 2
+    ID         shift, and go to state 3
+    T_BOOL     shift, and go to state 4
+    T_INT      shift, and go to state 5
+    T_CHAR     shift, and go to state 6
+    T_STRING   shift, and go to state 7
+    T_VOID     shift, and go to state 8
+    CONST      shift, and go to state 9
+    IF         shift, and go to state 10
+    WHILE      shift, and go to state 11
+    FOR        shift, and go to state 12
+    RETURN     shift, and go to state 13
+    CONTINUE   shift, and go to state 14
+    BREAK      shift, and go to state 15
+    PRINTF     shift, and go to state 16
+    SCANF      shift, and go to state 17
+    SEMICOLON  shift, and go to state 18
+
+    SEMICOLON  [reduce using rule 48 (assignment)]
+
+    statements    go to state 154
+    statement     go to state 21
+    function      go to state 22
+    functionDefi  go to state 23
+    functionDecl  go to state 24
+    functionCall  go to state 25
+    declaration   go to state 26
+    type          go to state 27
+    loop          go to state 28
+    control       go to state 29
+    jump          go to state 30
+    assignment    go to state 31
 
 
 State 142
 
-   25 printfIdlist: COMMA ID .
+   41 forcon: assignment SEMICOLON expr . SEMICOLON assignment
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
-    $default  reduce using rule 25 (printfIdlist)
+    ADD        shift, and go to state 89
+    MIN        shift, and go to state 90
+    MUL        shift, and go to state 91
+    DIV        shift, and go to state 92
+    MOD        shift, and go to state 93
+    EQU        shift, and go to state 94
+    GT         shift, and go to state 95
+    LT         shift, and go to state 96
+    GTQ        shift, and go to state 97
+    LTQ        shift, and go to state 98
+    NEQ        shift, and go to state 99
+    AND        shift, and go to state 100
+    OR         shift, and go to state 101
+    SEMICOLON  shift, and go to state 155
 
 
 State 143
 
-   17 functionCall: PRINTF LBRACE STRING printfIdlist RBRACE .
+   26 printfIdlist: COMMA ID .
 
-    $default  reduce using rule 17 (functionCall)
+    $default  reduce using rule 26 (printfIdlist)
 
 
 State 144
 
-   24 printfIdlist: printfIdlist COMMA . ID
+   18 functionCall: PRINTF LBRACE STRING printfIdlist RBRACE .
 
-    ID  shift, and go to state 155
+    $default  reduce using rule 18 (functionCall)
 
 
 State 145
 
-   23 scanfIdlist: COMMA REF . ID
+   25 printfIdlist: printfIdlist COMMA . ID
 
     ID  shift, and go to state 156
 
 
 State 146
 
+   24 scanfIdlist: COMMA REF . ID
+
+    ID  shift, and go to state 157
+
+
+State 147
+
    16 functionCall: SCANF LBRACE STRING scanfIdlist RBRACE .
 
     $default  reduce using rule 16 (functionCall)
 
 
-State 147
-
-   22 scanfIdlist: scanfIdlist COMMA . REF ID
-
-    REF  shift, and go to state 157
-
-
 State 148
+
+   23 scanfIdlist: scanfIdlist COMMA . REF ID
+
+    REF  shift, and go to state 158
+
+
+State 149
 
    14 functionDefi: type MAIN LBRACE RBRACE LPAREN . statements RPAREN
 
@@ -2506,9 +2518,9 @@ State 148
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statements    go to state 158
+    statements    go to state 159
     statement     go to state 21
     function      go to state 22
     functionDefi  go to state 23
@@ -2522,9 +2534,9 @@ State 148
     assignment    go to state 31
 
 
-State 149
+State 150
 
-   26 idlist: idlist COMMA ID ASG . expr
+   27 idlist: idlist COMMA ID ASG . expr
 
     REF      shift, and go to state 47
     NOT      shift, and go to state 48
@@ -2535,54 +2547,14 @@ State 149
     CHAR     shift, and go to state 53
     STRING   shift, and go to state 54
 
-    expr  go to state 159
-
-
-State 150
-
-    3 statements: statements . statement
-   41 control: IF LBRACE expr RBRACE LPAREN statements . RPAREN
-   42        | IF LBRACE expr RBRACE LPAREN statements . RPAREN ELSE LPAREN statements RPAREN
-
-    ADDASGO    shift, and go to state 1
-    MINASGO    shift, and go to state 2
-    RPAREN     shift, and go to state 160
-    ID         shift, and go to state 3
-    T_BOOL     shift, and go to state 4
-    T_INT      shift, and go to state 5
-    T_CHAR     shift, and go to state 6
-    T_STRING   shift, and go to state 7
-    T_VOID     shift, and go to state 8
-    CONST      shift, and go to state 9
-    IF         shift, and go to state 10
-    WHILE      shift, and go to state 11
-    FOR        shift, and go to state 12
-    RETURN     shift, and go to state 13
-    CONTINUE   shift, and go to state 14
-    BREAK      shift, and go to state 15
-    PRINTF     shift, and go to state 16
-    SCANF      shift, and go to state 17
-    SEMICOLON  shift, and go to state 18
-
-    SEMICOLON  [reduce using rule 47 (assignment)]
-
-    statement     go to state 59
-    function      go to state 22
-    functionDefi  go to state 23
-    functionDecl  go to state 24
-    functionCall  go to state 25
-    declaration   go to state 26
-    type          go to state 27
-    loop          go to state 28
-    control       go to state 29
-    jump          go to state 30
-    assignment    go to state 31
+    expr  go to state 160
 
 
 State 151
 
     3 statements: statements . statement
-   38 loop: WHILE LBRACE expr RBRACE LPAREN statements . RPAREN
+   42 control: IF LBRACE expr RBRACE LPAREN statements . RPAREN
+   43        | IF LBRACE expr RBRACE LPAREN statements . RPAREN ELSE LPAREN statements RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
@@ -2604,7 +2576,7 @@ State 151
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
     statement     go to state 59
     function      go to state 22
@@ -2621,25 +2593,12 @@ State 151
 
 State 152
 
-   39 forcon: declaration SEMICOLON expr SEMICOLON . assignment
-
-    ADDASGO  shift, and go to state 1
-    MINASGO  shift, and go to state 2
-    ID       shift, and go to state 80
-
-    $default  reduce using rule 47 (assignment)
-
-    assignment  go to state 162
-
-
-State 153
-
     3 statements: statements . statement
-   37 loop: FOR LBRACE forcon RBRACE LPAREN statements . RPAREN
+   39 loop: WHILE LBRACE expr RBRACE LPAREN statements . RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
-    RPAREN     shift, and go to state 163
+    RPAREN     shift, and go to state 162
     ID         shift, and go to state 3
     T_BOOL     shift, and go to state 4
     T_INT      shift, and go to state 5
@@ -2657,7 +2616,7 @@ State 153
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
     statement     go to state 59
     function      go to state 22
@@ -2672,48 +2631,101 @@ State 153
     assignment    go to state 31
 
 
-State 154
+State 153
 
-   40 forcon: assignment SEMICOLON expr SEMICOLON . assignment
+   40 forcon: declaration SEMICOLON expr SEMICOLON . assignment
 
     ADDASGO  shift, and go to state 1
     MINASGO  shift, and go to state 2
     ID       shift, and go to state 80
 
-    $default  reduce using rule 47 (assignment)
+    $default  reduce using rule 48 (assignment)
 
-    assignment  go to state 164
+    assignment  go to state 163
+
+
+State 154
+
+    3 statements: statements . statement
+   38 loop: FOR LBRACE forcon RBRACE LPAREN statements . RPAREN
+
+    ADDASGO    shift, and go to state 1
+    MINASGO    shift, and go to state 2
+    RPAREN     shift, and go to state 164
+    ID         shift, and go to state 3
+    T_BOOL     shift, and go to state 4
+    T_INT      shift, and go to state 5
+    T_CHAR     shift, and go to state 6
+    T_STRING   shift, and go to state 7
+    T_VOID     shift, and go to state 8
+    CONST      shift, and go to state 9
+    IF         shift, and go to state 10
+    WHILE      shift, and go to state 11
+    FOR        shift, and go to state 12
+    RETURN     shift, and go to state 13
+    CONTINUE   shift, and go to state 14
+    BREAK      shift, and go to state 15
+    PRINTF     shift, and go to state 16
+    SCANF      shift, and go to state 17
+    SEMICOLON  shift, and go to state 18
+
+    SEMICOLON  [reduce using rule 48 (assignment)]
+
+    statement     go to state 59
+    function      go to state 22
+    functionDefi  go to state 23
+    functionDecl  go to state 24
+    functionCall  go to state 25
+    declaration   go to state 26
+    type          go to state 27
+    loop          go to state 28
+    control       go to state 29
+    jump          go to state 30
+    assignment    go to state 31
 
 
 State 155
 
-   24 printfIdlist: printfIdlist COMMA ID .
+   41 forcon: assignment SEMICOLON expr SEMICOLON . assignment
 
-    $default  reduce using rule 24 (printfIdlist)
+    ADDASGO  shift, and go to state 1
+    MINASGO  shift, and go to state 2
+    ID       shift, and go to state 80
+
+    $default  reduce using rule 48 (assignment)
+
+    assignment  go to state 165
 
 
 State 156
 
-   23 scanfIdlist: COMMA REF ID .
+   25 printfIdlist: printfIdlist COMMA ID .
 
-    $default  reduce using rule 23 (scanfIdlist)
+    $default  reduce using rule 25 (printfIdlist)
 
 
 State 157
 
-   22 scanfIdlist: scanfIdlist COMMA REF . ID
+   24 scanfIdlist: COMMA REF ID .
 
-    ID  shift, and go to state 165
+    $default  reduce using rule 24 (scanfIdlist)
 
 
 State 158
+
+   23 scanfIdlist: scanfIdlist COMMA REF . ID
+
+    ID  shift, and go to state 166
+
+
+State 159
 
     3 statements: statements . statement
    14 functionDefi: type MAIN LBRACE RBRACE LPAREN statements . RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
-    RPAREN     shift, and go to state 166
+    RPAREN     shift, and go to state 167
     ID         shift, and go to state 3
     T_BOOL     shift, and go to state 4
     T_INT      shift, and go to state 5
@@ -2731,7 +2743,7 @@ State 158
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
     statement     go to state 59
     function      go to state 22
@@ -2746,22 +2758,22 @@ State 158
     assignment    go to state 31
 
 
-State 159
+State 160
 
-   26 idlist: idlist COMMA ID ASG expr .
-   58 expr: expr . ADD expr
-   59     | expr . MIN expr
-   60     | expr . MUL expr
-   61     | expr . DIV expr
-   62     | expr . MOD expr
-   63     | expr . AND expr
-   64     | expr . OR expr
-   65     | expr . GT expr
-   66     | expr . GTQ expr
-   67     | expr . LT expr
-   68     | expr . LTQ expr
-   69     | expr . NEQ expr
-   70     | expr . EQU expr
+   27 idlist: idlist COMMA ID ASG expr .
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
 
     ADD  shift, and go to state 89
     MIN  shift, and go to state 90
@@ -2777,115 +2789,74 @@ State 159
     AND  shift, and go to state 100
     OR   shift, and go to state 101
 
-    $default  reduce using rule 26 (idlist)
-
-
-State 160
-
-   41 control: IF LBRACE expr RBRACE LPAREN statements RPAREN .
-   42        | IF LBRACE expr RBRACE LPAREN statements RPAREN . ELSE LPAREN statements RPAREN
-
-    ELSE  shift, and go to state 167
-
-    $default  reduce using rule 41 (control)
+    $default  reduce using rule 27 (idlist)
 
 
 State 161
 
-   38 loop: WHILE LBRACE expr RBRACE LPAREN statements RPAREN .
+   42 control: IF LBRACE expr RBRACE LPAREN statements RPAREN .
+   43        | IF LBRACE expr RBRACE LPAREN statements RPAREN . ELSE LPAREN statements RPAREN
 
-    $default  reduce using rule 38 (loop)
+    ELSE  shift, and go to state 168
+
+    $default  reduce using rule 42 (control)
 
 
 State 162
 
-   39 forcon: declaration SEMICOLON expr SEMICOLON assignment .
+   39 loop: WHILE LBRACE expr RBRACE LPAREN statements RPAREN .
 
-    $default  reduce using rule 39 (forcon)
+    $default  reduce using rule 39 (loop)
 
 
 State 163
 
-   37 loop: FOR LBRACE forcon RBRACE LPAREN statements RPAREN .
-
-    $default  reduce using rule 37 (loop)
-
-
-State 164
-
-   40 forcon: assignment SEMICOLON expr SEMICOLON assignment .
+   40 forcon: declaration SEMICOLON expr SEMICOLON assignment .
 
     $default  reduce using rule 40 (forcon)
 
 
+State 164
+
+   38 loop: FOR LBRACE forcon RBRACE LPAREN statements RPAREN .
+
+    $default  reduce using rule 38 (loop)
+
+
 State 165
 
-   22 scanfIdlist: scanfIdlist COMMA REF ID .
+   41 forcon: assignment SEMICOLON expr SEMICOLON assignment .
 
-    $default  reduce using rule 22 (scanfIdlist)
+    $default  reduce using rule 41 (forcon)
 
 
 State 166
+
+   23 scanfIdlist: scanfIdlist COMMA REF ID .
+
+    $default  reduce using rule 23 (scanfIdlist)
+
+
+State 167
 
    14 functionDefi: type MAIN LBRACE RBRACE LPAREN statements RPAREN .
 
     $default  reduce using rule 14 (functionDefi)
 
 
-State 167
-
-   42 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE . LPAREN statements RPAREN
-
-    LPAREN  shift, and go to state 168
-
-
 State 168
 
-   42 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN . statements RPAREN
+   43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE . LPAREN statements RPAREN
 
-    ADDASGO    shift, and go to state 1
-    MINASGO    shift, and go to state 2
-    ID         shift, and go to state 3
-    T_BOOL     shift, and go to state 4
-    T_INT      shift, and go to state 5
-    T_CHAR     shift, and go to state 6
-    T_STRING   shift, and go to state 7
-    T_VOID     shift, and go to state 8
-    CONST      shift, and go to state 9
-    IF         shift, and go to state 10
-    WHILE      shift, and go to state 11
-    FOR        shift, and go to state 12
-    RETURN     shift, and go to state 13
-    CONTINUE   shift, and go to state 14
-    BREAK      shift, and go to state 15
-    PRINTF     shift, and go to state 16
-    SCANF      shift, and go to state 17
-    SEMICOLON  shift, and go to state 18
-
-    SEMICOLON  [reduce using rule 47 (assignment)]
-
-    statements    go to state 169
-    statement     go to state 21
-    function      go to state 22
-    functionDefi  go to state 23
-    functionDecl  go to state 24
-    functionCall  go to state 25
-    declaration   go to state 26
-    type          go to state 27
-    loop          go to state 28
-    control       go to state 29
-    jump          go to state 30
-    assignment    go to state 31
+    LPAREN  shift, and go to state 169
 
 
 State 169
 
-    3 statements: statements . statement
-   42 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements . RPAREN
+   43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN . statements RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
-    RPAREN     shift, and go to state 170
     ID         shift, and go to state 3
     T_BOOL     shift, and go to state 4
     T_INT      shift, and go to state 5
@@ -2903,9 +2874,10 @@ State 169
     SCANF      shift, and go to state 17
     SEMICOLON  shift, and go to state 18
 
-    SEMICOLON  [reduce using rule 47 (assignment)]
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statement     go to state 59
+    statements    go to state 170
+    statement     go to state 21
     function      go to state 22
     functionDefi  go to state 23
     functionDecl  go to state 24
@@ -2920,6 +2892,46 @@ State 169
 
 State 170
 
-   42 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN .
+    3 statements: statements . statement
+   43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements . RPAREN
 
-    $default  reduce using rule 42 (control)
+    ADDASGO    shift, and go to state 1
+    MINASGO    shift, and go to state 2
+    RPAREN     shift, and go to state 171
+    ID         shift, and go to state 3
+    T_BOOL     shift, and go to state 4
+    T_INT      shift, and go to state 5
+    T_CHAR     shift, and go to state 6
+    T_STRING   shift, and go to state 7
+    T_VOID     shift, and go to state 8
+    CONST      shift, and go to state 9
+    IF         shift, and go to state 10
+    WHILE      shift, and go to state 11
+    FOR        shift, and go to state 12
+    RETURN     shift, and go to state 13
+    CONTINUE   shift, and go to state 14
+    BREAK      shift, and go to state 15
+    PRINTF     shift, and go to state 16
+    SCANF      shift, and go to state 17
+    SEMICOLON  shift, and go to state 18
+
+    SEMICOLON  [reduce using rule 48 (assignment)]
+
+    statement     go to state 59
+    function      go to state 22
+    functionDefi  go to state 23
+    functionDecl  go to state 24
+    functionCall  go to state 25
+    declaration   go to state 26
+    type          go to state 27
+    loop          go to state 28
+    control       go to state 29
+    jump          go to state 30
+    assignment    go to state 31
+
+
+State 171
+
+   43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN .
+
+    $default  reduce using rule 43 (control)

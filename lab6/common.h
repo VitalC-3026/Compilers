@@ -17,4 +17,9 @@ struct functionAttr{
     DeclType returnValue;
 };
 
+struct constString{
+    int num;
+    string str;
+};
+
 #endif

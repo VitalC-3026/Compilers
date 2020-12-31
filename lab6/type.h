@@ -50,7 +50,7 @@ enum DeclType
 
 enum StatementType
 {
-    STMT_ASIG,
+    STMT_ASIG = 1,
     STMT_EXPR,
     STMT_DECL,
     STMT_IF,
