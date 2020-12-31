@@ -22,7 +22,7 @@ main:
 run: lex yacc main
 
 clean:
-	rm -f main.lex.yy.cpp main.tab.cpp  main.tab.h $(TARGET) *.o ./bin/*
+	rm -f main.lex.yy.cpp main.tab.cpp  main.tab.h $(TARGET) *.o ./bin/* ./results/*.s ./results/*.txt
 
 test:
 	./bin/main tests/test_main.cpp results/test.res.txt results/test.s

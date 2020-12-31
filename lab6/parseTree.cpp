@@ -906,8 +906,9 @@ void TreeNode::genFuncLabel() {
     if (this->funcType == FUNC_DEFI) {
         this->label.beginLabel = newLabel();
         TreeNode* body = this->child->sibling;
-        if(body != nullptr) {
+        while(body != nullptr) {
             body->recursiveGenLabel();
+            body = body->sibling;
         }
     } else if (this->funcType == FUNC_CALL) {
         if (strcmp(this->child->identifier.c_str(), "scanf") == 0 || 
@@ -1242,6 +1243,27 @@ void TreeNode::genStmtCode(ostream &out) {
             // this->genDeclCode(out);
             break;
         }
+        case STMT_RETURN: {
+            if (this->child != nullptr) {
+                out << "\tmovl, $";
+                if (this->child->declType == D_INT) {
+                    out << this->child->getIntValue(); 
+                }
+                else if (this->child->declType == D_CHAR) {
+                    out << this->child->getCharValue();
+                }
+                else if (this->child->declType == D_BOOL) {
+                    if (this->child->getBoolValue()) {
+                        out << "1";
+                    } else {
+                        out << "0";
+                    }
+                }
+                out << ", %eax" << endl;
+            }
+        }
+        default:
+            break;
     }
 }
 
@@ -2173,13 +2195,10 @@ void TreeNode::genFuncCode(ostream &out) {
             out << this->identifier << ":" << endl;
             out << "\tpushl %ebp" << endl;
             out << "\tmovl %esp, %ebp" << endl;
-            TreeNode* body = this->child->sibling;
-            body->recursiveGenCode(out);
-            TreeNode* ret = this->child->sibling->sibling;
-            if (ret != nullptr && ret->child != nullptr) {
-                if (ret->child->declType == D_INT) {
-                    out << "\tmovl $" << ret->child->getIntValue() << ", %eax" << endl;
-                }
+            TreeNode* bodyChild = this->child->sibling;
+            while(bodyChild != nullptr) {
+                bodyChild->recursiveGenCode(out);
+                bodyChild = bodyChild->sibling;
             }
             out << "\tret" << endl;
         }
