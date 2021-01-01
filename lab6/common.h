@@ -22,4 +22,9 @@ struct constString{
     string str;
 };
 
+struct tempVar{
+    int num;
+    int value;
+};
+
 #endif

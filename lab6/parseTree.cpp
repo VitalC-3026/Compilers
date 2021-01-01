@@ -10,7 +10,10 @@ extern void yyerror(const char*);
 void typeIncompatible(int, string);
 void noOperands(int);
 int rostringNum = 0;
+int tempVarNum = 0;
 vector<constString> rostring;
+vector<tempVar> tempVariables;
+vector<string> basicCodeBlock;
 
 
 void TreeNode::addChild(TreeNode* &child) {
@@ -791,18 +794,23 @@ void TreeNode::genStmtLabel(){
             break;
         }
         case STMT_IF: {
-            TreeNode* expr = this->getChild();
+            cout << "if" << endl;
+            TreeNode* expr = this->child;
             TreeNode* trueBody = this->child->sibling;
-            TreeNode* falseBody = nullptr;
+            TreeNode* falseBody = this->child->sibling->sibling;
             if(this->child->sibling->sibling){
                 falseBody = this->child->sibling->sibling;
             }
             if (this->label.beginLabel == "") {
                 this->label.beginLabel = newLabel();
+                cout << "if beginL" << this->label.beginLabel << endl;
             }
             trueBody->label.beginLabel = expr->label.trueLabel = newLabel();
+            cout << "if beginT" << trueBody->label.beginLabel << endl;
+            expr->label.falseLabel = newLabel();
             if (falseBody) {
-                falseBody->label.beginLabel = expr->label.falseLabel = newLabel();
+                falseBody->label.beginLabel = expr->label.falseLabel;
+                cout << "if beginF" << trueBody->label.beginLabel << endl;
             }
             if(this->label.nextLabel == ""){
                 this->label.nextLabel = newLabel();
@@ -816,7 +824,9 @@ void TreeNode::genStmtLabel(){
             }
             expr->recursiveGenLabel();
             trueBody->recursiveGenLabel();
-            falseBody->recursiveGenLabel();
+            if (falseBody != nullptr) {
+                falseBody->recursiveGenLabel();
+            }
             break;
         }
         case STMT_FOR: {
@@ -842,57 +852,14 @@ void TreeNode::genStmtLabel(){
             break;
         }
         case STMT_EXPR: {
-            TreeNode* operand1 = this->child;
-            TreeNode* operand2 = this->child->sibling;
-            switch (this->opType)
-            {
-                case OP_AND: {
-                    operand2->label.trueLabel = this->label.trueLabel;
-                    operand1->label.trueLabel = newLabel();
-                    operand1->label.falseLabel = operand2->label.falseLabel = this->label.falseLabel;
-                    if (operand1->stmtType == STMT_EXPR) {
-                        operand1->recursiveGenLabel();
-                    }
-                    if (operand2->stmtType == STMT_EXPR) {
-                        operand2->recursiveGenLabel();
-                    }
-                    break;
-                }
-                case OP_OR: {
-                    operand1->label.trueLabel = operand2->label.trueLabel = this->label.trueLabel;
-                    operand1->label.falseLabel = newLabel();
-                    operand2->label.falseLabel = this->label.falseLabel;
-                    if (operand1->stmtType == STMT_EXPR) {
-                        operand1->recursiveGenLabel();
-                    }
-                    if (operand2->stmtType == STMT_EXPR) {
-                        operand2->recursiveGenLabel();
-                    }
-                    break;
-                }
-                case OP_NOT: {
-                    operand1->label.trueLabel = this->label.falseLabel;
-                    operand1->label.falseLabel = this->label.trueLabel;
-                    if (operand1->stmtType == STMT_EXPR) {
-                        operand1->recursiveGenLabel();
-                    }
-                    if (operand2->stmtType == STMT_EXPR) {
-                        operand2->recursiveGenLabel();
-                    }
-                    break;
-                }
-                default: {
-                    // < > <= >= == != ??
-                    if (this->opType == OP_GT || this->opType == OP_GTQ ||
-                    this->opType == OP_LT || this->opType == OP_LTQ ||
-                    this->opType == OP_EQU || this->opType == OP_NEQ) {
-                        this->label.trueLabel = newLabel();
-                        this->label.falseLabel = newLabel();
-                    }
-                    break;
-                }
-            }
+            this->genExprLabel();
             break;
+        }
+        case STMT_ASIG: {
+            TreeNode* expr = this->child->sibling;
+            if (expr != nullptr) {
+                expr->recursiveGenLabel();
+            } 
         }
         default: {
             break;
@@ -900,6 +867,89 @@ void TreeNode::genStmtLabel(){
 
     }
 
+}
+
+void TreeNode::genExprLabel() {
+    TreeNode* operand1 = this->child;
+    TreeNode* operand2 = this->child->sibling;
+    switch (this->opType)
+    {
+        case OP_AND: {
+            operand2->label.trueLabel = this->label.trueLabel;
+            operand1->label.trueLabel = newLabel();
+            operand1->label.falseLabel = operand2->label.falseLabel = this->label.falseLabel;
+            if (operand1->stmtType == STMT_EXPR) {
+                operand1->recursiveGenLabel();
+            }
+            if (operand2->stmtType == STMT_EXPR) {
+                operand2->recursiveGenLabel();
+            }
+            break;
+        }
+        case OP_OR: {
+            operand1->label.trueLabel = operand2->label.trueLabel = this->label.trueLabel;
+            operand1->label.falseLabel = newLabel();
+            operand2->label.falseLabel = this->label.falseLabel;
+            if (operand1->stmtType == STMT_EXPR) {
+                operand1->recursiveGenLabel();
+            }
+            if (operand2->stmtType == STMT_EXPR) {
+                operand2->recursiveGenLabel();
+            }
+            break;
+        }
+        case OP_NOT: {
+            operand1->label.trueLabel = this->label.falseLabel;
+            operand1->label.falseLabel = this->label.trueLabel;
+            if (operand1->stmtType == STMT_EXPR) {
+                operand1->recursiveGenLabel();
+            }
+            if (operand2->stmtType == STMT_EXPR) {
+                operand2->recursiveGenLabel();
+            }
+            break;
+        }
+        default: {
+            // < > <= >= == != ??
+            if (this->opType == OP_GT || this->opType == OP_GTQ ||
+            this->opType == OP_LT || this->opType == OP_LTQ ||
+            this->opType == OP_EQU || this->opType == OP_NEQ) {
+                this->label.trueLabel = newLabel();
+                this->label.falseLabel = newLabel();
+                if (operand1->stmtType == STMT_EXPR) {
+                    operand1->recursiveGenLabel();
+                }
+                if (operand2->stmtType == STMT_EXPR) {
+                    operand2->recursiveGenLabel();
+                }
+            } 
+            else if (this->opType == OP_ADD || this->opType == OP_MUL || 
+            this->opType == OP_DIV || this->opType == OP_MOD) {
+                if (operand1->stmtType == STMT_EXPR) {
+                    operand1->recursiveGenLabel();
+                }
+                if (operand2->stmtType == STMT_EXPR) {
+                    operand2->recursiveGenLabel();
+                }
+            } else if (this->opType == OP_MIN) {
+                cout << "min" << endl;
+                if (operand1->stmtType == STMT_EXPR) {
+                    operand1->recursiveGenLabel();
+                }
+                if (operand2 != nullptr && operand2->stmtType == STMT_EXPR) {
+                    operand2->recursiveGenLabel();
+                }
+            }
+            break;
+        }
+    }
+    this->tempId = to_string(tempVarNum);
+    tempVar var;
+    var.num = tempVarNum;
+    var.value = this->nodeID;
+    tempVarNum++;
+    tempVariables.push_back(var);
+    cout << "tmpSize" << tempVariables.size() << endl;
 }
 
 void TreeNode::genFuncLabel() {
@@ -971,25 +1021,32 @@ string TreeNode::newLabel(){
 }
 
 void TreeNode::recursiveGenLabel() {
-    if (this->nodeType == NODE_Stmt || this->stmtType == STMT_EXPR) {
+    if (this->nodeType == NODE_Stmt) {
+        cout << "recursiveGenStmt " << this->nodeID << endl;
         this->genStmtLabel();
     } 
+    else if (this->stmtType == STMT_EXPR) {
+        cout << "recursiveGenExpr " << this->nodeID << endl;
+        this->genExprLabel();
+    }
     else if (this->nodeType == NODE_Func) {
+        cout << "recursiveGenFunc " << this->nodeID << endl;
         this->genFuncLabel();
     }
-    else {
-        if (this->nodeType == NODE_Prog) {
+    else if (this->nodeType == NODE_Prog) {
             this->label.beginLabel = "_start";
-        }
-        TreeNode* child = this->child;
-        while(child != nullptr){
-            child->recursiveGenLabel();
-            child = child->sibling;
-        }
+            TreeNode* child = this->child;
+            while(child != nullptr){
+                child->recursiveGenLabel();
+                child = child->sibling;
+            }
     }
 }
 
 void TreeNode::genCode(ostream &out) {
+    for(int i = 0 ; i < tempVariables.size(); i++) {
+        cout << tempVariables[i].num << " " << tempVariables[i].value << endl;
+    }
     out << "# your asm code header here!" << endl;
     if(this->nodeType == NODE_Prog) {
         bool textHeader = true;
@@ -1001,6 +1058,7 @@ void TreeNode::genCode(ostream &out) {
             child = child->sibling;
         }
     }
+    out << "\t.section\t.note.GNU-stack,\"\",@progbits" << endl;
 }
 
 void TreeNode::recursiveGenCode(ostream &out) {
@@ -1046,7 +1104,7 @@ void TreeNode::genStmtCode(ostream &out) {
                         break;
                     }
                     case ADDASIG: {
-                        if (expr->nodeType == NODE_Const) {
+                        if (expr->nodeType == NODE_Const || expr->nodeType == NODE_Var || expr->nodeType == NODE_ConstVar) {
                             if (expr->declType == D_INT) {
                                 out << "\tmovl $" << expr->getIntValue() << ", _" << id->identifier << endl;
                             } 
@@ -1056,44 +1114,23 @@ void TreeNode::genStmtCode(ostream &out) {
                             else if (expr->declType == D_CHAR) {
                                 out << "\tmovb $" << expr->getCharValue() << ", _" << id->identifier << endl;
                             }
-                        } else {
+                        } 
+                        else {
+                            expr->recursiveGenCode(out);
                             out << "\tmovl t" << expr->tempId << ", %eax" << endl;
-                            out << "\tmovl _" << id->identifier << ", %ecx" << endl;
-                            out << "\taddl %ecx, %eax" << endl;
-                            if (id->declType == D_CHAR || id->declType == D_BOOL) {
-                                out << "\tmovb %al, _" << id->identifier << endl;
-                            } else {
-                                out << "\tmovl %eax, _" << id->identifier << endl;
-                            }
                         }
-                        break;
-                    }
-                    case MINASIG: {
-                        if (expr->nodeType == NODE_Const) {
-                            if (expr->declType == D_INT) {
-                                out << "\tmovl $" << expr->getIntValue() << ", _" << id->identifier << endl;
-                            } 
-                            else if (expr->declType == D_BOOL) {
-                                out << "\tmovb $" << expr->getBoolValue() << ", _" << id->identifier << endl;
-                            }
-                            else if (expr->declType == D_CHAR) {
-                                out << "\tmovb $" << expr->getCharValue() << ", _" << id->identifier << endl;
-                            }
+                        out << "\tmovl _" << id->identifier << ", %ecx" << endl;
+                        out << "\taddl %ecx, %eax" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
                         } else {
-                            out << "\tmovl t" << expr->tempId << ", %ecx" << endl;
-                            out << "\tmovl _" << id->identifier << ", %eax" << endl;
-                            out << "\tsubl %ecx, %eax" << endl;
-                            if (id->declType == D_CHAR || id->declType == D_BOOL) {
-                                out << "\tmovb %al, _" << id->identifier << endl;
-                            } else {
-                                out << "\tmovl %eax, _" << id->identifier << endl;
-                            }
+                            out << "\tmovl %eax, _" << id->identifier << endl;
                         }
                         
                         break;
                     }
-                    case MULASIG: {
-                        if (expr->nodeType == NODE_Const) {
+                    case MINASIG: {
+                        if (expr->nodeType == NODE_Const || expr->nodeType == NODE_Var || expr->nodeType == NODE_ConstVar) {
                             if (expr->declType == D_INT) {
                                 out << "\tmovl $" << expr->getIntValue() << ", _" << id->identifier << endl;
                             } 
@@ -1104,19 +1141,45 @@ void TreeNode::genStmtCode(ostream &out) {
                                 out << "\tmovb $" << expr->getCharValue() << ", _" << id->identifier << endl;
                             }
                         } else {
-                            out << "\tmovl t" << expr->tempId << ", %ecx" << endl;
-                            out << "\tmovl _" << id->identifier << ", %eax" << endl;
-                            out << "\timull %ecx, %eax" << endl;
-                            if (id->declType == D_CHAR || id->declType == D_BOOL) {
-                                out << "\tmovb %al, _" << id->identifier << endl;
-                            } else {
-                                out << "\tmovl %eax, _" << id->identifier << endl;
+                            expr->recursiveGenCode(out);
+                            out << "\tmovl t" << expr->tempId << ", %eax" << endl;
+                        }
+                        out << "\tmovl _" << id->identifier << ", %ecx" << endl;
+                        out << "\tsubl %ecx, %eax" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %eax, _" << id->identifier << endl;
+                        } 
+                        break;
+                    }
+                    case MULASIG: {
+                        if (expr->nodeType == NODE_Const || expr->nodeType == NODE_Var || expr->nodeType == NODE_ConstVar) {
+                            if (expr->declType == D_INT) {
+                                out << "\tmovl $" << expr->getIntValue() << ", _" << id->identifier << endl;
+                            } 
+                            else if (expr->declType == D_BOOL) {
+                                out << "\tmovb $" << expr->getBoolValue() << ", _" << id->identifier << endl;
                             }
+                            else if (expr->declType == D_CHAR) {
+                                out << "\tmovb $" << expr->getCharValue() << ", _" << id->identifier << endl;
+                            }
+                        } 
+                        else {
+                            expr->recursiveGenCode(out);
+                            out << "\tmovl t" << expr->tempId << ", %eax" << endl;
+                        }
+                        out << "\tmovl _" << id->identifier << ", %ecx" << endl;
+                        out << "\timull %ecx, %eax" << endl;
+                        if (id->declType == D_CHAR || id->declType == D_BOOL) {
+                            out << "\tmovb %al, _" << id->identifier << endl;
+                        } else {
+                            out << "\tmovl %eax, _" << id->identifier << endl;
                         }
                         break;
                     }
                     case DIVASIG: {
-                        if (expr->nodeType == NODE_Const) {
+                        if (expr->nodeType == NODE_Const || expr->nodeType == NODE_Var || expr->nodeType == NODE_ConstVar) {
                             if (expr->declType == D_INT) {
                                 out << "\tmovl $" << expr->getIntValue() << ", _" << id->identifier << endl;
                             } 
@@ -1225,10 +1288,10 @@ void TreeNode::genStmtCode(ostream &out) {
             TreeNode* expr = this->child;
             expr->recursiveGenCode(out);
             out << "\ttestl t" << expr->tempId << ", $1" << endl;
-            out << "\tjne " << this->label.falseLabel << endl;
+            out << "\tjne " << expr->label.falseLabel << endl;
             TreeNode* trueStmt = this->child->sibling;
             trueStmt->recursiveGenCode(out);
-            out << this->label.falseLabel << ":" << endl;
+            out << expr->label.falseLabel << ":" << endl;
             if (trueStmt->sibling != nullptr) {
                 TreeNode* falseStmt = this->child->sibling->sibling;
                 falseStmt->recursiveGenCode(out);
@@ -1245,7 +1308,7 @@ void TreeNode::genStmtCode(ostream &out) {
         }
         case STMT_RETURN: {
             if (this->child != nullptr) {
-                out << "\tmovl, $";
+                out << "\tmovl $";
                 if (this->child->declType == D_INT) {
                     out << this->child->getIntValue(); 
                 }
@@ -1323,7 +1386,13 @@ void TreeNode::genDeclCode(ostream &out) {
         }
         
     }
-    out << endl << "\t.section .rdata, \"dr\"" << endl;
+    for (int i = 0; i < tempVarNum; i++) {
+        out << "\t.globl\tt" << i << endl;
+        out << "t" << i << ":" << endl;
+        out << ".align\t4" << endl;
+        out << ".zero\t4" << endl;
+    }
+    out << endl << "\t.section .rodata" << endl;
     cout << "rostring" << rostring.size() << endl;
     for (int i = 0; i < rostring.size(); i++) {
         out << "LC" << rostring[i].num << ":" << endl;
@@ -1335,6 +1404,7 @@ void TreeNode::genExprCode(ostream& out) {
     TreeNode* child1 = this->child;
     TreeNode* child2 = this->child->sibling;
     bool charFlag = false;
+    string stmt = "";
     switch (this->opType)
     {
         case OP_ADD: {
@@ -1346,7 +1416,7 @@ void TreeNode::genExprCode(ostream& out) {
                 else {
                     out << "\tmovl " << "_" << child1->identifier;
                 }
-                
+                stmt += "_" + child1->identifier + "+";
             }
             else if (child1->nodeType == NODE_Const) {
                 out << "\tmovl ";
@@ -1365,11 +1435,12 @@ void TreeNode::genExprCode(ostream& out) {
             }
             else {
                 // (child1->nodeType == NODE_Op) 
-                out << "t" << child1->tempId;
+                child1->recursiveGenCode(out);
+                out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
             if (this->declType == D_INT && charFlag) {
-                out << "\tmovsbl %al, %edx" << endl;
+                out << "\tmovsbl %dl, %edx" << endl;
                 charFlag = false;
             }
             if (child2->nodeType == NODE_Var || child2->nodeType == NODE_ConstVar) {
@@ -1398,8 +1469,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child2->tempId;
+                child2->recursiveGenCode(out);
+                out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1411,6 +1482,40 @@ void TreeNode::genExprCode(ostream& out) {
             break;
         }
         case OP_MIN: {
+            if (child2 == nullptr) {
+                if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
+                    if (child1->declType == D_CHAR) {
+                        out << "\tmovzbl " << "_" << child1->identifier;
+                        charFlag = true;
+                    }
+                    else {
+                        out << "\tmovl " << "_" << child1->identifier;
+                    }
+                }
+                else if (child1->nodeType == NODE_Const) {
+                    out << "\tmovl ";
+                    switch (child1->declType)
+                    {
+                        case D_INT:{
+                            out << "$" << child1->getIntValue();
+                            break;
+                        }
+                        case D_CHAR: {
+                            out << "$" << (int)child1->getCharValue();
+                        }
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    child1->recursiveGenCode(out);
+                    out << "\tmovl t" << child1->tempId;
+                }
+                out << ", %eax" << endl;
+                out << "\tnegl %eax" << endl;
+                out << "\tmovl %eax, t" << this->tempId << endl;
+                break;
+            }
             if (child1->nodeType == NODE_Var || child1->nodeType == NODE_ConstVar) {
                 if (child1->declType == D_CHAR) {
                     out << "\tmovzbl " << "_" << child1->identifier;
@@ -1419,7 +1524,6 @@ void TreeNode::genExprCode(ostream& out) {
                 else {
                     out << "\tmovl " << "_" << child1->identifier;
                 }
-                
             }
             else if (child1->nodeType == NODE_Const) {
                 out << "\tmovl ";
@@ -1437,8 +1541,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child1->tempId;
+                child1->recursiveGenCode(out);
+                out << "\tmovl t" << child1->tempId;
             }
             out << ", %eax" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1471,8 +1575,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child2->tempId;
+                child2->recursiveGenCode(out);
+                out << "\tmovl t" << child2->tempId;
             }
             out << ", %edx" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1510,8 +1614,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child1->tempId;
+                child1->recursiveGenCode(out);
+                out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1544,8 +1648,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child2->tempId;
+                child2->recursiveGenCode(out);
+                out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1583,8 +1687,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child1->tempId;
+                child1->recursiveGenCode(out);
+                out << "\tmovl t" << child1->tempId;
             }
             out << ", %eax" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1617,8 +1721,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child2->tempId;
+                child2->recursiveGenCode(out); 
+                out << "\tmovl t" << child2->tempId;
             }
             out << ", %ebx" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1657,8 +1761,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child1->tempId;
+                child1->recursiveGenCode(out);
+                out << "\tmovl t" << child1->tempId;
             }
             out << ", %eax" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1691,8 +1795,8 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
-                // (child1->nodeType == NODE_Op) 
-                out << "t" << child2->tempId;
+                child2->recursiveGenCode(out);
+                out << "\tmovl t" << child2->tempId;
             }
             out << ", %ebx" << endl;
             if (this->declType == D_INT && charFlag) {
@@ -1713,7 +1817,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tmovl $" << child1->getBoolValue();       
             }
             else {
-                // (child1->nodeType == NODE_Op) 
+                child1->recursiveGenCode(out);
                 out << "\tmovzbl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -1724,7 +1828,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tmovl $" << child1->getBoolValue();       
             }
             else {
-                // (child1->nodeType == NODE_Op) 
+                child2->recursiveGenCode(out);
                 out << "\tmovzbl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -1740,7 +1844,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tmovl $" << child1->getBoolValue();       
             }
             else {
-                // (child1->nodeType == NODE_Op) 
+                child1->recursiveGenCode(out);
                 out << "\tmovzbl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -1751,7 +1855,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tmovl $" << child1->getBoolValue();       
             }
             else {
-                // (child1->nodeType == NODE_Op) 
+                child2->recursiveGenCode(out);
                 out << "\tmovzbl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -1768,7 +1872,7 @@ void TreeNode::genExprCode(ostream& out) {
                 value = child1->getBoolValue();       
             }
             else {
-                // (child1->nodeType == NODE_Op) 
+                child1->recursiveGenCode(out); 
                 out << "\tmovzbl t" << child1->tempId;
             }
             if (child1->nodeType == NODE_Const) {
@@ -1811,6 +1915,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child1->recursiveGenCode(out);
                 out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -1839,6 +1944,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child2->recursiveGenCode(out);
                 out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -1848,7 +1954,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tcmpl %eax, %edx" << endl;
             }
             out << "\tsete %al" << endl;
-            out << "movl %al t" << this->tempId << endl;
+            out << "\tmovl %al t" << this->tempId << endl;
             break;
         }
         case OP_GT: {
@@ -1877,6 +1983,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child1->recursiveGenCode(out);
                 out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -1905,6 +2012,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child2->recursiveGenCode(out);
                 out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -1914,7 +2022,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tcmpl %eax, %edx" << endl;
             }
             out << "\tsetg %al" << endl;
-            out << "movl %al t" << this->tempId << endl;
+            out << "\tmovl %al t" << this->tempId << endl;
             break;
         }
         case OP_LT: {
@@ -1943,6 +2051,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child1->recursiveGenCode(out);
                 out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -1971,6 +2080,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child2->recursiveGenCode(out);
                 out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -1980,7 +2090,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tcmpl %eax, %edx" << endl;
             }
             out << "\tsetl %al" << endl;
-            out << "movl %al t" << this->tempId << endl;
+            out << "\tmovl %al t" << this->tempId << endl;
             break;
         }
         case OP_GTQ: {
@@ -2009,6 +2119,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child1->recursiveGenCode(out);
                 out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -2037,6 +2148,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child2->recursiveGenCode(out);
                 out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -2046,7 +2158,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tcmpl %eax, %edx" << endl;
             }
             out << "\tsetge %al" << endl;
-            out << "movl %al t" << this->tempId << endl;
+            out << "\tmovl %al t" << this->tempId << endl;
             break;
         }
         case OP_LTQ: {
@@ -2075,6 +2187,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child1->recursiveGenCode(out);
                 out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -2103,6 +2216,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child2->recursiveGenCode(out);
                 out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -2112,7 +2226,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tcmpl %eax, %edx" << endl;
             }
             out << "\tsetle %al" << endl;
-            out << "movl %al t" << this->tempId << endl;
+            out << "\tmovl %al t" << this->tempId << endl;
             break;
         }
         case OP_NEQ: {
@@ -2141,6 +2255,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child1->recursiveGenCode(out);
                 out << "\tmovl t" << child1->tempId;
             }
             out << ", %edx" << endl;
@@ -2169,6 +2284,7 @@ void TreeNode::genExprCode(ostream& out) {
                 }
             }
             else {
+                child2->recursiveGenCode(out);
                 out << "\tmovl t" << child2->tempId;
             }
             out << ", %eax" << endl;
@@ -2178,7 +2294,7 @@ void TreeNode::genExprCode(ostream& out) {
                 out << "\tcmpl %eax, %edx" << endl;
             }
             out << "\tsetne %al" << endl;
-            out << "movl %al t" << this->tempId << endl;
+            out << "\tmovl %al t" << this->tempId << endl;
             break;
         }
         default:
@@ -2189,7 +2305,7 @@ void TreeNode::genExprCode(ostream& out) {
 void TreeNode::genFuncCode(ostream &out) {
     if (this->funcType == FUNC_DEFI) {
         if (strcmp("main", this->identifier.c_str()) == 0) {
-            out << "\t.text" << endl;
+            out << endl << "\t.text" << endl;
             out << "\t.global main" << endl;
             out << "\t.type main, @function" << endl;
             out << this->identifier << ":" << endl;
@@ -2200,6 +2316,8 @@ void TreeNode::genFuncCode(ostream &out) {
                 bodyChild->recursiveGenCode(out);
                 bodyChild = bodyChild->sibling;
             }
+            out << "\tmovl %ebp, %esp" << endl;
+            out << "\tpopl %ebp" << endl;
             out << "\tret" << endl;
         }
     }
@@ -2213,13 +2331,35 @@ void TreeNode::genFuncCode(ostream &out) {
                 nodes.push(var);
                 var = var->sibling;
             }
+            int count = nodes.size();
             for (int i = nodes.size(); i > 0; i--) {
                 TreeNode* node = nodes.top();
-                out << "\tmovl _" << node->identifier << ", " << i * 4 << "(%esp)" << endl;
+                out << "\tmovl _" << node->identifier << ", %eax" << endl;
+                out << "\tpushl %eax" << endl;
                 nodes.pop();
             }
-            out << "\tmovl LC" << str->tempId << ", (%esp)" << endl;
+            out << "\tpushl $LC" << str->tempId << endl;
             out << "\tcall printf" << endl;
+            out << "\taddl $" << (count+1)*4 << ", %esp" << endl;
+        }
+        else if (strcmp("scanf", this->child->identifier.c_str()) == 0) {
+            cout << "scanf" << endl;
+            stack<TreeNode*> nodes;
+            TreeNode* str = this->child->sibling;
+            TreeNode* var = this->child->sibling->sibling;
+            while(var != nullptr) {
+                nodes.push(var);
+                var = var->sibling;
+            }
+            int count = nodes.size();
+            for (int i = nodes.size(); i > 0; i--) {
+                TreeNode* node = nodes.top();
+                out << "\tpushl $_" << node->identifier << endl;
+                nodes.pop();
+            }
+            out << "\tpushl $LC" << str->tempId << endl;
+            out << "\tcall scanf" << endl;
+            out << "\taddl $" << (count+1)*4 << ", %esp" << endl;
         }
     }
     

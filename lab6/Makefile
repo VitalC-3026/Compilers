@@ -17,7 +17,7 @@ yacc: main.tab.c
 main:
 	$(CC) $(CFLAGS) $(shell ls ./*.cpp) -o ./bin/main
 
-.PHONY: all clean main run lex yacc test 
+.PHONY: all clean main run lex yacc test testasm
 
 run: lex yacc main
 
@@ -26,3 +26,7 @@ clean:
 
 test:
 	./bin/main tests/test_main.cpp results/test.res.txt results/test.s
+
+testasm:
+	gcc results/test.s -m32 -o ./bin/main.out
+	qemu-i386 ./bin/main.out
