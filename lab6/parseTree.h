@@ -54,6 +54,7 @@ public:
         this->isAlive = alive;
     }
     bool getIsAlive() { return this->isAlive; }
+    int getLineno() { return this->lineno; }
 
     void genStmtLabel();
     void genExprLabel();

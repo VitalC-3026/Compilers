@@ -527,8 +527,9 @@ expr
                         $$ = node;
                     }
                 }
-| NOT  expr     { if($2->getNodeType() == NODE_Var || $2->getNodeType() == NODE_ConstVar || $2->getNodeType() == NODE_Const) {
-                    if ($1->getDeclType() != D_STRING) {
+| NOT  expr     { if($2->getNodeType() == NODE_Var || $2->getNodeType() == NODE_ConstVar 
+                    || $2->getNodeType() == NODE_Const || $2->getNodeType() == NODE_Op) {
+                    if ($2->getDeclType() != D_STRING) {
                         TreeNode* node = new TreeNode(lineno, NODE_Op);
                         node->setStatementType(STMT_EXPR);
                         node->setOperatorType(OP_NOT);
@@ -537,7 +538,8 @@ expr
                         $$ = node;
                     }
                   } else {
-                      yyerror("NOT Type error, this node is a string.");
+                      string msg = (string)"Line@ " + to_string(lineno) + (string)" Node@" + to_string($2->getNodeType()) + (string)"Type error : NOT operation" ;
+                      yyerror(msg.c_str());
                   }
                 }
 | ADD  expr     { $$ = $2;}
@@ -566,7 +568,8 @@ expr
                   } else {
                       yyerror("REF Type error, this node is not an identifier.");
                   }
-                }    
+                }
+| LBRACE expr RBRACE { $$ = $2; }    
 | ID   {    if(identifierTable.find($1->getIdentifier()) == identifierTable.end()) {
                 string msg = (string)"Node@" + to_string($1->getNodeId()) + (string)" NODE_Var/ConstVar : ID not defined.";
                 yyerror(msg.c_str());
@@ -670,13 +673,13 @@ bool checkWhile(TreeNode* t1, TreeNode* t2)
 
 bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
 {
-    if (t2->getNodeType() != NODE_Stmt) {
-        string msg = (string)"Node@" + to_string(t2->getNodeId()) + (string)" NODE_If: unexpected type for true statements";
+    if (t2->getNodeType() != NODE_Stmt && t2->getNodeType() != NODE_Func) {
+        string msg = (string)"Line@" + to_string(t2->getLineno()) + (string)" Node@" + to_string(t2->getNodeId()) + (string)" NODE_If: unexpected type for true statements";
         yyerror(msg.c_str());
         return false;
     }
-    if (t3 != NULL && t3->getNodeType() != NODE_Stmt) {
-        string msg = (string)"Node@" + to_string(t2->getNodeId()) + (string)" NODE_If: unexpected type for false statements";
+    if (t3 != NULL && t3->getNodeType() != NODE_Stmt && t3->getNodeType() != NODE_Func) {
+        string msg = (string)"Line@" + to_string(t2->getLineno()) + (string)" Node@" + to_string(t3->getNodeId()) + (string)" NODE_If: unexpected type for false statements";
         yyerror(msg.c_str());
         return false;
     }

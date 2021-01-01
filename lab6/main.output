@@ -11,16 +11,16 @@ Terminals unused in grammar
 
 State 0 conflicts: 1 shift/reduce
 State 20 conflicts: 1 shift/reduce
-State 138 conflicts: 1 shift/reduce
-State 139 conflicts: 1 shift/reduce
 State 141 conflicts: 1 shift/reduce
-State 149 conflicts: 1 shift/reduce
-State 151 conflicts: 1 shift/reduce
+State 142 conflicts: 1 shift/reduce
+State 144 conflicts: 1 shift/reduce
 State 152 conflicts: 1 shift/reduce
 State 154 conflicts: 1 shift/reduce
-State 159 conflicts: 1 shift/reduce
-State 169 conflicts: 1 shift/reduce
-State 170 conflicts: 1 shift/reduce
+State 155 conflicts: 1 shift/reduce
+State 157 conflicts: 1 shift/reduce
+State 162 conflicts: 1 shift/reduce
+State 172 conflicts: 1 shift/reduce
+State 173 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -120,10 +120,11 @@ Grammar
    73     | ADD expr
    74     | MIN expr
    75     | REF expr
-   76     | ID
-   77     | INTEGER
-   78     | CHAR
-   79     | STRING
+   76     | LBRACE expr RBRACE
+   77     | ID
+   78     | INTEGER
+   79     | CHAR
+   80     | STRING
 
 
 Terminals, with rules where they appear
@@ -155,20 +156,20 @@ LTQ (279) 69
 NEQ (280) 70
 AND (281) 64
 OR (282) 65
-LBRACE (283) 14 15 16 17 18 19 38 39 42 43
-RBRACE (284) 14 15 16 17 18 19 38 39 42 43
+LBRACE (283) 14 15 16 17 18 19 38 39 42 43 76
+RBRACE (284) 14 15 16 17 18 19 38 39 42 43 76
 LPAREN (285) 14 38 39 42 43
 RPAREN (286) 14 38 39 42 43
 ID (287) 15 19 23 24 25 26 27 28 29 30 49 50 51 52 53 54 55 56 57 58
-    76
-INTEGER (288) 77
+    77
+INTEGER (288) 78
 MAIN (289) 14
 DEC (290)
 OCT (291)
 HEX (292)
-CHAR (293) 78
+CHAR (293) 79
 BOOL (294)
-STRING (295) 16 17 18 79
+STRING (295) 16 17 18 80
 T_BOOL (296) 33
 T_INT (297) 34
 T_CHAR (298) 35
@@ -231,8 +232,8 @@ assignment (77)
     on left: 48 49 50 51 52 53 54 55 56 57 58, on right: 6 40 41
 expr (78)
     on left: 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76
-    77 78 79, on right: 20 21 27 29 39 40 41 42 43 46 49 50 51 52 53
-    54 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75
+    77 78 79 80, on right: 20 21 27 29 39 40 41 42 43 46 49 50 51 52
+    53 54 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76
 
 
 State 0
@@ -391,14 +392,15 @@ State 13
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
     $default  reduce using rule 47 (jump)
 
-    expr  go to state 55
+    expr  go to state 56
 
 
 State 14
@@ -420,14 +422,14 @@ State 16
    17 functionCall: PRINTF . LBRACE STRING RBRACE
    18             | PRINTF . LBRACE STRING printfIdlist RBRACE
 
-    LBRACE  shift, and go to state 56
+    LBRACE  shift, and go to state 57
 
 
 State 17
 
    16 functionCall: SCANF . LBRACE STRING scanfIdlist RBRACE
 
-    LBRACE  shift, and go to state 57
+    LBRACE  shift, and go to state 58
 
 
 State 18
@@ -441,7 +443,7 @@ State 19
 
     0 $accept: program . $end
 
-    $end  shift, and go to state 58
+    $end  shift, and go to state 59
 
 
 State 20
@@ -471,7 +473,7 @@ State 20
     SEMICOLON  [reduce using rule 48 (assignment)]
     $default   reduce using rule 1 (program)
 
-    statement     go to state 59
+    statement     go to state 60
     function      go to state 22
     functionDefi  go to state 23
     functionDecl  go to state 24
@@ -509,21 +511,21 @@ State 24
 
    11 function: functionDecl . SEMICOLON
 
-    SEMICOLON  shift, and go to state 60
+    SEMICOLON  shift, and go to state 61
 
 
 State 25
 
    12 function: functionCall . SEMICOLON
 
-    SEMICOLON  shift, and go to state 61
+    SEMICOLON  shift, and go to state 62
 
 
 State 26
 
     5 statement: declaration . SEMICOLON
 
-    SEMICOLON  shift, and go to state 62
+    SEMICOLON  shift, and go to state 63
 
 
 State 27
@@ -532,10 +534,10 @@ State 27
    15 functionDecl: type . ID LBRACE RBRACE
    31 declaration: type . idlist
 
-    ID    shift, and go to state 63
-    MAIN  shift, and go to state 64
+    ID    shift, and go to state 64
+    MAIN  shift, and go to state 65
 
-    idlist  go to state 65
+    idlist  go to state 66
 
 
 State 28
@@ -556,14 +558,14 @@ State 30
 
     7 statement: jump . SEMICOLON
 
-    SEMICOLON  shift, and go to state 66
+    SEMICOLON  shift, and go to state 67
 
 
 State 31
 
     6 statement: assignment . SEMICOLON
 
-    SEMICOLON  shift, and go to state 67
+    SEMICOLON  shift, and go to state 68
 
 
 State 32
@@ -588,12 +590,13 @@ State 34
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 68
+    expr  go to state 69
 
 
 State 35
@@ -604,12 +607,13 @@ State 35
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 69
+    expr  go to state 70
 
 
 State 36
@@ -620,12 +624,13 @@ State 36
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 70
+    expr  go to state 71
 
 
 State 37
@@ -636,12 +641,13 @@ State 37
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 71
+    expr  go to state 72
 
 
 State 38
@@ -652,12 +658,13 @@ State 38
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 72
+    expr  go to state 73
 
 
 State 39
@@ -668,12 +675,13 @@ State 39
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 73
+    expr  go to state 74
 
 
 State 40
@@ -698,24 +706,25 @@ State 42
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
     $default  reduce using rule 22 (paramList)
 
-    paramList  go to state 74
-    expr       go to state 75
+    paramList  go to state 75
+    expr       go to state 76
 
 
 State 43
 
    32 declaration: CONST type . idlist
 
-    ID  shift, and go to state 76
+    ID  shift, and go to state 77
 
-    idlist  go to state 77
+    idlist  go to state 78
 
 
 State 44
@@ -727,12 +736,13 @@ State 44
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 78
+    expr  go to state 79
 
 
 State 45
@@ -743,12 +753,13 @@ State 45
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 79
+    expr  go to state 80
 
 
 State 46
@@ -757,7 +768,7 @@ State 46
 
     ADDASGO   shift, and go to state 1
     MINASGO   shift, and go to state 2
-    ID        shift, and go to state 80
+    ID        shift, and go to state 81
     T_BOOL    shift, and go to state 4
     T_INT     shift, and go to state 5
     T_CHAR    shift, and go to state 6
@@ -767,10 +778,10 @@ State 46
 
     $default  reduce using rule 48 (assignment)
 
-    declaration  go to state 81
-    type         go to state 82
-    forcon       go to state 83
-    assignment   go to state 84
+    declaration  go to state 82
+    type         go to state 83
+    forcon       go to state 84
+    assignment   go to state 85
 
 
 State 47
@@ -781,12 +792,13 @@ State 47
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 85
+    expr  go to state 86
 
 
 State 48
@@ -797,12 +809,13 @@ State 48
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 86
+    expr  go to state 87
 
 
 State 49
@@ -813,12 +826,13 @@ State 49
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 87
+    expr  go to state 88
 
 
 State 50
@@ -829,43 +843,61 @@ State 50
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 88
+    expr  go to state 89
 
 
 State 51
 
-   76 expr: ID .
+   76 expr: LBRACE . expr RBRACE
 
-    $default  reduce using rule 76 (expr)
+    REF      shift, and go to state 47
+    NOT      shift, and go to state 48
+    ADD      shift, and go to state 49
+    MIN      shift, and go to state 50
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
+
+    expr  go to state 90
 
 
 State 52
 
-   77 expr: INTEGER .
+   77 expr: ID .
 
     $default  reduce using rule 77 (expr)
 
 
 State 53
 
-   78 expr: CHAR .
+   78 expr: INTEGER .
 
     $default  reduce using rule 78 (expr)
 
 
 State 54
 
-   79 expr: STRING .
+   79 expr: CHAR .
 
     $default  reduce using rule 79 (expr)
 
 
 State 55
+
+   80 expr: STRING .
+
+    $default  reduce using rule 80 (expr)
+
+
+State 56
 
    46 jump: RETURN expr .
    59 expr: expr . ADD expr
@@ -882,118 +914,118 @@ State 55
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 46 (jump)
 
 
-State 56
+State 57
 
    17 functionCall: PRINTF LBRACE . STRING RBRACE
    18             | PRINTF LBRACE . STRING printfIdlist RBRACE
 
-    STRING  shift, and go to state 102
-
-
-State 57
-
-   16 functionCall: SCANF LBRACE . STRING scanfIdlist RBRACE
-
-    STRING  shift, and go to state 103
+    STRING  shift, and go to state 104
 
 
 State 58
+
+   16 functionCall: SCANF LBRACE . STRING scanfIdlist RBRACE
+
+    STRING  shift, and go to state 105
+
+
+State 59
 
     0 $accept: program $end .
 
     $default  accept
 
 
-State 59
+State 60
 
     3 statements: statements statement .
 
     $default  reduce using rule 3 (statements)
 
 
-State 60
+State 61
 
    11 function: functionDecl SEMICOLON .
 
     $default  reduce using rule 11 (function)
 
 
-State 61
+State 62
 
    12 function: functionCall SEMICOLON .
 
     $default  reduce using rule 12 (function)
 
 
-State 62
+State 63
 
     5 statement: declaration SEMICOLON .
 
     $default  reduce using rule 5 (statement)
 
 
-State 63
+State 64
 
    15 functionDecl: type ID . LBRACE RBRACE
    29 idlist: ID . ASG expr
    30       | ID .
 
-    ASG     shift, and go to state 104
-    LBRACE  shift, and go to state 105
+    ASG     shift, and go to state 106
+    LBRACE  shift, and go to state 107
 
     $default  reduce using rule 30 (idlist)
 
 
-State 64
+State 65
 
    14 functionDefi: type MAIN . LBRACE RBRACE LPAREN statements RPAREN
 
-    LBRACE  shift, and go to state 106
+    LBRACE  shift, and go to state 108
 
 
-State 65
+State 66
 
    27 idlist: idlist . COMMA ID ASG expr
    28       | idlist . COMMA ID
    31 declaration: type idlist .
 
-    COMMA  shift, and go to state 107
+    COMMA  shift, and go to state 109
 
     $default  reduce using rule 31 (declaration)
 
 
-State 66
+State 67
 
     7 statement: jump SEMICOLON .
 
     $default  reduce using rule 7 (statement)
 
 
-State 67
+State 68
 
     6 statement: assignment SEMICOLON .
 
     $default  reduce using rule 6 (statement)
 
 
-State 68
+State 69
 
    49 assignment: ID ASG expr .
    59 expr: expr . ADD expr
@@ -1010,24 +1042,24 @@ State 68
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 49 (assignment)
 
 
-State 69
+State 70
 
    50 assignment: ID ADDASG expr .
    59 expr: expr . ADD expr
@@ -1044,24 +1076,24 @@ State 69
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 50 (assignment)
 
 
-State 70
+State 71
 
    51 assignment: ID MINASG expr .
    59 expr: expr . ADD expr
@@ -1078,24 +1110,24 @@ State 70
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 51 (assignment)
 
 
-State 71
+State 72
 
    52 assignment: ID MULASG expr .
    59 expr: expr . ADD expr
@@ -1112,24 +1144,24 @@ State 71
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 52 (assignment)
 
 
-State 72
+State 73
 
    53 assignment: ID DIVASG expr .
    59 expr: expr . ADD expr
@@ -1146,24 +1178,24 @@ State 72
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 53 (assignment)
 
 
-State 73
+State 74
 
    54 assignment: ID MODASG expr .
    59 expr: expr . ADD expr
@@ -1180,33 +1212,33 @@ State 73
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 54 (assignment)
 
 
-State 74
+State 75
 
    19 functionCall: ID LBRACE paramList . RBRACE
    20 paramList: paramList . COMMA expr
 
-    RBRACE  shift, and go to state 108
-    COMMA   shift, and go to state 109
+    RBRACE  shift, and go to state 110
+    COMMA   shift, and go to state 111
 
 
-State 75
+State 76
 
    21 paramList: expr .
    59 expr: expr . ADD expr
@@ -1223,45 +1255,45 @@ State 75
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 21 (paramList)
 
 
-State 76
+State 77
 
    29 idlist: ID . ASG expr
    30       | ID .
 
-    ASG  shift, and go to state 104
+    ASG  shift, and go to state 106
 
     $default  reduce using rule 30 (idlist)
 
 
-State 77
+State 78
 
    27 idlist: idlist . COMMA ID ASG expr
    28       | idlist . COMMA ID
    32 declaration: CONST type idlist .
 
-    COMMA  shift, and go to state 107
+    COMMA  shift, and go to state 109
 
     $default  reduce using rule 32 (declaration)
 
 
-State 78
+State 79
 
    42 control: IF LBRACE expr . RBRACE LPAREN statements RPAREN
    43        | IF LBRACE expr . RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN
@@ -1279,23 +1311,23 @@ State 78
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD     shift, and go to state 89
-    MIN     shift, and go to state 90
-    MUL     shift, and go to state 91
-    DIV     shift, and go to state 92
-    MOD     shift, and go to state 93
-    EQU     shift, and go to state 94
-    GT      shift, and go to state 95
-    LT      shift, and go to state 96
-    GTQ     shift, and go to state 97
-    LTQ     shift, and go to state 98
-    NEQ     shift, and go to state 99
-    AND     shift, and go to state 100
-    OR      shift, and go to state 101
-    RBRACE  shift, and go to state 110
+    ADD     shift, and go to state 91
+    MIN     shift, and go to state 92
+    MUL     shift, and go to state 93
+    DIV     shift, and go to state 94
+    MOD     shift, and go to state 95
+    EQU     shift, and go to state 96
+    GT      shift, and go to state 97
+    LT      shift, and go to state 98
+    GTQ     shift, and go to state 99
+    LTQ     shift, and go to state 100
+    NEQ     shift, and go to state 101
+    AND     shift, and go to state 102
+    OR      shift, and go to state 103
+    RBRACE  shift, and go to state 112
 
 
-State 79
+State 80
 
    39 loop: WHILE LBRACE expr . RBRACE LPAREN statements RPAREN
    59 expr: expr . ADD expr
@@ -1312,23 +1344,23 @@ State 79
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD     shift, and go to state 89
-    MIN     shift, and go to state 90
-    MUL     shift, and go to state 91
-    DIV     shift, and go to state 92
-    MOD     shift, and go to state 93
-    EQU     shift, and go to state 94
-    GT      shift, and go to state 95
-    LT      shift, and go to state 96
-    GTQ     shift, and go to state 97
-    LTQ     shift, and go to state 98
-    NEQ     shift, and go to state 99
-    AND     shift, and go to state 100
-    OR      shift, and go to state 101
-    RBRACE  shift, and go to state 111
+    ADD     shift, and go to state 91
+    MIN     shift, and go to state 92
+    MUL     shift, and go to state 93
+    DIV     shift, and go to state 94
+    MOD     shift, and go to state 95
+    EQU     shift, and go to state 96
+    GT      shift, and go to state 97
+    LT      shift, and go to state 98
+    GTQ     shift, and go to state 99
+    LTQ     shift, and go to state 100
+    NEQ     shift, and go to state 101
+    AND     shift, and go to state 102
+    OR      shift, and go to state 103
+    RBRACE  shift, and go to state 113
 
 
-State 80
+State 81
 
    49 assignment: ID . ASG expr
    50           | ID . ADDASG expr
@@ -1349,37 +1381,37 @@ State 80
     MINASGO  shift, and go to state 41
 
 
-State 81
-
-   40 forcon: declaration . SEMICOLON expr SEMICOLON assignment
-
-    SEMICOLON  shift, and go to state 112
-
-
 State 82
 
-   31 declaration: type . idlist
-
-    ID  shift, and go to state 76
-
-    idlist  go to state 65
-
-
-State 83
-
-   38 loop: FOR LBRACE forcon . RBRACE LPAREN statements RPAREN
-
-    RBRACE  shift, and go to state 113
-
-
-State 84
-
-   41 forcon: assignment . SEMICOLON expr SEMICOLON assignment
+   40 forcon: declaration . SEMICOLON expr SEMICOLON assignment
 
     SEMICOLON  shift, and go to state 114
 
 
+State 83
+
+   31 declaration: type . idlist
+
+    ID  shift, and go to state 77
+
+    idlist  go to state 66
+
+
+State 84
+
+   38 loop: FOR LBRACE forcon . RBRACE LPAREN statements RPAREN
+
+    RBRACE  shift, and go to state 115
+
+
 State 85
+
+   41 forcon: assignment . SEMICOLON expr SEMICOLON assignment
+
+    SEMICOLON  shift, and go to state 116
+
+
+State 86
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1399,7 +1431,7 @@ State 85
     $default  reduce using rule 75 (expr)
 
 
-State 86
+State 87
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1419,7 +1451,7 @@ State 86
     $default  reduce using rule 72 (expr)
 
 
-State 87
+State 88
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1436,14 +1468,14 @@ State 87
    71     | expr . EQU expr
    73     | ADD expr .
 
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 73 (expr)
 
 
-State 88
+State 89
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1460,14 +1492,47 @@ State 88
    71     | expr . EQU expr
    74     | MIN expr .
 
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 74 (expr)
 
 
-State 89
+State 90
+
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+   76     | LBRACE expr . RBRACE
+
+    ADD     shift, and go to state 91
+    MIN     shift, and go to state 92
+    MUL     shift, and go to state 93
+    DIV     shift, and go to state 94
+    MOD     shift, and go to state 95
+    EQU     shift, and go to state 96
+    GT      shift, and go to state 97
+    LT      shift, and go to state 98
+    GTQ     shift, and go to state 99
+    LTQ     shift, and go to state 100
+    NEQ     shift, and go to state 101
+    AND     shift, and go to state 102
+    OR      shift, and go to state 103
+    RBRACE  shift, and go to state 117
+
+
+State 91
 
    59 expr: expr ADD . expr
 
@@ -1475,15 +1540,16 @@ State 89
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 115
+    expr  go to state 118
 
 
-State 90
+State 92
 
    60 expr: expr MIN . expr
 
@@ -1491,15 +1557,16 @@ State 90
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 116
+    expr  go to state 119
 
 
-State 91
+State 93
 
    61 expr: expr MUL . expr
 
@@ -1507,15 +1574,16 @@ State 91
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 117
+    expr  go to state 120
 
 
-State 92
+State 94
 
    62 expr: expr DIV . expr
 
@@ -1523,15 +1591,16 @@ State 92
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 118
+    expr  go to state 121
 
 
-State 93
+State 95
 
    63 expr: expr MOD . expr
 
@@ -1539,15 +1608,16 @@ State 93
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 119
+    expr  go to state 122
 
 
-State 94
+State 96
 
    71 expr: expr EQU . expr
 
@@ -1555,15 +1625,16 @@ State 94
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 120
+    expr  go to state 123
 
 
-State 95
+State 97
 
    66 expr: expr GT . expr
 
@@ -1571,15 +1642,16 @@ State 95
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 121
+    expr  go to state 124
 
 
-State 96
+State 98
 
    68 expr: expr LT . expr
 
@@ -1587,15 +1659,16 @@ State 96
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 122
+    expr  go to state 125
 
 
-State 97
+State 99
 
    67 expr: expr GTQ . expr
 
@@ -1603,15 +1676,16 @@ State 97
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 123
+    expr  go to state 126
 
 
-State 98
+State 100
 
    69 expr: expr LTQ . expr
 
@@ -1619,15 +1693,16 @@ State 98
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 124
+    expr  go to state 127
 
 
-State 99
+State 101
 
    70 expr: expr NEQ . expr
 
@@ -1635,15 +1710,16 @@ State 99
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 125
+    expr  go to state 128
 
 
-State 100
+State 102
 
    64 expr: expr AND . expr
 
@@ -1651,15 +1727,16 @@ State 100
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 126
+    expr  go to state 129
 
 
-State 101
+State 103
 
    65 expr: expr OR . expr
 
@@ -1667,35 +1744,36 @@ State 101
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 127
+    expr  go to state 130
 
 
-State 102
+State 104
 
    17 functionCall: PRINTF LBRACE STRING . RBRACE
    18             | PRINTF LBRACE STRING . printfIdlist RBRACE
 
-    RBRACE  shift, and go to state 128
-    COMMA   shift, and go to state 129
+    RBRACE  shift, and go to state 131
+    COMMA   shift, and go to state 132
 
-    printfIdlist  go to state 130
+    printfIdlist  go to state 133
 
 
-State 103
+State 105
 
    16 functionCall: SCANF LBRACE STRING . scanfIdlist RBRACE
 
-    COMMA  shift, and go to state 131
+    COMMA  shift, and go to state 134
 
-    scanfIdlist  go to state 132
+    scanfIdlist  go to state 135
 
 
-State 104
+State 106
 
    29 idlist: ID ASG . expr
 
@@ -1703,44 +1781,45 @@ State 104
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 133
-
-
-State 105
-
-   15 functionDecl: type ID LBRACE . RBRACE
-
-    RBRACE  shift, and go to state 134
-
-
-State 106
-
-   14 functionDefi: type MAIN LBRACE . RBRACE LPAREN statements RPAREN
-
-    RBRACE  shift, and go to state 135
+    expr  go to state 136
 
 
 State 107
 
-   27 idlist: idlist COMMA . ID ASG expr
-   28       | idlist COMMA . ID
+   15 functionDecl: type ID LBRACE . RBRACE
 
-    ID  shift, and go to state 136
+    RBRACE  shift, and go to state 137
 
 
 State 108
+
+   14 functionDefi: type MAIN LBRACE . RBRACE LPAREN statements RPAREN
+
+    RBRACE  shift, and go to state 138
+
+
+State 109
+
+   27 idlist: idlist COMMA . ID ASG expr
+   28       | idlist COMMA . ID
+
+    ID  shift, and go to state 139
+
+
+State 110
 
    19 functionCall: ID LBRACE paramList RBRACE .
 
     $default  reduce using rule 19 (functionCall)
 
 
-State 109
+State 111
 
    20 paramList: paramList COMMA . expr
 
@@ -1748,30 +1827,31 @@ State 109
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 137
+    expr  go to state 140
 
 
-State 110
+State 112
 
    42 control: IF LBRACE expr RBRACE . LPAREN statements RPAREN
    43        | IF LBRACE expr RBRACE . LPAREN statements RPAREN ELSE LPAREN statements RPAREN
 
-    LPAREN  shift, and go to state 138
+    LPAREN  shift, and go to state 141
 
 
-State 111
+State 113
 
    39 loop: WHILE LBRACE expr RBRACE . LPAREN statements RPAREN
 
-    LPAREN  shift, and go to state 139
+    LPAREN  shift, and go to state 142
 
 
-State 112
+State 114
 
    40 forcon: declaration SEMICOLON . expr SEMICOLON assignment
 
@@ -1779,22 +1859,23 @@ State 112
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 140
+    expr  go to state 143
 
 
-State 113
+State 115
 
    38 loop: FOR LBRACE forcon RBRACE . LPAREN statements RPAREN
 
-    LPAREN  shift, and go to state 141
+    LPAREN  shift, and go to state 144
 
 
-State 114
+State 116
 
    41 forcon: assignment SEMICOLON . expr SEMICOLON assignment
 
@@ -1802,15 +1883,23 @@ State 114
     NOT      shift, and go to state 48
     ADD      shift, and go to state 49
     MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    expr  go to state 142
+    expr  go to state 145
 
 
-State 115
+State 117
+
+   76 expr: LBRACE expr RBRACE .
+
+    $default  reduce using rule 76 (expr)
+
+
+State 118
 
    59 expr: expr . ADD expr
    59     | expr ADD expr .
@@ -1827,14 +1916,14 @@ State 115
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 59 (expr)
 
 
-State 116
+State 119
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1851,14 +1940,14 @@ State 116
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 60 (expr)
 
 
-State 117
+State 120
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1878,7 +1967,7 @@ State 117
     $default  reduce using rule 61 (expr)
 
 
-State 118
+State 121
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1898,7 +1987,7 @@ State 118
     $default  reduce using rule 62 (expr)
 
 
-State 119
+State 122
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1918,7 +2007,7 @@ State 119
     $default  reduce using rule 63 (expr)
 
 
-State 120
+State 123
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1935,16 +2024,16 @@ State 120
    71     | expr . EQU expr
    71     | expr EQU expr .
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 71 (expr)
 
 
-State 121
+State 124
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1961,16 +2050,16 @@ State 121
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 66 (expr)
 
 
-State 122
+State 125
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -1987,16 +2076,16 @@ State 122
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 68 (expr)
 
 
-State 123
+State 126
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -2013,16 +2102,16 @@ State 123
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 67 (expr)
 
 
-State 124
+State 127
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -2039,16 +2128,16 @@ State 124
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 69 (expr)
 
 
-State 125
+State 128
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -2065,16 +2154,16 @@ State 125
    70     | expr NEQ expr .
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
 
     $default  reduce using rule 70 (expr)
 
 
-State 126
+State 129
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -2091,22 +2180,22 @@ State 126
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
 
     $default  reduce using rule 64 (expr)
 
 
-State 127
+State 130
 
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -2123,61 +2212,61 @@ State 127
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
 
     $default  reduce using rule 65 (expr)
 
 
-State 128
+State 131
 
    17 functionCall: PRINTF LBRACE STRING RBRACE .
 
     $default  reduce using rule 17 (functionCall)
 
 
-State 129
+State 132
 
    26 printfIdlist: COMMA . ID
 
-    ID  shift, and go to state 143
+    ID  shift, and go to state 146
 
 
-State 130
+State 133
 
    18 functionCall: PRINTF LBRACE STRING printfIdlist . RBRACE
    25 printfIdlist: printfIdlist . COMMA ID
-
-    RBRACE  shift, and go to state 144
-    COMMA   shift, and go to state 145
-
-
-State 131
-
-   24 scanfIdlist: COMMA . REF ID
-
-    REF  shift, and go to state 146
-
-
-State 132
-
-   16 functionCall: SCANF LBRACE STRING scanfIdlist . RBRACE
-   23 scanfIdlist: scanfIdlist . COMMA REF ID
 
     RBRACE  shift, and go to state 147
     COMMA   shift, and go to state 148
 
 
-State 133
+State 134
+
+   24 scanfIdlist: COMMA . REF ID
+
+    REF  shift, and go to state 149
+
+
+State 135
+
+   16 functionCall: SCANF LBRACE STRING scanfIdlist . RBRACE
+   23 scanfIdlist: scanfIdlist . COMMA REF ID
+
+    RBRACE  shift, and go to state 150
+    COMMA   shift, and go to state 151
+
+
+State 136
 
    29 idlist: ID ASG expr .
    59 expr: expr . ADD expr
@@ -2194,48 +2283,48 @@ State 133
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 29 (idlist)
 
 
-State 134
+State 137
 
    15 functionDecl: type ID LBRACE RBRACE .
 
     $default  reduce using rule 15 (functionDecl)
 
 
-State 135
+State 138
 
    14 functionDefi: type MAIN LBRACE RBRACE . LPAREN statements RPAREN
 
-    LPAREN  shift, and go to state 149
+    LPAREN  shift, and go to state 152
 
 
-State 136
+State 139
 
    27 idlist: idlist COMMA ID . ASG expr
    28       | idlist COMMA ID .
 
-    ASG  shift, and go to state 150
+    ASG  shift, and go to state 153
 
     $default  reduce using rule 28 (idlist)
 
 
-State 137
+State 140
 
    20 paramList: paramList COMMA expr .
    59 expr: expr . ADD expr
@@ -2252,138 +2341,27 @@ State 137
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 20 (paramList)
 
 
-State 138
+State 141
 
    42 control: IF LBRACE expr RBRACE LPAREN . statements RPAREN
    43        | IF LBRACE expr RBRACE LPAREN . statements RPAREN ELSE LPAREN statements RPAREN
-
-    ADDASGO    shift, and go to state 1
-    MINASGO    shift, and go to state 2
-    ID         shift, and go to state 3
-    T_BOOL     shift, and go to state 4
-    T_INT      shift, and go to state 5
-    T_CHAR     shift, and go to state 6
-    T_STRING   shift, and go to state 7
-    T_VOID     shift, and go to state 8
-    CONST      shift, and go to state 9
-    IF         shift, and go to state 10
-    WHILE      shift, and go to state 11
-    FOR        shift, and go to state 12
-    RETURN     shift, and go to state 13
-    CONTINUE   shift, and go to state 14
-    BREAK      shift, and go to state 15
-    PRINTF     shift, and go to state 16
-    SCANF      shift, and go to state 17
-    SEMICOLON  shift, and go to state 18
-
-    SEMICOLON  [reduce using rule 48 (assignment)]
-
-    statements    go to state 151
-    statement     go to state 21
-    function      go to state 22
-    functionDefi  go to state 23
-    functionDecl  go to state 24
-    functionCall  go to state 25
-    declaration   go to state 26
-    type          go to state 27
-    loop          go to state 28
-    control       go to state 29
-    jump          go to state 30
-    assignment    go to state 31
-
-
-State 139
-
-   39 loop: WHILE LBRACE expr RBRACE LPAREN . statements RPAREN
-
-    ADDASGO    shift, and go to state 1
-    MINASGO    shift, and go to state 2
-    ID         shift, and go to state 3
-    T_BOOL     shift, and go to state 4
-    T_INT      shift, and go to state 5
-    T_CHAR     shift, and go to state 6
-    T_STRING   shift, and go to state 7
-    T_VOID     shift, and go to state 8
-    CONST      shift, and go to state 9
-    IF         shift, and go to state 10
-    WHILE      shift, and go to state 11
-    FOR        shift, and go to state 12
-    RETURN     shift, and go to state 13
-    CONTINUE   shift, and go to state 14
-    BREAK      shift, and go to state 15
-    PRINTF     shift, and go to state 16
-    SCANF      shift, and go to state 17
-    SEMICOLON  shift, and go to state 18
-
-    SEMICOLON  [reduce using rule 48 (assignment)]
-
-    statements    go to state 152
-    statement     go to state 21
-    function      go to state 22
-    functionDefi  go to state 23
-    functionDecl  go to state 24
-    functionCall  go to state 25
-    declaration   go to state 26
-    type          go to state 27
-    loop          go to state 28
-    control       go to state 29
-    jump          go to state 30
-    assignment    go to state 31
-
-
-State 140
-
-   40 forcon: declaration SEMICOLON expr . SEMICOLON assignment
-   59 expr: expr . ADD expr
-   60     | expr . MIN expr
-   61     | expr . MUL expr
-   62     | expr . DIV expr
-   63     | expr . MOD expr
-   64     | expr . AND expr
-   65     | expr . OR expr
-   66     | expr . GT expr
-   67     | expr . GTQ expr
-   68     | expr . LT expr
-   69     | expr . LTQ expr
-   70     | expr . NEQ expr
-   71     | expr . EQU expr
-
-    ADD        shift, and go to state 89
-    MIN        shift, and go to state 90
-    MUL        shift, and go to state 91
-    DIV        shift, and go to state 92
-    MOD        shift, and go to state 93
-    EQU        shift, and go to state 94
-    GT         shift, and go to state 95
-    LT         shift, and go to state 96
-    GTQ        shift, and go to state 97
-    LTQ        shift, and go to state 98
-    NEQ        shift, and go to state 99
-    AND        shift, and go to state 100
-    OR         shift, and go to state 101
-    SEMICOLON  shift, and go to state 153
-
-
-State 141
-
-   38 loop: FOR LBRACE forcon RBRACE LPAREN . statements RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
@@ -2422,6 +2400,117 @@ State 141
 
 State 142
 
+   39 loop: WHILE LBRACE expr RBRACE LPAREN . statements RPAREN
+
+    ADDASGO    shift, and go to state 1
+    MINASGO    shift, and go to state 2
+    ID         shift, and go to state 3
+    T_BOOL     shift, and go to state 4
+    T_INT      shift, and go to state 5
+    T_CHAR     shift, and go to state 6
+    T_STRING   shift, and go to state 7
+    T_VOID     shift, and go to state 8
+    CONST      shift, and go to state 9
+    IF         shift, and go to state 10
+    WHILE      shift, and go to state 11
+    FOR        shift, and go to state 12
+    RETURN     shift, and go to state 13
+    CONTINUE   shift, and go to state 14
+    BREAK      shift, and go to state 15
+    PRINTF     shift, and go to state 16
+    SCANF      shift, and go to state 17
+    SEMICOLON  shift, and go to state 18
+
+    SEMICOLON  [reduce using rule 48 (assignment)]
+
+    statements    go to state 155
+    statement     go to state 21
+    function      go to state 22
+    functionDefi  go to state 23
+    functionDecl  go to state 24
+    functionCall  go to state 25
+    declaration   go to state 26
+    type          go to state 27
+    loop          go to state 28
+    control       go to state 29
+    jump          go to state 30
+    assignment    go to state 31
+
+
+State 143
+
+   40 forcon: declaration SEMICOLON expr . SEMICOLON assignment
+   59 expr: expr . ADD expr
+   60     | expr . MIN expr
+   61     | expr . MUL expr
+   62     | expr . DIV expr
+   63     | expr . MOD expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . GT expr
+   67     | expr . GTQ expr
+   68     | expr . LT expr
+   69     | expr . LTQ expr
+   70     | expr . NEQ expr
+   71     | expr . EQU expr
+
+    ADD        shift, and go to state 91
+    MIN        shift, and go to state 92
+    MUL        shift, and go to state 93
+    DIV        shift, and go to state 94
+    MOD        shift, and go to state 95
+    EQU        shift, and go to state 96
+    GT         shift, and go to state 97
+    LT         shift, and go to state 98
+    GTQ        shift, and go to state 99
+    LTQ        shift, and go to state 100
+    NEQ        shift, and go to state 101
+    AND        shift, and go to state 102
+    OR         shift, and go to state 103
+    SEMICOLON  shift, and go to state 156
+
+
+State 144
+
+   38 loop: FOR LBRACE forcon RBRACE LPAREN . statements RPAREN
+
+    ADDASGO    shift, and go to state 1
+    MINASGO    shift, and go to state 2
+    ID         shift, and go to state 3
+    T_BOOL     shift, and go to state 4
+    T_INT      shift, and go to state 5
+    T_CHAR     shift, and go to state 6
+    T_STRING   shift, and go to state 7
+    T_VOID     shift, and go to state 8
+    CONST      shift, and go to state 9
+    IF         shift, and go to state 10
+    WHILE      shift, and go to state 11
+    FOR        shift, and go to state 12
+    RETURN     shift, and go to state 13
+    CONTINUE   shift, and go to state 14
+    BREAK      shift, and go to state 15
+    PRINTF     shift, and go to state 16
+    SCANF      shift, and go to state 17
+    SEMICOLON  shift, and go to state 18
+
+    SEMICOLON  [reduce using rule 48 (assignment)]
+
+    statements    go to state 157
+    statement     go to state 21
+    function      go to state 22
+    functionDefi  go to state 23
+    functionDecl  go to state 24
+    functionCall  go to state 25
+    declaration   go to state 26
+    type          go to state 27
+    loop          go to state 28
+    control       go to state 29
+    jump          go to state 30
+    assignment    go to state 31
+
+
+State 145
+
    41 forcon: assignment SEMICOLON expr . SEMICOLON assignment
    59 expr: expr . ADD expr
    60     | expr . MIN expr
@@ -2437,65 +2526,65 @@ State 142
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD        shift, and go to state 89
-    MIN        shift, and go to state 90
-    MUL        shift, and go to state 91
-    DIV        shift, and go to state 92
-    MOD        shift, and go to state 93
-    EQU        shift, and go to state 94
-    GT         shift, and go to state 95
-    LT         shift, and go to state 96
-    GTQ        shift, and go to state 97
-    LTQ        shift, and go to state 98
-    NEQ        shift, and go to state 99
-    AND        shift, and go to state 100
-    OR         shift, and go to state 101
-    SEMICOLON  shift, and go to state 155
+    ADD        shift, and go to state 91
+    MIN        shift, and go to state 92
+    MUL        shift, and go to state 93
+    DIV        shift, and go to state 94
+    MOD        shift, and go to state 95
+    EQU        shift, and go to state 96
+    GT         shift, and go to state 97
+    LT         shift, and go to state 98
+    GTQ        shift, and go to state 99
+    LTQ        shift, and go to state 100
+    NEQ        shift, and go to state 101
+    AND        shift, and go to state 102
+    OR         shift, and go to state 103
+    SEMICOLON  shift, and go to state 158
 
 
-State 143
+State 146
 
    26 printfIdlist: COMMA ID .
 
     $default  reduce using rule 26 (printfIdlist)
 
 
-State 144
+State 147
 
    18 functionCall: PRINTF LBRACE STRING printfIdlist RBRACE .
 
     $default  reduce using rule 18 (functionCall)
 
 
-State 145
+State 148
 
    25 printfIdlist: printfIdlist COMMA . ID
 
-    ID  shift, and go to state 156
+    ID  shift, and go to state 159
 
 
-State 146
+State 149
 
    24 scanfIdlist: COMMA REF . ID
 
-    ID  shift, and go to state 157
+    ID  shift, and go to state 160
 
 
-State 147
+State 150
 
    16 functionCall: SCANF LBRACE STRING scanfIdlist RBRACE .
 
     $default  reduce using rule 16 (functionCall)
 
 
-State 148
+State 151
 
    23 scanfIdlist: scanfIdlist COMMA . REF ID
 
-    REF  shift, and go to state 158
+    REF  shift, and go to state 161
 
 
-State 149
+State 152
 
    14 functionDefi: type MAIN LBRACE RBRACE LPAREN . statements RPAREN
 
@@ -2520,105 +2609,8 @@ State 149
 
     SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statements    go to state 159
+    statements    go to state 162
     statement     go to state 21
-    function      go to state 22
-    functionDefi  go to state 23
-    functionDecl  go to state 24
-    functionCall  go to state 25
-    declaration   go to state 26
-    type          go to state 27
-    loop          go to state 28
-    control       go to state 29
-    jump          go to state 30
-    assignment    go to state 31
-
-
-State 150
-
-   27 idlist: idlist COMMA ID ASG . expr
-
-    REF      shift, and go to state 47
-    NOT      shift, and go to state 48
-    ADD      shift, and go to state 49
-    MIN      shift, and go to state 50
-    ID       shift, and go to state 51
-    INTEGER  shift, and go to state 52
-    CHAR     shift, and go to state 53
-    STRING   shift, and go to state 54
-
-    expr  go to state 160
-
-
-State 151
-
-    3 statements: statements . statement
-   42 control: IF LBRACE expr RBRACE LPAREN statements . RPAREN
-   43        | IF LBRACE expr RBRACE LPAREN statements . RPAREN ELSE LPAREN statements RPAREN
-
-    ADDASGO    shift, and go to state 1
-    MINASGO    shift, and go to state 2
-    RPAREN     shift, and go to state 161
-    ID         shift, and go to state 3
-    T_BOOL     shift, and go to state 4
-    T_INT      shift, and go to state 5
-    T_CHAR     shift, and go to state 6
-    T_STRING   shift, and go to state 7
-    T_VOID     shift, and go to state 8
-    CONST      shift, and go to state 9
-    IF         shift, and go to state 10
-    WHILE      shift, and go to state 11
-    FOR        shift, and go to state 12
-    RETURN     shift, and go to state 13
-    CONTINUE   shift, and go to state 14
-    BREAK      shift, and go to state 15
-    PRINTF     shift, and go to state 16
-    SCANF      shift, and go to state 17
-    SEMICOLON  shift, and go to state 18
-
-    SEMICOLON  [reduce using rule 48 (assignment)]
-
-    statement     go to state 59
-    function      go to state 22
-    functionDefi  go to state 23
-    functionDecl  go to state 24
-    functionCall  go to state 25
-    declaration   go to state 26
-    type          go to state 27
-    loop          go to state 28
-    control       go to state 29
-    jump          go to state 30
-    assignment    go to state 31
-
-
-State 152
-
-    3 statements: statements . statement
-   39 loop: WHILE LBRACE expr RBRACE LPAREN statements . RPAREN
-
-    ADDASGO    shift, and go to state 1
-    MINASGO    shift, and go to state 2
-    RPAREN     shift, and go to state 162
-    ID         shift, and go to state 3
-    T_BOOL     shift, and go to state 4
-    T_INT      shift, and go to state 5
-    T_CHAR     shift, and go to state 6
-    T_STRING   shift, and go to state 7
-    T_VOID     shift, and go to state 8
-    CONST      shift, and go to state 9
-    IF         shift, and go to state 10
-    WHILE      shift, and go to state 11
-    FOR        shift, and go to state 12
-    RETURN     shift, and go to state 13
-    CONTINUE   shift, and go to state 14
-    BREAK      shift, and go to state 15
-    PRINTF     shift, and go to state 16
-    SCANF      shift, and go to state 17
-    SEMICOLON  shift, and go to state 18
-
-    SEMICOLON  [reduce using rule 48 (assignment)]
-
-    statement     go to state 59
     function      go to state 22
     functionDefi  go to state 23
     functionDecl  go to state 24
@@ -2633,21 +2625,26 @@ State 152
 
 State 153
 
-   40 forcon: declaration SEMICOLON expr SEMICOLON . assignment
+   27 idlist: idlist COMMA ID ASG . expr
 
-    ADDASGO  shift, and go to state 1
-    MINASGO  shift, and go to state 2
-    ID       shift, and go to state 80
+    REF      shift, and go to state 47
+    NOT      shift, and go to state 48
+    ADD      shift, and go to state 49
+    MIN      shift, and go to state 50
+    LBRACE   shift, and go to state 51
+    ID       shift, and go to state 52
+    INTEGER  shift, and go to state 53
+    CHAR     shift, and go to state 54
+    STRING   shift, and go to state 55
 
-    $default  reduce using rule 48 (assignment)
-
-    assignment  go to state 163
+    expr  go to state 163
 
 
 State 154
 
     3 statements: statements . statement
-   38 loop: FOR LBRACE forcon RBRACE LPAREN statements . RPAREN
+   42 control: IF LBRACE expr RBRACE LPAREN statements . RPAREN
+   43        | IF LBRACE expr RBRACE LPAREN statements . RPAREN ELSE LPAREN statements RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
@@ -2671,7 +2668,7 @@ State 154
 
     SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statement     go to state 59
+    statement     go to state 60
     function      go to state 22
     functionDefi  go to state 23
     functionDecl  go to state 24
@@ -2686,42 +2683,61 @@ State 154
 
 State 155
 
-   41 forcon: assignment SEMICOLON expr SEMICOLON . assignment
+    3 statements: statements . statement
+   39 loop: WHILE LBRACE expr RBRACE LPAREN statements . RPAREN
 
-    ADDASGO  shift, and go to state 1
-    MINASGO  shift, and go to state 2
-    ID       shift, and go to state 80
+    ADDASGO    shift, and go to state 1
+    MINASGO    shift, and go to state 2
+    RPAREN     shift, and go to state 165
+    ID         shift, and go to state 3
+    T_BOOL     shift, and go to state 4
+    T_INT      shift, and go to state 5
+    T_CHAR     shift, and go to state 6
+    T_STRING   shift, and go to state 7
+    T_VOID     shift, and go to state 8
+    CONST      shift, and go to state 9
+    IF         shift, and go to state 10
+    WHILE      shift, and go to state 11
+    FOR        shift, and go to state 12
+    RETURN     shift, and go to state 13
+    CONTINUE   shift, and go to state 14
+    BREAK      shift, and go to state 15
+    PRINTF     shift, and go to state 16
+    SCANF      shift, and go to state 17
+    SEMICOLON  shift, and go to state 18
 
-    $default  reduce using rule 48 (assignment)
+    SEMICOLON  [reduce using rule 48 (assignment)]
 
-    assignment  go to state 165
+    statement     go to state 60
+    function      go to state 22
+    functionDefi  go to state 23
+    functionDecl  go to state 24
+    functionCall  go to state 25
+    declaration   go to state 26
+    type          go to state 27
+    loop          go to state 28
+    control       go to state 29
+    jump          go to state 30
+    assignment    go to state 31
 
 
 State 156
 
-   25 printfIdlist: printfIdlist COMMA ID .
+   40 forcon: declaration SEMICOLON expr SEMICOLON . assignment
 
-    $default  reduce using rule 25 (printfIdlist)
+    ADDASGO  shift, and go to state 1
+    MINASGO  shift, and go to state 2
+    ID       shift, and go to state 81
+
+    $default  reduce using rule 48 (assignment)
+
+    assignment  go to state 166
 
 
 State 157
 
-   24 scanfIdlist: COMMA REF ID .
-
-    $default  reduce using rule 24 (scanfIdlist)
-
-
-State 158
-
-   23 scanfIdlist: scanfIdlist COMMA REF . ID
-
-    ID  shift, and go to state 166
-
-
-State 159
-
     3 statements: statements . statement
-   14 functionDefi: type MAIN LBRACE RBRACE LPAREN statements . RPAREN
+   38 loop: FOR LBRACE forcon RBRACE LPAREN statements . RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
@@ -2745,7 +2761,7 @@ State 159
 
     SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statement     go to state 59
+    statement     go to state 60
     function      go to state 22
     functionDefi  go to state 23
     functionDecl  go to state 24
@@ -2758,7 +2774,81 @@ State 159
     assignment    go to state 31
 
 
+State 158
+
+   41 forcon: assignment SEMICOLON expr SEMICOLON . assignment
+
+    ADDASGO  shift, and go to state 1
+    MINASGO  shift, and go to state 2
+    ID       shift, and go to state 81
+
+    $default  reduce using rule 48 (assignment)
+
+    assignment  go to state 168
+
+
+State 159
+
+   25 printfIdlist: printfIdlist COMMA ID .
+
+    $default  reduce using rule 25 (printfIdlist)
+
+
 State 160
+
+   24 scanfIdlist: COMMA REF ID .
+
+    $default  reduce using rule 24 (scanfIdlist)
+
+
+State 161
+
+   23 scanfIdlist: scanfIdlist COMMA REF . ID
+
+    ID  shift, and go to state 169
+
+
+State 162
+
+    3 statements: statements . statement
+   14 functionDefi: type MAIN LBRACE RBRACE LPAREN statements . RPAREN
+
+    ADDASGO    shift, and go to state 1
+    MINASGO    shift, and go to state 2
+    RPAREN     shift, and go to state 170
+    ID         shift, and go to state 3
+    T_BOOL     shift, and go to state 4
+    T_INT      shift, and go to state 5
+    T_CHAR     shift, and go to state 6
+    T_STRING   shift, and go to state 7
+    T_VOID     shift, and go to state 8
+    CONST      shift, and go to state 9
+    IF         shift, and go to state 10
+    WHILE      shift, and go to state 11
+    FOR        shift, and go to state 12
+    RETURN     shift, and go to state 13
+    CONTINUE   shift, and go to state 14
+    BREAK      shift, and go to state 15
+    PRINTF     shift, and go to state 16
+    SCANF      shift, and go to state 17
+    SEMICOLON  shift, and go to state 18
+
+    SEMICOLON  [reduce using rule 48 (assignment)]
+
+    statement     go to state 60
+    function      go to state 22
+    functionDefi  go to state 23
+    functionDecl  go to state 24
+    functionCall  go to state 25
+    declaration   go to state 26
+    type          go to state 27
+    loop          go to state 28
+    control       go to state 29
+    jump          go to state 30
+    assignment    go to state 31
+
+
+State 163
 
    27 idlist: idlist COMMA ID ASG expr .
    59 expr: expr . ADD expr
@@ -2775,83 +2865,83 @@ State 160
    70     | expr . NEQ expr
    71     | expr . EQU expr
 
-    ADD  shift, and go to state 89
-    MIN  shift, and go to state 90
-    MUL  shift, and go to state 91
-    DIV  shift, and go to state 92
-    MOD  shift, and go to state 93
-    EQU  shift, and go to state 94
-    GT   shift, and go to state 95
-    LT   shift, and go to state 96
-    GTQ  shift, and go to state 97
-    LTQ  shift, and go to state 98
-    NEQ  shift, and go to state 99
-    AND  shift, and go to state 100
-    OR   shift, and go to state 101
+    ADD  shift, and go to state 91
+    MIN  shift, and go to state 92
+    MUL  shift, and go to state 93
+    DIV  shift, and go to state 94
+    MOD  shift, and go to state 95
+    EQU  shift, and go to state 96
+    GT   shift, and go to state 97
+    LT   shift, and go to state 98
+    GTQ  shift, and go to state 99
+    LTQ  shift, and go to state 100
+    NEQ  shift, and go to state 101
+    AND  shift, and go to state 102
+    OR   shift, and go to state 103
 
     $default  reduce using rule 27 (idlist)
 
 
-State 161
+State 164
 
    42 control: IF LBRACE expr RBRACE LPAREN statements RPAREN .
    43        | IF LBRACE expr RBRACE LPAREN statements RPAREN . ELSE LPAREN statements RPAREN
 
-    ELSE  shift, and go to state 168
+    ELSE  shift, and go to state 171
 
     $default  reduce using rule 42 (control)
 
 
-State 162
+State 165
 
    39 loop: WHILE LBRACE expr RBRACE LPAREN statements RPAREN .
 
     $default  reduce using rule 39 (loop)
 
 
-State 163
+State 166
 
    40 forcon: declaration SEMICOLON expr SEMICOLON assignment .
 
     $default  reduce using rule 40 (forcon)
 
 
-State 164
+State 167
 
    38 loop: FOR LBRACE forcon RBRACE LPAREN statements RPAREN .
 
     $default  reduce using rule 38 (loop)
 
 
-State 165
+State 168
 
    41 forcon: assignment SEMICOLON expr SEMICOLON assignment .
 
     $default  reduce using rule 41 (forcon)
 
 
-State 166
+State 169
 
    23 scanfIdlist: scanfIdlist COMMA REF ID .
 
     $default  reduce using rule 23 (scanfIdlist)
 
 
-State 167
+State 170
 
    14 functionDefi: type MAIN LBRACE RBRACE LPAREN statements RPAREN .
 
     $default  reduce using rule 14 (functionDefi)
 
 
-State 168
+State 171
 
    43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE . LPAREN statements RPAREN
 
-    LPAREN  shift, and go to state 169
+    LPAREN  shift, and go to state 172
 
 
-State 169
+State 172
 
    43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN . statements RPAREN
 
@@ -2876,7 +2966,7 @@ State 169
 
     SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statements    go to state 170
+    statements    go to state 173
     statement     go to state 21
     function      go to state 22
     functionDefi  go to state 23
@@ -2890,14 +2980,14 @@ State 169
     assignment    go to state 31
 
 
-State 170
+State 173
 
     3 statements: statements . statement
    43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements . RPAREN
 
     ADDASGO    shift, and go to state 1
     MINASGO    shift, and go to state 2
-    RPAREN     shift, and go to state 171
+    RPAREN     shift, and go to state 174
     ID         shift, and go to state 3
     T_BOOL     shift, and go to state 4
     T_INT      shift, and go to state 5
@@ -2917,7 +3007,7 @@ State 170
 
     SEMICOLON  [reduce using rule 48 (assignment)]
 
-    statement     go to state 59
+    statement     go to state 60
     function      go to state 22
     functionDefi  go to state 23
     functionDecl  go to state 24
@@ -2930,7 +3020,7 @@ State 170
     assignment    go to state 31
 
 
-State 171
+State 174
 
    43 control: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN .
 
