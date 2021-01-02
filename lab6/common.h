@@ -22,9 +22,12 @@ struct constString{
     string str;
 };
 
-struct tempVar{
-    int num;
-    int value;
+struct localVar{
+    string identifier;
+    int id;
+    int level;
+    int offset = 0;
+    int size;
 };
 
 #endif

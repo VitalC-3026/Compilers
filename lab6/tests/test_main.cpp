@@ -1,12 +1,12 @@
 int a;
 int b;
 int c;
-int d;
 int main(){
-    a=-100020;
-    b=-3;
-    c=a/b;
-    d=a%b;
-    printf("test:%d %d\n",c,d);
-    return 0;
+	a = 16;
+	b = 2;
+	c = 30;
+	int d;
+	d = a+b*c;
+    printf("%d\n",d);
+	return 0;
 }

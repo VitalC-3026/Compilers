@@ -270,28 +270,42 @@ forcon
 ;
 
 control
-: IF LBRACE expr RBRACE LPAREN statements RPAREN    {   if(checkIf($3, $6, NULL)) {
+: IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE control   {   if(checkIf($3, $6, NULL)) {
+                                                                        $$ = new TreeNode(lineno, NODE_Stmt);
+                                                                        $$->addChild($3);
+                                                                        $$->addChild($6);
+                                                                        TreeNode* elseNode = new TreeNode(lineno, NODE_ELSE);
+                                                                        $$->addChild(elseNode);
+                                                                        $$->addChild($9);
+                                                                        $$->setStatementType(STMT_IF);
+                                                                        $$->typeCheck();
+                                                                    } else {
+                                                                        string msg = (string)"Line@" + to_string(lineno) + (string)" If : Not syntactically defined.";
+                                                                        yyerror(msg.c_str());
+                                                                    }
+                                                                }
+| IF LBRACE expr RBRACE LPAREN statements RPAREN    {   if(checkIf($3, $6, NULL)) {
                                                             $$ = new TreeNode(lineno, NODE_Stmt);
                                                             $$->addChild($3);
                                                             $$->addChild($6);
                                                             $$->setStatementType(STMT_IF);
                                                             $$->typeCheck();
-                                                        } else {
-                                                            string msg = (string)"Line@" + to_string(lineno) + (string)" ForCon : Not syntactically defined.";
-                                                            yyerror(msg.c_str());
                                                         }
                                                     }
 | IF LBRACE expr RBRACE LPAREN statements RPAREN ELSE LPAREN statements RPAREN  {   if(checkIf($3, $6, $10)) {
                                                                                         $$ = new TreeNode(lineno, NODE_Stmt);
                                                                                         $$->addChild($3);
                                                                                         $$->addChild($6);
+                                                                                        TreeNode* elseNode = new TreeNode(lineno, NODE_ELSE);
+                                                                                        $$->addChild(elseNode);
                                                                                         $$->addChild($10);
                                                                                         $$->setStatementType(STMT_IF);
                                                                                         $$->typeCheck();
-                                                                                    } else {
-                                                                                        string msg = (string)"Line@" + to_string(lineno) + (string)" ForCon : Not syntactically defined.";
-                                                                                        yyerror(msg.c_str());
-                                                                                    }
+                                                                                    } 
+                                                                                    // else {
+                                                                                    //     string msg = (string)"Line@" + to_string(lineno) + (string)" If : Not syntactically defined.";
+                                                                                    //     yyerror(msg.c_str());
+                                                                                    // }
                                                                                 }
 ;
 

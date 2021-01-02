@@ -11,7 +11,8 @@ enum NodeType
     NODE_Op, 
     NODE_Stmt,
     NODE_Func,
-    NODE_Type
+    NODE_Type,
+    NODE_ELSE
 };
 
 enum OperatorType
