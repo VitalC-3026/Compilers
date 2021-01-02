@@ -1,10 +1,12 @@
 int a;
+int b;
+int c;
+int d;
 int main(){
-    scanf("%d",&a);
-    while(a>0){
-        a=a-1;
-        printf("In Loop\n");
-    }
-    printf("End Loop\n");
+    a=-100020;
+    b=-3;
+    c=a/b;
+    d=a%b;
+    printf("test:%d %d\n",c,d);
     return 0;
 }

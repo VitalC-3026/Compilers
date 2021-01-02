@@ -304,6 +304,79 @@ jump
 
 assignment
 :
+| ID ASG assignment {
+                        if (checkAsg($1, 0)) {
+                            $$ = new TreeNode(lineno, NODE_Stmt);
+                            $$->setStatementType(STMT_ASIG);
+                            $$->setAssignmentType(ASIG);
+                            $$->addChild($1);
+                            $$->addChild($3);
+                            $$->typeCheck();
+                        } else {
+                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            yyerror(msg.c_str());
+                        }
+                    }
+| ID ADDASG assignment  {   if(checkAsg($1, 1)) {
+                            $$ = new TreeNode(lineno, NODE_Stmt);
+                            $$->setStatementType(STMT_ASIG);
+                            $$->setAssignmentType(ADDASIG);
+                            $$->addChild($1);
+                            $$->addChild($3);
+                            $$->typeCheck();
+                        } else {
+                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            yyerror(msg.c_str());
+                        }
+                    }
+| ID MINASG assignment  {   if(checkAsg($1, 1)) {
+                            $$ = new TreeNode(lineno, NODE_Stmt);
+                            $$->setStatementType(STMT_ASIG);
+                            $$->setAssignmentType(MINASIG);
+                            $$->addChild($1);
+                            $$->addChild($3);
+                            $$->typeCheck();
+                        } else {
+                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            yyerror(msg.c_str());
+                        }
+                    }
+| ID MULASG assignment  {   if(checkAsg($1, 1)) {
+                            $$ = new TreeNode(lineno, NODE_Stmt);
+                            $$->setStatementType(STMT_ASIG);
+                            $$->setAssignmentType(MULASIG);
+                            $$->addChild($1);
+                            $$->addChild($3);
+                            $$->typeCheck();
+                        } else {
+                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            yyerror(msg.c_str());
+                        }
+                    }
+| ID DIVASG assignment  {   if(checkAsg($1, 1)) {
+                            $$ = new TreeNode(lineno, NODE_Stmt);
+                            $$->setStatementType(STMT_ASIG);
+                            $$->setAssignmentType(DIVASIG);
+                            $$->addChild($1);
+                            $$->addChild($3);
+                            $$->typeCheck();
+                        } else {
+                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            yyerror(msg.c_str());
+                        }
+                    }
+| ID MODASG assignment  {   if(checkAsg($1, 1)) {
+                            $$ = new TreeNode(lineno, NODE_Stmt);
+                            $$->setStatementType(STMT_ASIG);
+                            $$->setAssignmentType(MODASIG);
+                            $$->addChild($1);
+                            $$->addChild($3);
+                            $$->typeCheck();
+                        } else {
+                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            yyerror(msg.c_str());
+                        }
+                    }
 | ID ASG expr       {   if(checkAsg($1, 0)) {
                             $$ = new TreeNode(lineno, NODE_Stmt);
                             $$->setStatementType(STMT_ASIG);
@@ -615,7 +688,7 @@ bool checkFor(TreeNode* t1, TreeNode* t2)
     // if((t1->getNodeType() != NODE_Stmt && t1->getNodeType() != NODE_Func) || (t2->getNodeType() != NODE_Stmt && t2->getNodeType() != NODE_Func)) {
     //     return false;
     // }
-    if(t1->getNodeType() != NODE_Stmt || t2->getNodeType() != NODE_Stmt) {
+    if(t1->getNodeType() != NODE_Stmt || (t2->getNodeType() != NODE_Stmt && t2->getNodeType() != NODE_Func)) {
         return false;
     }
     return true;

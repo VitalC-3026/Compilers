@@ -93,7 +93,7 @@ ID  [_a-zA-Z][a-zA-Z_0-9]*
 DEC [1-9]?[0-9]*
 OCT 0[0-7]+
 HEX 0x[0-9a-fA-F]+
-CHAR \'.?\'
+CHAR \'([^\\]|\\.)\'
 STRING \".*\"
 
 
@@ -224,7 +224,25 @@ STRING \".*\"
 {CHAR}  {
             TreeNode* node = new TreeNode(lineno, NODE_Const);
             node->setDeclType(D_CHAR);
-            node->setCharValue(yytext[1]);
+            if (strlen(yytext) == 4) {
+                if (yytext[2] == 't') {
+                    node->setCharValue(9);
+                } else if (yytext[2] == 'n') {
+                    node->setCharValue(10);
+                } else if (yytext[2] == 'r') {
+                    node->setCharValue(13);
+                } else if (yytext[2] == 'a') {
+                    node->setCharValue(7);
+                } else if (yytext[2] == 'b') {
+                    node->setCharValue(8);
+                } else if (yytext[2] == 'v') {
+                    node->setCharValue(11);
+                } else if (yytext[2] == 'f') {
+                    node->setCharValue(12);
+                }
+            } else {
+                node->setCharValue(yytext[1]);
+            }
             yylval = node;
             return CHAR;
         }
