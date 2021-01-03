@@ -1,12 +1,19 @@
 int a;
 int b;
-int c;
 int main(){
-	a = 16;
-	b = 2;
-	c = 30;
-	int d;
-	d = a+b*c;
-    printf("%d\n",d);
-	return 0;
+    a = 0;
+    b = 0;
+    while (a < 100) {
+    if (a == 5) {
+        b = 25;
+    }else if (a == 10) {
+        b = 42;  
+    }else {
+        b = a * 2;
+    }
+    a = a + 1;
+    } 
+    printf("%d\n",a);
+    printf("%d\n",b); 
+    return 0;
 }

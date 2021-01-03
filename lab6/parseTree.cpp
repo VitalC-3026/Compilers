@@ -824,51 +824,63 @@ void TreeNode::genStmtLabel(){
             TreeNode* body = this->getChild()->getSibling();
             if (this->label.beginLabel == "") {
                 this->label.beginLabel = newLabel();
+                cout << "whileBegin" << this->label.beginLabel;
             }
             body->label.nextLabel = this->label.beginLabel;
-            body->label.beginLabel = expr->label.trueLabel = newLabel();
+            expr->recursiveGenLabel();
+            if (expr->label.trueLabel == "") {
+                expr->label.trueLabel = newLabel();
+                cout << "whileExprTrue" << expr->label.trueLabel;
+            }
+            body->label.beginLabel = expr->label.trueLabel;
+            while (body != nullptr) {
+                body->recursiveGenLabel();
+                body = body->sibling;
+            }
             if(this->label.nextLabel == "") {
                 this->label.nextLabel = newLabel();
+                cout << "whileNext" << this->label.nextLabel;
             }
             expr->label.falseLabel = this->label.nextLabel;
             if (this->sibling != nullptr) {
                 this->sibling->label.beginLabel = this->label.nextLabel;
                 
             }
-            expr->recursiveGenLabel();
-            while (body != nullptr) {
-                body->recursiveGenLabel();
-                body = body->sibling;
-            }
-            
             break;
         }
         case STMT_IF: {
-            //cout << "if" << endl;
+            cout << "if" << endl;
             TreeNode* expr = this->child;
             TreeNode* trueBody = this->child->sibling;
-            TreeNode* falseBody;
+            TreeNode* falseBody = nullptr;
             
             // if(this->child->sibling->sibling){
             //     falseBody = this->child->sibling->sibling;
             // }
             if (this->label.beginLabel == "") {
                 this->label.beginLabel = newLabel();
+                
             }
+            cout << "IfBegin" << this->label.beginLabel;
             expr->recursiveGenLabel();
             if (expr->label.trueLabel == "") {
                 expr->label.trueLabel = newLabel();
+                
             }
+            cout << "IfTrue" << expr->label.trueLabel;
             trueBody->label.beginLabel = expr->label.trueLabel;
-            if (expr->label.falseLabel == "") {
-                expr->label.falseLabel = newLabel();
-            }
+            
             while(trueBody != nullptr && trueBody->nodeType != NODE_ELSE) {
+                cout << "trueBodyGen" << endl;
                 trueBody->recursiveGenLabel();
                 trueBody = trueBody->sibling;
             }
+            if (expr->label.falseLabel == "") {
+                expr->label.falseLabel = newLabel();
+            }
+            cout << "IfFalse" << expr->label.falseLabel;
             if (trueBody != nullptr && trueBody->nodeType == NODE_ELSE) {
-                falseBody = trueBody->sibling;
+                falseBody = trueBody;
                 if (falseBody) {
                     falseBody->label.beginLabel = expr->label.falseLabel;
                 }
@@ -880,12 +892,18 @@ void TreeNode::genStmtLabel(){
             
             if(this->label.nextLabel == ""){
                 this->label.nextLabel = newLabel();
+                
             }
+            cout << "IfNext" << this->label.nextLabel << endl;
+            // trueBodyNext
+            if (this->child->sibling) {
+                this->child->sibling->label.nextLabel = this->label.nextLabel;
+                cout << this->label.nextLabel << endl;
+            }
+            // falseBodyNext
             if (trueBody) {
                 trueBody->label.nextLabel = this->label.nextLabel;
-            }
-            if (falseBody) {
-                falseBody->label.nextLabel = this->label.nextLabel;
+                cout << this->label.nextLabel << endl;
             }
             if (this->sibling != nullptr) {
                 this->sibling->label.beginLabel = this->label.nextLabel;
@@ -1680,7 +1698,7 @@ void TreeNode::genStmtCode(ostream &out) {
                 count ++;
                 body = body->sibling;
             }
-            // cout << count << endl;
+            cout << count << endl;
             out << "\tjmp " << this->label.beginLabel << endl;
             out << expr->label.falseLabel << ":" << endl;
             break;
@@ -1693,22 +1711,26 @@ void TreeNode::genStmtCode(ostream &out) {
             out << "\tcmpl $0, %eax" << endl;
             out << "\tje ";
             TreeNode* tmp = trueStmt;
-            while(tmp->sibling != nullptr && tmp->sibling->nodeType != NODE_ELSE) {
-                tmp = tmp->sibling;
+            while(trueStmt != nullptr && trueStmt->nodeType != NODE_ELSE) {
+                trueStmt = trueStmt->sibling;
             }
-            if (tmp->sibling != nullptr) {
+            if (trueStmt != nullptr && trueStmt->nodeType == NODE_ELSE) {
+                cout << "false" << endl;
                 out << expr->label.falseLabel << endl;
             } else {
+                cout << "next" << endl;
                 out << this->label.nextLabel << endl;
             }
-            while(trueStmt->sibling != nullptr && trueStmt->sibling->nodeType != NODE_ELSE) {
+            trueStmt = this->child->sibling;
+            while(trueStmt != nullptr && trueStmt->nodeType != NODE_ELSE) {
+                cout << "genTrueCode" << endl;
                 trueStmt->recursiveGenCode(out);
                 trueStmt = trueStmt->sibling;
             }
-            if (trueStmt->sibling != nullptr) {
+            if (trueStmt != nullptr) {
                 out << "\tjmp " << this->label.nextLabel << endl;
                 out << expr->label.falseLabel << ":" << endl;
-                TreeNode* falseStmt = trueStmt->sibling->sibling;
+                TreeNode* falseStmt = trueStmt->sibling;
                 while(falseStmt != nullptr) {
                     falseStmt->recursiveGenCode(out);
                     falseStmt = falseStmt->sibling;

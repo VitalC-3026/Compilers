@@ -39,7 +39,8 @@
 
 
 %right  ASG ADDASG MINASG MULASG DIVASG MODASG
-%left   AND OR
+%left   OR
+%left   AND 
 %left   EQU GT LT GTQ LTQ NEQ
 %left   ADD MIN
 %left   MUL DIV MOD
