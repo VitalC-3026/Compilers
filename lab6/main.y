@@ -176,15 +176,14 @@ idlist
                                 $3->addChild($5);
                                 $$->addSibling($3);
                                 if (setEntryOfId($3->getIdentifier(), level, $3->getDeclType(), getValueOfId($5), $3->getNodeId())){
-                                    string msg = (string)"Node@" + to_string($3->getNodeId()) + (string)" ID : redefined.";
-                                    yyerror(msg.c_str());
+                                    string msg = (string)"Line@" + to_string($3->getLineno()) + (string)" Node@" + to_string($3->getNodeId()) + (string)": " + $3->getIdentifier() + (string)" ID : redefined.";yyerror(msg.c_str());
                                     $3->setIsAlive(false);
                                 }
                             }
 | idlist COMMA ID   {   $$ = $1; 
                         $$->addSibling($3);
                         if (setEntryOfId($3->getIdentifier(), level, $3->getDeclType(), getValueOfId(nullptr), $3->getNodeId())){
-                            string msg = (string)"Node@" + to_string($3->getNodeId()) + (string)" ID : redefined.";
+                            string msg = (string)"Line@" + to_string($3->getLineno()) + (string)" Node@" + to_string($3->getNodeId()) + (string)": " + $3->getIdentifier() + (string)" ID : redefined.";
                             yyerror(msg.c_str());
                             $3->setIsAlive(false);
                         }
@@ -193,14 +192,14 @@ idlist
                     $1->addChild($3);
                     $$ = $1;
                     if (setEntryOfId($1->getIdentifier(), level, $1->getDeclType(), getValueOfId($3), $1->getNodeId())){
-                        string msg = (string)"Node@" + to_string($1->getNodeId()) + (string)" ID : redefined.";
+                        string msg = (string)"Line@" + to_string($1->getLineno()) + (string)" Node@" + to_string($1->getNodeId()) + (string)": " + $1->getIdentifier() + (string)" ID : redefined.";
                         yyerror(msg.c_str());
                         $1->setIsAlive(false);
                     }
                 }
 | ID            {   $$ = $1;
                     if (setEntryOfId($1->getIdentifier(), level, $1->getDeclType(), getValueOfId(nullptr), $1->getNodeId())){
-                        string msg = (string)"Node@" + to_string($1->getNodeId()) + (string)" ID : redefined.";
+                        string msg = (string)"Line@" + to_string($1->getLineno()) + (string)" Node@" + to_string($1->getNodeId()) + (string)": " + $1->getIdentifier() + (string)" ID : redefined.";
                         yyerror(msg.c_str());
                         $1->setIsAlive(false);
                     }
@@ -328,8 +327,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID ADDASG assignment  {   if(checkAsg($1, 1)) {
@@ -340,8 +339,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID MINASG assignment  {   if(checkAsg($1, 1)) {
@@ -352,8 +351,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID MULASG assignment  {   if(checkAsg($1, 1)) {
@@ -364,8 +363,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID DIVASG assignment  {   if(checkAsg($1, 1)) {
@@ -376,8 +375,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID MODASG assignment  {   if(checkAsg($1, 1)) {
@@ -388,8 +387,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID ASG expr       {   if(checkAsg($1, 0)) {
@@ -400,8 +399,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID ADDASG expr    {   if(checkAsg($1, 1)) {
@@ -412,8 +411,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID MINASG expr    {   if(checkAsg($1, 1)) {
@@ -424,8 +423,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID MULASG expr    {   if(checkAsg($1, 1)) {
@@ -436,8 +435,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID DIVASG expr    {   if(checkAsg($1, 1)) {
@@ -448,8 +447,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID MODASG expr    {   if(checkAsg($1, 1)) {
@@ -460,8 +459,8 @@ assignment
                             $$->addChild($3);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ADDASGO ID        {   if(checkAsg($2, 1)) {
@@ -471,8 +470,8 @@ assignment
                             $$->addChild($2);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | MINASGO ID        {   if(checkAsg($2, 1)) {
@@ -482,8 +481,8 @@ assignment
                             $$->addChild($2);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID ADDASGO        {   if(checkAsg($1, 1)) {
@@ -493,8 +492,8 @@ assignment
                             $$->addChild($1);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 | ID MINASGO        {   if(checkAsg($1, 1)) {
@@ -504,8 +503,8 @@ assignment
                             $$->addChild($1);
                             $$->typeCheck();
                         } else {
-                            string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
-                            yyerror(msg.c_str());
+                            // string msg = (string)"Line@" + to_string(lineno) + (string)" Assignment : Identifier undefined.";
+                            // yyerror(msg.c_str());
                         }
                     }
 ;
@@ -659,7 +658,7 @@ expr
                 }
 | LBRACE expr RBRACE { $$ = $2; }    
 | ID   {    if(identifierTable.find($1->getIdentifier()) == identifierTable.end()) {
-                string msg = (string)"Node@" + to_string($1->getNodeId()) + (string)" NODE_Var/ConstVar : ID not defined.";
+                string msg = (string)"Line@" + to_string($1->getLineno()) + (string)" Node@" + to_string($1->getNodeId()) + (string)": " + $1->getIdentifier() + (string)" NODE_Var/ConstVar : ID not defined.";
                 yyerror(msg.c_str());
             }
             $$ = $1;
@@ -790,6 +789,8 @@ bool checkAsg(TreeNode* t1, bool i)
     // id check
     int res = checkRange(t1->getIdentifier(), level);
     if(res == -1){
+        string msg = (string)"Line@" + to_string(t1->getLineno()) + (string)" Node@" + to_string(t1->getNodeId()) + (string)": " + t1->getIdentifier() + (string)" Assignment : Identifier undefined.";
+        yyerror(msg.c_str());
         return false;
     }
     // if (identifierTable.find(t1->getIdentifier()) == identifierTable.end()) {

@@ -71,7 +71,7 @@ public:
     void generateNodeID();
     int getNodeId();
     void setFormerNodeId(int i);
-    int getFormerNodeId();
+    int getFormerNodeId() { return this->formerDeclID; };
     void printAST();
     string printInfo();
     void addChild(TreeNode*&);

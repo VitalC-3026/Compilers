@@ -39,15 +39,16 @@ int main(int argc, char *argv[])
     }
 
     yyparse();
-    fputs("+++++++++++++Tree Structure++++++++++++++\n", yyout);
-    cout << "genTree start" << endl;
-    if (root != nullptr) {
-        root->printAST();
-    }
-    cout << "genLabel start" << endl;
+    // fputs("+++++++++++++Tree Structure++++++++++++++\n", yyout);
+    // // cout << "genTree start" << endl;
+    // if (root != nullptr) {
+    //     root->printAST();
+    // }
+    // cout << "genLabel start" << endl;
     root->recursiveGenLabel();
-    ostream* asm_out = new ofstream(argv[3]);
-    cout << "genCode start" << endl;
+    // ostream* asm_out = new ofstream(argv[3]);
+    ostream* asm_out = &cout;
+    // cout << "genCode start" << endl;
     root->genCode(*asm_out);
     return 0;
 }

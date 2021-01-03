@@ -28,6 +28,7 @@ struct localVar{
     int level;
     int offset = 0;
     int size;
+    idAttr attr;
 };
 
 #endif

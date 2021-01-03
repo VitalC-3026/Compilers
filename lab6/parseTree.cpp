@@ -10,8 +10,10 @@ extern void yyerror(const char*);
 void typeIncompatible(int, int, string);
 void noOperands(int);
 int isGlobal(TreeNode*);
+extern int level;
+extern int checkRange(string, int);
 int rostringNum = 0;
-int localVarOffset = 0;
+int localVarOffset = 4;
 int tempLabelNum = 0;
 vector<constString> rostring;
 vector<localVar> localVariables;
@@ -492,13 +494,13 @@ bool TreeNode::typeCheck(){
             else {
                 // whether children are defined
                 if(child->getNodeType() == NODE_Var && identifierTable.find(child->getIdentifier()) == identifierTable.end()){
-                    string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Op: children not defined.";
+                    string msg = (string)"Line@" + to_string(this->lineno) + (string)" Node@" + to_string(nodeID) +  (string)" NODE_Op: children not defined.";
                     yyerror(msg.c_str());
                     this->setIsAlive(false);
                     return false;
                 }
                 if (child->sibling != nullptr && child->sibling->getNodeType() == NODE_Var && identifierTable.find(child->sibling->getIdentifier()) == identifierTable.end()) {
-                    string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Op: children not defined.";
+                    string msg = (string)"Line@" + to_string(this->lineno) + (string)" Node@" + to_string(nodeID) + (string)" NODE_Op: children not defined.";
                     yyerror(msg.c_str());
                     this->setIsAlive(false);
                     return false;
@@ -658,7 +660,7 @@ bool TreeNode::typeCheck(){
                 case STMT_ASIG: {
                     assert (this->child != nullptr);
                     if (this->child->getNodeType() != NODE_Var) {
-                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Assignment: we expect a left value.";
+                        string msg = (string)"Line@" + to_string(lineno) + (string)" Node@" + to_string(this->child->nodeID) + (string)": " + this->child->identifier + (string)" NODE_Assignment: we expect a left value.";
                         yyerror(msg.c_str());
                         this->setIsAlive(false);
                         return false;
@@ -723,7 +725,7 @@ bool TreeNode::typeCheck(){
                         }
                     } 
                     else {
-                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_Assignment: missing assignment value.";
+                        string msg = (string)"Node@" + to_string(this->nodeID) + (string)" NODE_Assignment: missing assignment value.";
                         yyerror(msg.c_str());
                         this->setIsAlive(false);
                         return false;
@@ -733,14 +735,14 @@ bool TreeNode::typeCheck(){
             
                 case STMT_IF:{
                     if (this->child == nullptr) {
-                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_If: missing conditions.";
+                        string msg = (string)"Node@" + to_string(this->nodeID) + (string)" NODE_If: missing conditions.";
                         yyerror(msg.c_str());
                         this->setIsAlive(false);
                         return false;
                     }
                     DeclType dType = this->child->getDeclType();
                     if (this->child->getSibling() == nullptr) {
-                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_If: missing true statements.";
+                        string msg = (string)"Node@" + to_string(this->nodeID) + (string)" NODE_If: missing true statements.";
                         yyerror(msg.c_str());
                         this->setIsAlive(false);
                         return false;
@@ -762,7 +764,7 @@ bool TreeNode::typeCheck(){
                 
                 case STMT_WHILE:{
                     if (this->child == nullptr) {
-                        string msg = (string)"Node@" + to_string(nodeID) + (string)" NODE_While: missing conditions.";
+                        string msg = (string)"Node@" + to_string(this->nodeID) + (string)" NODE_While: missing conditions.";
                         yyerror(msg.c_str());
                         this->setIsAlive(false);
                         return false;
@@ -824,22 +826,28 @@ void TreeNode::genStmtLabel(){
             TreeNode* body = this->getChild()->getSibling();
             if (this->label.beginLabel == "") {
                 this->label.beginLabel = newLabel();
-                cout << "whileBegin" << this->label.beginLabel;
+                // // cout << "whileBegin" << this->label.beginLabel;
             }
-            body->label.nextLabel = this->label.beginLabel;
+            
             expr->recursiveGenLabel();
             if (expr->label.trueLabel == "") {
                 expr->label.trueLabel = newLabel();
-                cout << "whileExprTrue" << expr->label.trueLabel;
+                
             }
+            // // cout << "Id@" << expr->nodeID << " ";
+            // // cout << "whileExprTrue" << expr->label.trueLabel;
             body->label.beginLabel = expr->label.trueLabel;
             while (body != nullptr) {
+                // // cout << "Id@" << body->nodeID << endl;
                 body->recursiveGenLabel();
+                if (body->sibling == nullptr) {
+                    body->label.nextLabel = this->label.beginLabel;
+                }
                 body = body->sibling;
             }
             if(this->label.nextLabel == "") {
                 this->label.nextLabel = newLabel();
-                cout << "whileNext" << this->label.nextLabel;
+                // // cout << "whileNext" << this->label.nextLabel;
             }
             expr->label.falseLabel = this->label.nextLabel;
             if (this->sibling != nullptr) {
@@ -849,7 +857,7 @@ void TreeNode::genStmtLabel(){
             break;
         }
         case STMT_IF: {
-            cout << "if" << endl;
+            // // cout << "if" << endl;
             TreeNode* expr = this->child;
             TreeNode* trueBody = this->child->sibling;
             TreeNode* falseBody = nullptr;
@@ -861,30 +869,40 @@ void TreeNode::genStmtLabel(){
                 this->label.beginLabel = newLabel();
                 
             }
-            cout << "IfBegin" << this->label.beginLabel;
+            // // cout << "IfBegin" << this->label.beginLabel;
             expr->recursiveGenLabel();
             if (expr->label.trueLabel == "") {
                 expr->label.trueLabel = newLabel();
                 
             }
-            cout << "IfTrue" << expr->label.trueLabel;
+            // // cout << "IfTrue" << expr->label.trueLabel;
             trueBody->label.beginLabel = expr->label.trueLabel;
             
             while(trueBody != nullptr && trueBody->nodeType != NODE_ELSE) {
-                cout << "trueBodyGen" << endl;
+                // // cout << "ID@" << trueBody->nodeID << endl;
+                // // cout << "trueBodyB" << trueBody->label.beginLabel << endl;
+                // // cout << "trueBodyT" << trueBody->label.trueLabel << endl;
+                // // cout << "trueBodyF" << trueBody->label.falseLabel << endl;
+                // // cout << "trueBodyN" << trueBody->label.nextLabel << endl;
                 trueBody->recursiveGenLabel();
                 trueBody = trueBody->sibling;
             }
             if (expr->label.falseLabel == "") {
                 expr->label.falseLabel = newLabel();
             }
-            cout << "IfFalse" << expr->label.falseLabel;
+            // // cout << "IfFalse" << expr->label.falseLabel;
             if (trueBody != nullptr && trueBody->nodeType == NODE_ELSE) {
-                falseBody = trueBody;
+                falseBody = trueBody->sibling;
                 if (falseBody) {
                     falseBody->label.beginLabel = expr->label.falseLabel;
+                    // // cout << "falseBodyB" << falseBody->label.beginLabel << endl;
                 }
                 while (falseBody != nullptr) {
+                    // // cout << "ID@" << falseBody->nodeID << endl;
+                    // // cout << "falseBodyB" << falseBody->label.beginLabel << endl;
+                    // // cout << "falseBodyT" << falseBody->label.trueLabel << endl;
+                    // // cout << "falseBodyF" << falseBody->label.falseLabel << endl;
+                    // // cout << "falseBodyN" << falseBody->label.nextLabel << endl;
                     falseBody->recursiveGenLabel();
                     falseBody = falseBody->sibling;
                 }
@@ -894,16 +912,18 @@ void TreeNode::genStmtLabel(){
                 this->label.nextLabel = newLabel();
                 
             }
-            cout << "IfNext" << this->label.nextLabel << endl;
+            // // cout << "Id@" << this->nodeID << " ";
+            // // cout << "IfNext" << this->label.nextLabel << endl;
+            
             // trueBodyNext
             if (this->child->sibling) {
                 this->child->sibling->label.nextLabel = this->label.nextLabel;
-                cout << this->label.nextLabel << endl;
+                // // cout << "trueBodyN" << this->label.nextLabel << endl;
             }
             // falseBodyNext
             if (trueBody) {
                 trueBody->label.nextLabel = this->label.nextLabel;
-                cout << this->label.nextLabel << endl;
+                // // cout << "falseBodyN" << this->label.nextLabel << endl;
             }
             if (this->sibling != nullptr) {
                 this->sibling->label.beginLabel = this->label.nextLabel;
@@ -956,6 +976,7 @@ void TreeNode::genStmtLabel(){
                         if (attr.id == var->nodeID && attr.level != 0) {
                             localVar local;
                             local.identifier = var->identifier;
+                            // cout << var->identifier << endl;
                             local.id = var->nodeID;
                             local.level = attr.level;
                             if (var->declType == D_INT) {
@@ -963,6 +984,11 @@ void TreeNode::genStmtLabel(){
                             } else if (var->declType == D_BOOL || var->declType == D_CHAR) {
                                 local.size = 1;
                             }
+                            local.attr.level = attr.level;
+                            local.attr.type = attr.type;
+                            local.attr.value = attr.value;
+                            local.attr.isConst = attr.isConst;
+                            local.attr.id = attr.id;
                             localVariables.push_back(local);
                             break;
                         }
@@ -1032,7 +1058,7 @@ void TreeNode::genExprLabel() {
             } 
             else if (this->opType == OP_ADD || this->opType == OP_MUL || 
             this->opType == OP_DIV || this->opType == OP_MOD) {
-                // cout << "+ * / % genLabel" << endl;
+                // // cout << "+ * / % genLabel" << endl;
                 if (operand1->stmtType == STMT_EXPR) {
                     operand1->recursiveGenLabel();
                 }
@@ -1040,7 +1066,7 @@ void TreeNode::genExprLabel() {
                     operand2->recursiveGenLabel();
                 }
             } else if (this->opType == OP_MIN) {
-                // cout << "- genLabel" << endl;
+                // // cout << "- genLabel" << endl;
                 if (operand1->stmtType == STMT_EXPR) {
                     operand1->recursiveGenLabel();
                 }
@@ -1057,7 +1083,7 @@ void TreeNode::genExprLabel() {
     // var.value = this->nodeID;
     // tempVarNum++;
     // tempVariables.push_back(var);
-    // cout << "tmpSize" << tempVariables.size() << endl;
+    // // cout << "tmpSize" << tempVariables.size() << endl;
 }
 
 void TreeNode::genFuncLabel() {
@@ -1103,7 +1129,7 @@ void TreeNode::genFuncLabel() {
             }
             str = "\"" + str + (string)"\\0\"";
             constString info;
-            // cout << str << endl;
+            // // cout << str << endl;
             info.str = str;
             info.num = rostringNum;
             rostring.push_back(info);
@@ -1123,15 +1149,15 @@ string TreeNode::newLabel(){
 
 void TreeNode::recursiveGenLabel() {
     if (this->nodeType == NODE_Stmt) {
-        // cout << "recursiveGenStmt " << this->nodeID << endl;
+        // // cout << "recursiveGenStmt " << this->nodeID << endl;
         this->genStmtLabel();
     } 
     else if (this->stmtType == STMT_EXPR) {
-        // cout << "recursiveGenExpr " << this->nodeID << endl;
+        // // cout << "recursiveGenExpr " << this->nodeID << endl;
         this->genExprLabel();
     }
     else if (this->nodeType == NODE_Func) {
-        // cout << "recursiveGenFunc " << this->nodeID << endl;
+        // // cout << "recursiveGenFunc " << this->nodeID << endl;
         this->genFuncLabel();
     }
     else if (this->nodeType == NODE_Prog) {
@@ -1215,7 +1241,7 @@ void TreeNode::genStmtCode(ostream &out) {
                                                 out << "\tmovb -" << exprOff << "(%ebp), %eax" << endl;
                                             } else {
                                                 out << "\tmovl -" << exprOff << "(%ebp), %eax" << endl;
-                                            }
+                                            }  
                                         }
                                         
                                     }
@@ -1692,13 +1718,13 @@ void TreeNode::genStmtCode(ostream &out) {
             out << "\tpopl %eax" << endl;
             out << "\tcmpl $1, %eax" << endl;
             out << "\tjne " << expr->label.falseLabel << endl;
-            int count = 0;
+            // int count = 0;
             while (body != nullptr) {
                 body->recursiveGenCode(out);
-                count ++;
+                // count ++;
                 body = body->sibling;
             }
-            cout << count << endl;
+            // // cout << count << endl;
             out << "\tjmp " << this->label.beginLabel << endl;
             out << expr->label.falseLabel << ":" << endl;
             break;
@@ -1715,15 +1741,15 @@ void TreeNode::genStmtCode(ostream &out) {
                 trueStmt = trueStmt->sibling;
             }
             if (trueStmt != nullptr && trueStmt->nodeType == NODE_ELSE) {
-                cout << "false" << endl;
+                // // cout << "false" << endl;
                 out << expr->label.falseLabel << endl;
             } else {
-                cout << "next" << endl;
+                // // cout << "next" << endl;
                 out << this->label.nextLabel << endl;
             }
             trueStmt = this->child->sibling;
             while(trueStmt != nullptr && trueStmt->nodeType != NODE_ELSE) {
-                cout << "genTrueCode" << endl;
+                // // cout << "genTrueCode" << endl;
                 trueStmt->recursiveGenCode(out);
                 trueStmt = trueStmt->sibling;
             }
@@ -1747,11 +1773,11 @@ void TreeNode::genStmtCode(ostream &out) {
         case STMT_DECL: {
             TreeNode* var = this->child->sibling;
             if (var != nullptr) {
-                cout << localVariables.size() << endl;
                 for (int i = 0; i < localVariables.size(); i++) {
                     if (var->nodeID == localVariables[i].id) {
                         assert (strcmp(var->identifier.c_str(), localVariables[i].identifier.c_str()) == 0);
                         int size = localVariables[i].size;
+                        // cout << "size" << size << endl;
                         if (size == 4) {
                             if (localVarOffset % 4 == 0) {
                                 out << "\tsubl $4, %esp" << endl;
@@ -1768,6 +1794,23 @@ void TreeNode::genStmtCode(ostream &out) {
                             out << "\tsubl $1, %esp" << endl;
                             localVariables[i].offset = localVarOffset;
                             localVarOffset += 1;
+                        }
+                        idAttr attr = localVariables[i].attr;
+                        if (attr.value != to_string(0)) {
+                            if (attr.type == D_INT) {
+                                int val = atoi(attr.value.c_str());
+                                out << "\tmovl $" << val << ", -" << localVariables[i].offset << "(%ebp)" << endl;
+                            } else if (attr.type == D_CHAR) {
+                                int val = (int)attr.value.c_str()[0];
+                                out << "\tmovb $" << val << ", -" << localVariables[i].offset << "(%ebp)" << endl;
+                            } else if (attr.type == D_BOOL) {
+                                int val = attr.value.c_str()[0];
+                                if (val == 1) {
+                                    out << "\tmovb $1, -" << localVariables[i].offset << "(%ebp)" << endl;
+                                } else {
+                                    out << "\tmovb $0, -" << localVariables[i].offset << "(%ebp)" << endl;
+                                }
+                            }
                         }
                     }
                 }
@@ -1798,7 +1841,6 @@ void TreeNode::genStmtCode(ostream &out) {
     }
 }
 
-// temp variables => how to identify and generate
 void TreeNode::genDeclCode(ostream &out) {
     // out << endl << "# define your variables here" << endl;
     map<string, stack<idAttr>>::iterator it = identifierTable.begin();
@@ -1806,6 +1848,9 @@ void TreeNode::genDeclCode(ostream &out) {
     for(; it != identifierTable.end(); it++) {
         if(!it->second.empty()){
             idAttr attr = it->second.top();
+            if (attr.level != 0) {
+                continue;
+            }
             if (!attr.isConst) {
                 out << "\t.globl\t" << "_" << it->first << endl;
                 if (bssOne) {
@@ -1863,7 +1908,7 @@ void TreeNode::genDeclCode(ostream &out) {
     if (rostring.size() != 0) {
         out << endl << "\t.section .rodata" << endl;
     }
-    // cout << "rostring" << rostring.size() << endl;
+    // // cout << "rostring" << rostring.size() << endl;
     for (int i = 0; i < rostring.size(); i++) {
         out << "LC" << rostring[i].num << ":" << endl;
         out << "\t.ascii " << rostring[i].str << endl;
@@ -3245,6 +3290,7 @@ void TreeNode::genFuncCode(ostream &out) {
             out << this->identifier << ":" << endl;
             out << "\tpushl %ebp" << endl;
             out << "\tmovl %esp, %ebp" << endl;
+            out << "\tsubl $4, %esp" << endl;
             TreeNode* bodyChild = this->child->sibling;
             while(bodyChild != nullptr) {
                 bodyChild->recursiveGenCode(out);
@@ -3257,7 +3303,7 @@ void TreeNode::genFuncCode(ostream &out) {
     }
     else if (this->funcType == FUNC_CALL) {
         if (strcmp("printf", this->child->identifier.c_str()) == 0) {
-            // cout << "printf" << endl;
+            // // cout << "printf" << endl;
             stack<TreeNode*> nodes;
             TreeNode* str = this->child->sibling;
             TreeNode* var = this->child->sibling->sibling;
@@ -3268,8 +3314,15 @@ void TreeNode::genFuncCode(ostream &out) {
             int printfCounts = nodes.size();
             for (int i = nodes.size(); i > 0; i--) {
                 TreeNode* node = nodes.top();
-                out << "\tmovl _" << node->identifier << ", %eax" << endl;
-                out << "\tpushl %eax" << endl;
+                int varOff = isGlobal(node);
+                if (varOff == -1) {
+                    out << "\tmovl _" << node->identifier << ", %eax" << endl;
+                    out << "\tpushl %eax" << endl;
+                } else {
+                    out << "\tmovl -" << varOff << "(%ebp), %eax" << endl;
+                    out << "\tpushl %eax" << endl;
+                }
+                
                 nodes.pop();
             }
             out << "\tpushl $LC" << str->tempId << endl;
@@ -3277,7 +3330,7 @@ void TreeNode::genFuncCode(ostream &out) {
             out << "\taddl $" << (printfCounts+1)*4 << ", %esp" << endl;
         }
         else if (strcmp("scanf", this->child->identifier.c_str()) == 0) {
-            // cout << "scanf" << endl;
+            // // cout << "scanf" << endl;
             stack<TreeNode*> nodes;
             TreeNode* str = this->child->sibling;
             TreeNode* var = this->child->sibling->sibling;
@@ -3288,7 +3341,14 @@ void TreeNode::genFuncCode(ostream &out) {
             int scanfCounts = nodes.size();
             for (int i = nodes.size(); i > 0; i--) {
                 TreeNode* node = nodes.top();
-                out << "\tpushl $_" << node->identifier << endl;
+                int varOff = isGlobal(node);
+                if (varOff == -1) {
+                    out << "\tmovl $_" << node->identifier << ", %eax" << endl;
+                    out << "\tpushl %eax" << endl;
+                } else {
+                    out << "\tleal -" << varOff << "(%ebp), %eax" << endl;
+                    out << "\tpushl %eax" << endl;
+                }
                 nodes.pop();
             }
             out << "\tpushl $LC" << str->tempId << endl;
@@ -3304,7 +3364,7 @@ int isGlobal(TreeNode* node) {
         bool found = false;
         idAttr attr;
         while(!s.empty()) {
-            if (s.top().id == node->getNodeId() && s.top().level != 0) {
+            if (s.top().id == node->getFormerNodeId() && s.top().level != 0) {
                 found = true;
                 attr = s.top();
                 break;
@@ -3312,12 +3372,14 @@ int isGlobal(TreeNode* node) {
             s.pop();
         }
         if (found) {
+            // cout << "found: " << found << endl;
             for (int i = 0; i < localVariables.size(); i++) {
-                if (localVariables[i].id == node->getNodeId()) {
+                if (localVariables[i].id == node->getFormerNodeId()) {
                     return localVariables[i].offset;
                 }
             }
         }
         return -1;
     }
+    return -1;
 }

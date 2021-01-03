@@ -1,19 +1,11 @@
-int a;
-int b;
+/*
+Contributor: Sakura
+Date: 12/19/2020
+Comment: var shall not use before defination, wrong type check will cause this mistake.
+*/
 int main(){
-    a = 0;
-    b = 0;
-    while (a < 100) {
-    if (a == 5) {
-        b = 25;
-    }else if (a == 10) {
-        b = 42;  
-    }else {
-        b = a * 2;
-    }
-    a = a + 1;
-    } 
-    printf("%d\n",a);
-    printf("%d\n",b); 
-    return 0;
+	b=10;
+	int a=4,b=5;
+	a = a + 1;
+	return 0;
 }
