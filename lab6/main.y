@@ -776,39 +776,17 @@ bool checkIf(TreeNode* t1, TreeNode* t2, TreeNode* t3)
 bool checkAsg(TreeNode* t1, bool i)
 {
     assert (t1 != nullptr);
-    // if (t1->getNodeType() != NODE_Var) {
-    //     string msg = (string)"variable should be a left value instead of" + TreeNode::nodeType2String(t1->getNodeType());
-    //     yyerror(msg.c_str());
-    //     return false;
-    // }
-    // if (i) {
-    //     if (t1->getDeclType() != D_INT) {
-    //         return false;
-    //     }
-    // }
-    // id check
     int res = checkRange(t1->getIdentifier(), level);
     if(res == -1){
         string msg = (string)"Line@" + to_string(t1->getLineno()) + (string)" Node@" + to_string(t1->getNodeId()) + (string)": " + t1->getIdentifier() + (string)" Assignment : Identifier undefined.";
         yyerror(msg.c_str());
         return false;
     }
-    // if (identifierTable.find(t1->getIdentifier()) == identifierTable.end()) {
-    //     return false;
-    // } else {
-    //     stack<idAttr> s = identifierTable.find(t1->getIdentifier())->second;
-    //     // cout << "checkAsg" << endl;
-    //     if (s.size() == 0) {
-    //         return false;
-    //     }
-    // }
     return true;
 }
 
 void setType(TreeNode* &idlist, TreeNode* type, bool ifConst) {
     if(ifConst){
-        // iterate nodes to set type and const
-        // cout << "ifConst here" << endl;
         TreeNode* node = idlist;
         assert (node != nullptr);
         node->setNodeType(NODE_ConstVar);
@@ -872,7 +850,6 @@ string getValueOfId(TreeNode* n) {
 }
 
 bool setEntryOfId(string identifier, int level, DeclType type, string value, int nodeId){
-    // cout << identifier << " declared in level " << level << endl;
     idAttr attr;
     attr.level = level;
     attr.type = type;
